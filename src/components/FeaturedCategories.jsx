@@ -13,7 +13,7 @@ const categories = [
 
 const FeaturedCategories = () => {
   return (
-    <section className="bg-gradient-to-b from-sand-50 via-sand-100 to-sand-50 py-24 px-4">
+    <section className="bg-gradient-to-b from-sand-50 via-sand-100 to-sand-50 py-15 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-16">

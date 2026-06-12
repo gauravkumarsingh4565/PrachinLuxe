@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
+import { Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import HeroSection from './components/HeroSection'
 import FeaturedCategories from './components/FeaturedCategories'
 import FeaturedProducts from './components/FeaturedProducts'
 import AboutSection from './components/AboutSection'
 import Testimonials from './components/Testimonials'
-import Newsletter from './components/Newsletter'
+import HandmadeJewelryItem from './components/HandmadeJewelryItem'
+import AntiqueItems from './components/AntiqueItems'
 import Footer from './components/Footer'
 
 function App() {
@@ -26,14 +28,31 @@ function App() {
   return (
     <div className="min-h-screen bg-sand-50">
       <Navbar />
-      <main>
-        <HeroSection />
-        <FeaturedCategories />
-        <FeaturedProducts />
-        <AboutSection />
-        <Testimonials />
-        {/* <Newsletter /> */}
-      </main>
+      
+      <Routes>
+        <Route path="/" element={
+          <main>
+            <HeroSection />
+            <FeaturedCategories />
+            <FeaturedProducts />
+            <AboutSection />
+            <Testimonials />
+          </main>
+        } />
+        
+        <Route path="/handmade" element={
+          <main>
+            <HandmadeJewelryItem />
+          </main>
+        } />
+        
+        <Route path="/antique" element={
+          <main>
+            <AntiqueItems />
+          </main>
+        } />
+      </Routes>
+
       <Footer />
 
       {/* Scroll to Top Button */}

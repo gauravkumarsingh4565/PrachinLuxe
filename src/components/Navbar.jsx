@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import logoImg from '../assets/images/logo.png';
 
 const Navbar = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
+  const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   useEffect(() => {
     if (isMobileMenuOpen) {
@@ -24,54 +18,54 @@ const Navbar = () => {
   }, [isMobileMenuOpen]);
 
   const navLinks = [
-    { name: 'Home', href: '#' },
-    { name: 'Collections', href: '#collections' },
-    { name: 'About Us', href: '#about' },
-    { name: 'Contact', href: '#contact' },
+    { name: 'Home', path: '/' },
+    { name: 'Handmade Jewelry', path: '/handmade' },
+    { name: 'Antique Collection', path: '/antique' },
+    { name: 'Collections', path: '/#collections' },
+    { name: 'About Us', path: '/#about' },
   ];
 
   return (
     <>
-      <nav
-        className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 border-b ${
-          isScrolled
-            ? 'bg-sand-50/95 backdrop-blur-md border-gold-500/25 shadow-lg shadow-sand-500/15'
-            : 'bg-transparent border-gold-500/25'
-        }`}
-      >
+      <nav className="sticky top-0 left-0 w-full z-50 bg-sand-50/95 backdrop-blur-md border-b border-gold-500/25 shadow-sm shadow-sand-500/15">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20 lg:h-24">
+          <div className="flex items-center justify-between h-14 lg:h-16">
             {/* Logo */}
-            <div className="flex-shrink-0 flex flex-col items-center">
-              <a href="#" className="flex flex-col items-center group">
-                <span className={`font-cinzel-decorative text-xl lg:text-2xl tracking-[0.15em] transition-all duration-300 ${
-                  isScrolled ? 'text-gold-700 group-hover:text-gold-600' : 'text-sand-50 group-hover:text-gold-400'
-                }`}>
-                  PRACHIN LUXE
-                </span>
-                <span className={`font-cinzel text-[9px] tracking-[0.3em] uppercase mt-0.5 transition-colors duration-300 ${
-                  isScrolled ? 'text-gold-700/70' : 'text-gold-300/80'
-                }`}>
-                  The Ancient Riches
-                </span>
-              </a>
+            <div className="flex-shrink-0 flex items-center">
+              <Link to="/" className="flex items-center gap-3 group focus:outline-none">
+                {/* <div className="w-10 h-10 sm:w-12 sm:h-12 overflow-hidden rounded-full flex items-center justify-center">
+                  <img 
+                    // src={logoImg} 
+                    alt="Logo Icon" 
+                    className="w-full h-full object-cover object-left scale-150 ml-2" 
+                  />
+                </div> */}
+                <div className="flex flex-col items-start mt-0.5">
+                  <span className="font-cinzel-decorative text-xl lg:text-2xl font-bold tracking-[0.1em] text-royal-blue-800 group-hover:text-gold-600 transition-colors duration-300">
+                    PRACHIN LUXE
+                  </span>
+                  <span className="font-sans text-[8px] sm:text-[9px] tracking-[0.25em] font-medium text-royal-blue-600/80 transition-colors duration-300 mt-[-2px]">
+                    HANDCRAFTED JEWELRY & ANTIQUES
+                  </span>
+                </div>
+              </Link>
             </div>
 
             {/* Desktop Nav Links */}
             <div className="hidden lg:flex items-center space-x-10">
               {navLinks.map((link) => (
-                <a
+                <Link
                   key={link.name}
-                  href={link.href}
-                  className={`relative font-cinzel text-sm tracking-wider transition-all duration-300 group py-2 ${
-                    isScrolled ? 'text-royal-blue-700 hover:text-gold-600' : 'text-sand-50/90 hover:text-gold-400'
+                  to={link.path}
+                  className={`relative font-cinzel font-bold text-sm tracking-wider transition-all duration-300 group py-2 focus:outline-none ${
+                    location.pathname === link.path ? 'text-gold-600' : 'text-royal-blue-700 hover:text-gold-600'
                   }`}
                 >
                   {link.name}
-                  <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] transition-all duration-300 group-hover:w-full ${
-                    isScrolled ? 'bg-gold-600' : 'bg-gold-400'
+                  <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-[1.5px] transition-all duration-300 ${
+                    location.pathname === link.path ? 'w-full bg-gold-600' : 'w-0 bg-gold-600 group-hover:w-full'
                   }`} />
-                </a>
+                </Link>
               ))}
             </div>
 
@@ -79,7 +73,7 @@ const Navbar = () => {
             <div className="flex items-center space-x-5">
               {/* Search Icon */}
               <button
-                className={`transition-all duration-300 ${isScrolled ? 'text-royal-blue-700 hover:text-gold-600' : 'text-sand-50/90 hover:text-gold-400'}`}
+                className="text-royal-blue-700 hover:text-gold-600 transition-all duration-300"
                 aria-label="Search"
               >
                 <svg
@@ -100,7 +94,7 @@ const Navbar = () => {
 
               {/* Shopping Bag Icon */}
               <button
-                className={`relative transition-all duration-300 ${isScrolled ? 'text-royal-blue-700 hover:text-gold-600' : 'text-sand-50/90 hover:text-gold-400'}`}
+                className="relative text-royal-blue-700 hover:text-gold-600 transition-all duration-300"
                 aria-label="Shopping bag"
               >
                 <svg
@@ -130,19 +124,16 @@ const Navbar = () => {
                 aria-label="Toggle menu"
               >
                 <span
-                  className={`block w-6 h-[1.5px] transition-all duration-300 ${isScrolled ? 'bg-royal-blue-800' : 'bg-sand-50'} ${
-                    isMobileMenuOpen ? 'rotate-45 translate-y-[7.5px]' : ''
-                  }`}
+                  className={`block w-6 h-[1.5px] bg-royal-blue-800 transition-all duration-300 ${isMobileMenuOpen ? 'rotate-45 translate-y-[7.5px]' : ''
+                    }`}
                 />
                 <span
-                  className={`block w-6 h-[1.5px] transition-all duration-300 ${isScrolled ? 'bg-royal-blue-800' : 'bg-sand-50'} ${
-                    isMobileMenuOpen ? 'opacity-0 scale-x-0' : ''
-                  }`}
+                  className={`block w-6 h-[1.5px] bg-royal-blue-800 transition-all duration-300 ${isMobileMenuOpen ? 'opacity-0 scale-x-0' : ''
+                    }`}
                 />
                 <span
-                  className={`block w-6 h-[1.5px] transition-all duration-300 ${isScrolled ? 'bg-royal-blue-800' : 'bg-sand-50'} ${
-                    isMobileMenuOpen ? '-rotate-45 -translate-y-[7.5px]' : ''
-                  }`}
+                  className={`block w-6 h-[1.5px] bg-royal-blue-800 transition-all duration-300 ${isMobileMenuOpen ? '-rotate-45 -translate-y-[7.5px]' : ''
+                    }`}
                 />
               </button>
             </div>
@@ -152,11 +143,10 @@ const Navbar = () => {
 
       {/* Mobile Full-Screen Overlay */}
       <div
-        className={`fixed inset-0 z-40 bg-sand-50/98 backdrop-blur-lg transition-all duration-500 lg:hidden ${
-          isMobileMenuOpen
-            ? 'opacity-100 pointer-events-auto'
-            : 'opacity-0 pointer-events-none'
-        }`}
+        className={`fixed inset-0 z-40 bg-sand-50/98 backdrop-blur-lg transition-all duration-500 lg:hidden ${isMobileMenuOpen
+          ? 'opacity-100 pointer-events-auto'
+          : 'opacity-0 pointer-events-none'
+          }`}
       >
         <div className="flex flex-col items-center justify-center h-full space-y-8">
           {/* Decorative top ornament */}
@@ -173,18 +163,22 @@ const Navbar = () => {
           </div>
 
           {navLinks.map((link, index) => (
-            <a
+            <Link
               key={link.name}
-              href={link.href}
+              to={link.path}
               onClick={() => setIsMobileMenuOpen(false)}
-              className="relative font-cinzel text-xl tracking-[0.2em] text-royal-blue-700 hover:text-gold-600 transition-all duration-300 group py-2"
+              className={`relative font-cinzel text-xl tracking-[0.2em] transition-all duration-300 group py-2 focus:outline-none ${
+                location.pathname === link.path ? 'text-gold-600' : 'text-royal-blue-700 hover:text-gold-600'
+              }`}
               style={{
                 animationDelay: `${index * 100}ms`,
               }}
             >
               {link.name}
-              <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] bg-gold-600 transition-all duration-300 group-hover:w-full" />
-            </a>
+              <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-[1px] transition-all duration-300 ${
+                location.pathname === link.path ? 'w-full bg-gold-600' : 'w-0 bg-gold-600 group-hover:w-full'
+              }`} />
+            </Link>
           ))}
 
           {/* Decorative bottom ornament */}
