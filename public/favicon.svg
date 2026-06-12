@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
+  <!-- Crown shape for Prachin Luxe -->
+  <rect width="48" height="48" rx="10" fill="#FFFFF0"/>
+  <path d="M8 36h32v3H8zM8 33l5.33-18.67L18.67 24 24 14.67 29.33 24l5.34-9.67L40 33z" fill="url(#goldGrad)" stroke="#96701F" stroke-width="0.5"/>
+  <defs>
+    <linearGradient id="goldGrad" x1="8" y1="14" x2="40" y2="36" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#D4A437"/>
+      <stop offset="50%" stop-color="#F5E6C8"/>
+      <stop offset="100%" stop-color="#C9A84C"/>
+    </linearGradient>
+  </defs>
+</svg>
