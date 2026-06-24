@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect } from 'react';
 import bannerImg from '../../assets/images/hero_banner 2.png';
 import necklace1 from '../../assets/images/necklace_premium.png';

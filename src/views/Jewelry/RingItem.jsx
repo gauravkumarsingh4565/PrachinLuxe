@@ -1,46 +1,49 @@
+"use client";
+
 import React, { useEffect } from 'react';
 import bannerImg from '../../assets/images/hero_banner 2.png';
-import set1 from '../../assets/images/product_kundan_set.png';
-import set2 from '../../assets/images/jewelry_set_premium.png';
-import set3 from '../../assets/images/product_kundan_set.png';
-import set4 from '../../assets/images/jewelry_set_premium.png';
+import ring1 from '../../assets/images/ring_premium.png';
+import ring2 from '../../assets/images/ring_2_premium.png';
+// Re-using some images for placeholders
+import ring3 from '../../assets/images/ring_premium.png';
+import ring4 from '../../assets/images/ring_2_premium.png';
 
 const products = [
   {
-    name: 'Royal Bridal Kundan Set',
-    category: 'Sets',
-    price: '1,25,000.00',
-    originalPrice: '1,45,000.00',
-    rating: '5.0',
-    reviews: '56',
-    img: set1,
-  },
-  {
-    name: 'Antique Gold Heritage Set',
-    category: 'Sets',
-    price: '85,500.00',
-    originalPrice: '95,000.00',
+    name: 'Vintage Polki Ring',
+    category: 'Rings',
+    price: '21,000.00',
+    originalPrice: '25,000.00',
     rating: '4.9',
-    reviews: '112',
-    img: set2,
+    reviews: '342',
+    img: ring1,
   },
   {
-    name: 'Polki Diamond Choker Set',
-    category: 'Sets',
-    price: '1,55,000.00',
-    originalPrice: '1,75,000.00',
+    name: 'Royal Diamond Statement Ring',
+    category: 'Rings',
+    price: '45,500.00',
+    originalPrice: '52,000.00',
     rating: '5.0',
-    reviews: '34',
-    img: set3,
+    reviews: '89',
+    img: ring2,
   },
   {
-    name: 'Meenakari Wedding Set',
-    category: 'Sets',
-    price: '95,999.00',
-    originalPrice: '1,10,000.00',
+    name: 'Kundan Cocktail Ring',
+    category: 'Rings',
+    price: '18,500.00',
+    originalPrice: '22,000.00',
+    rating: '4.7',
+    reviews: '156',
+    img: ring3,
+  },
+  {
+    name: 'Antique Gold Band',
+    category: 'Rings',
+    price: '15,999.00',
+    originalPrice: '18,999.00',
     rating: '4.8',
-    reviews: '89',
-    img: set4,
+    reviews: '210',
+    img: ring4,
   },
 ];
 
@@ -81,7 +84,7 @@ const ProductCard = ({ product }) => (
   </div>
 );
 
-const JewelrySetItem = () => {
+const RingItem = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -92,7 +95,7 @@ const JewelrySetItem = () => {
       <div className="relative w-full h-[40vh] sm:h-[50vh] lg:h-[60vh] flex items-center justify-center overflow-hidden">
         <img
           src={bannerImg}
-          alt="Handmade Sets Collection"
+          alt="Handmade Rings Collection"
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-royal-blue-950/30"></div>
@@ -107,10 +110,10 @@ const JewelrySetItem = () => {
               <div className="h-px w-12 sm:w-20 bg-gold-600/40" />
             </div>
             <h1 className="font-cinzel-decorative text-4xl lg:text-5xl text-royal-blue-900 mb-4 tracking-wide">
-              Bridal & Jewelry Sets
+              Statement Rings
             </h1>
             <p className="font-cormorant text-xl text-royal-blue-600/70 max-w-2xl mx-auto italic">
-              Complete your majestic look with our carefully curated, breathtaking jewelry sets perfect for weddings and grand occasions.
+              Adorn your hands with our majestic rings, crafted with precision and adorned with precious gems.
             </p>
           </div>
 
@@ -125,4 +128,4 @@ const JewelrySetItem = () => {
   );
 };
 
-export default JewelrySetItem;
+export default RingItem;

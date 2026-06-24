@@ -1,5 +1,7 @@
+"use client";
+
 import { useRef, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 
 import catDisc from '../assets/images/cat_disc.png';
 import catSignature from '../assets/images/cat_signature.png';
@@ -23,7 +25,7 @@ const earringCategories = [
 
 const ShopEarringCategory = () => {
   const scrollRef = useRef(null);
-  const navigate = useNavigate();
+  const router = useRouter();
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
 
@@ -57,7 +59,7 @@ const ShopEarringCategory = () => {
   };
 
   const handleCategoryClick = (categoryName) => {
-    navigate(`/jewelry/earrings?category=${encodeURIComponent(categoryName.toLowerCase())}`);
+    router.push(`/jewelry/earrings?category=${encodeURIComponent(categoryName.toLowerCase())}`);
   };
 
   return (

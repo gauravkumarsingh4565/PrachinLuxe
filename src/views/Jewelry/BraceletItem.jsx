@@ -1,47 +1,48 @@
+"use client";
+
 import React, { useEffect } from 'react';
 import bannerImg from '../../assets/images/hero_banner 2.png';
-import ring1 from '../../assets/images/ring_premium.png';
-import ring2 from '../../assets/images/ring_2_premium.png';
-// Re-using some images for placeholders
-import ring3 from '../../assets/images/ring_premium.png';
-import ring4 from '../../assets/images/ring_2_premium.png';
+import bracelet1 from '../../assets/images/bracelet_premium.png';
+import bracelet2 from '../../assets/images/product_gold_payal.png';
+import bracelet3 from '../../assets/images/bracelet_premium.png';
+import bracelet4 from '../../assets/images/product_gold_payal.png';
 
 const products = [
   {
-    name: 'Vintage Polki Ring',
-    category: 'Rings',
-    price: '21,000.00',
-    originalPrice: '25,000.00',
-    rating: '4.9',
-    reviews: '342',
-    img: ring1,
-  },
-  {
-    name: 'Royal Diamond Statement Ring',
-    category: 'Rings',
-    price: '45,500.00',
-    originalPrice: '52,000.00',
-    rating: '5.0',
-    reviews: '89',
-    img: ring2,
-  },
-  {
-    name: 'Kundan Cocktail Ring',
-    category: 'Rings',
-    price: '18,500.00',
-    originalPrice: '22,000.00',
-    rating: '4.7',
-    reviews: '156',
-    img: ring3,
-  },
-  {
-    name: 'Antique Gold Band',
-    category: 'Rings',
-    price: '15,999.00',
-    originalPrice: '18,999.00',
+    name: 'Kundan Bangle Set',
+    category: 'Bracelets',
+    price: '34,000.00',
+    originalPrice: '38,000.00',
     rating: '4.8',
     reviews: '210',
-    img: ring4,
+    img: bracelet1,
+  },
+  {
+    name: 'Traditional Gold Payal',
+    category: 'Bracelets',
+    price: '28,500.00',
+    originalPrice: '32,000.00',
+    rating: '4.9',
+    reviews: '156',
+    img: bracelet2,
+  },
+  {
+    name: 'Royal Navratna Bracelet',
+    category: 'Bracelets',
+    price: '42,500.00',
+    originalPrice: '46,000.00',
+    rating: '5.0',
+    reviews: '89',
+    img: bracelet3,
+  },
+  {
+    name: 'Meenakari Kada',
+    category: 'Bracelets',
+    price: '22,999.00',
+    originalPrice: '26,999.00',
+    rating: '4.7',
+    reviews: '112',
+    img: bracelet4,
   },
 ];
 
@@ -82,7 +83,7 @@ const ProductCard = ({ product }) => (
   </div>
 );
 
-const RingItem = () => {
+const BraceletItem = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -93,7 +94,7 @@ const RingItem = () => {
       <div className="relative w-full h-[40vh] sm:h-[50vh] lg:h-[60vh] flex items-center justify-center overflow-hidden">
         <img
           src={bannerImg}
-          alt="Handmade Rings Collection"
+          alt="Handmade Bracelets Collection"
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-royal-blue-950/30"></div>
@@ -108,10 +109,10 @@ const RingItem = () => {
               <div className="h-px w-12 sm:w-20 bg-gold-600/40" />
             </div>
             <h1 className="font-cinzel-decorative text-4xl lg:text-5xl text-royal-blue-900 mb-4 tracking-wide">
-              Statement Rings
+              Bangles & Bracelets
             </h1>
             <p className="font-cormorant text-xl text-royal-blue-600/70 max-w-2xl mx-auto italic">
-              Adorn your hands with our majestic rings, crafted with precision and adorned with precious gems.
+              Elegant and timeless, our handcrafted bracelets and bangles add a touch of royal charm to your wrists.
             </p>
           </div>
 
@@ -126,4 +127,4 @@ const RingItem = () => {
   );
 };
 
-export default RingItem;
+export default BraceletItem;

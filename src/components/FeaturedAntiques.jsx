@@ -1,5 +1,7 @@
+"use client";
+
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import productAntiqueBoxImg from '../assets/images/product_antique_box.png';
 import productMeenakariBangleImg from '../assets/images/lamp.jpg';
 import antiqueImg from '../assets/images/antique.png';
@@ -104,7 +106,7 @@ const ProductCard = ({ product }) => (
 );
 
 const FeaturedAntiques = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   return (
     <section className="bg-sand-50 py-6 px-4 border-t border-gold-500/20">
@@ -144,7 +146,7 @@ const FeaturedAntiques = () => {
 
         <div className="flex justify-end ">
           <button 
-            onClick={() => navigate('/antique')}
+            onClick={() => router.push('/antique')}
             className="group relative inline-flex items-center gap-3 px-8 py-3 text-royal-blue-900 font-cinzel-decorative font-bold text-lg uppercase tracking-[0.15em] transition-all duration-300 hover:text-gold-600"
           >
             <span className="relative">

@@ -1,4 +1,7 @@
+"use client";
+
 import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import bannerImg from '../../assets/images/hero_banner 2.png';
 import earrings1 from '../../assets/images/earrings_premium.png';
 import earrings2 from '../../assets/images/earrings_2_premium.png';
@@ -143,10 +146,20 @@ const ProductCard = ({ product }) => (
 
 const EarringItem = () => {
   const [activeSubcat, setActiveSubcat] = useState(null);
+  const searchParams = useSearchParams();
+  const categoryQuery = searchParams.get('category');
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+    if (categoryQuery) {
+      const matched = subcategories.find(
+        (c) => c.name.toLowerCase() === categoryQuery.toLowerCase()
+      );
+      if (matched) {
+        setActiveSubcat(matched.name);
+      }
+    }
+  }, [categoryQuery]);
 
   const filteredProducts = activeSubcat
     ? allProducts.filter((p) => p.subcategory === activeSubcat)

@@ -1,5 +1,7 @@
+"use client";
+
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import bannerImg from '../assets/images/new_arrival.png';
 import earrings from '../assets/images/earrings_premium.png';
 import necklace from '../assets/images/necklace_premium.png';
@@ -104,7 +106,7 @@ const ProductCard = ({ product }) => (
 );
 
 const NewArrival = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   return (
     <section className="bg-sand-50 py-6 px-4 border-t border-gold-500/20">
@@ -143,7 +145,7 @@ const NewArrival = () => {
         {/* Action Button */}
         <div className="flex justify-center mt-4">
           <button
-            onClick={() => navigate('/handmade')}
+            onClick={() => router.push('/handmade')}
             className="px-10 py-3.5 bg-royal-blue-900 text-white font-cinzel-decorative text-sm tracking-[0.2em] hover:bg-gold-600 transition-colors duration-500 shadow-md rounded-sm"
           >
             VIEW FULL COLLECTION

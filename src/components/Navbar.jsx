@@ -1,8 +1,11 @@
+"use client";
+
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const Navbar = () => {
-  const location = useLocation();
+  const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileSliderOpen, setIsProfileSliderOpen] = useState(false);
 
@@ -41,7 +44,7 @@ const Navbar = () => {
           <div className="flex items-center justify-between h-14 lg:h-16">
             {/* Logo */}
             <div className="flex-shrink-0 flex items-center">
-              <Link to="/" className="flex items-center gap-3 group focus:outline-none">
+              <Link href="/" className="flex items-center gap-3 group focus:outline-none">
                 <div className="flex flex-col items-start mt-0.5">
                   <span className="font-cinzel-decorative text-xl lg:text-2xl font-bold tracking-[0.1em] text-royal-blue-800 group-hover:text-gold-600 transition-colors duration-300">
                     PRACHIN LUXE
@@ -58,14 +61,14 @@ const Navbar = () => {
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
-                  to={link.path}
+                  href={link.path}
                   className={`relative font-cinzel font-bold text-sm tracking-wider transition-all duration-300 group py-2 focus:outline-none ${
-                    location.pathname === link.path ? 'text-gold-600' : 'text-royal-blue-700 hover:text-gold-600'
+                    pathname === link.path ? 'text-gold-600' : 'text-royal-blue-700 hover:text-gold-600'
                   }`}
                 >
                   {link.name}
                   <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-[1.5px] transition-all duration-300 ${
-                    location.pathname === link.path ? 'w-full bg-gold-600' : 'w-0 bg-gold-600 group-hover:w-full'
+                    pathname === link.path ? 'w-full bg-gold-600' : 'w-0 bg-gold-600 group-hover:w-full'
                   }`} />
                 </Link>
               ))}
@@ -167,7 +170,7 @@ const Navbar = () => {
         {/* Account Links */}
         <div className="flex-grow overflow-y-auto py-4 flex flex-col">
           <Link 
-            to="/profile" 
+            href="/profile" 
             onClick={() => setIsProfileSliderOpen(false)}
             className="flex items-center justify-between px-6 py-4 font-cormorant text-[16px] font-medium text-gray-700 hover:bg-gold-50/50 hover:text-gold-700 transition-colors border-b border-gray-100"
           >
@@ -175,7 +178,7 @@ const Navbar = () => {
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
           </Link>
           <Link 
-            to="/orders" 
+            href="/orders" 
             onClick={() => setIsProfileSliderOpen(false)}
             className="flex items-center justify-between px-6 py-4 font-cormorant text-[16px] font-medium text-gray-700 hover:bg-gold-50/50 hover:text-gold-700 transition-colors border-b border-gray-100"
           >
@@ -183,7 +186,7 @@ const Navbar = () => {
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
           </Link>
           <Link 
-            to="/wishlist" 
+            href="/wishlist" 
             onClick={() => setIsProfileSliderOpen(false)}
             className="flex items-center justify-between px-6 py-4 font-cormorant text-[16px] font-medium text-gray-700 hover:bg-gold-50/50 hover:text-gold-700 transition-colors border-b border-gray-100"
           >
@@ -191,7 +194,7 @@ const Navbar = () => {
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
           </Link>
           <Link 
-            to="/addresses" 
+            href="/addresses" 
             onClick={() => setIsProfileSliderOpen(false)}
             className="flex items-center justify-between px-6 py-4 font-cormorant text-[16px] font-medium text-gray-700 hover:bg-gold-50/50 hover:text-gold-700 transition-colors"
           >
@@ -233,7 +236,7 @@ const Navbar = () => {
       >
         <div className="border-b border-gray-200 bg-white">
           <Link
-            to="/profile"
+            href="/profile"
             onClick={() => setIsMobileMenuOpen(false)}
             className="w-full flex flex-row items-center justify-between px-6 pt-12 pb-6 focus:outline-none transition-colors duration-300 hover:bg-gray-50"
           >
@@ -256,17 +259,17 @@ const Navbar = () => {
           {navLinks.map((link) => (
             <Link
               key={link.name}
-              to={link.path}
+              href={link.path}
               onClick={() => setIsMobileMenuOpen(false)}
               className={`block font-cinzel text-lg tracking-[0.1em] transition-all duration-300 pb-2 border-b border-gold-500/10 focus:outline-none ${
-                location.pathname === link.path ? 'text-gold-600 font-bold' : 'text-royal-blue-800 hover:text-gold-600'
+                pathname === link.path ? 'text-gold-600 font-bold' : 'text-royal-blue-800 hover:text-gold-600'
               }`}
             >
               {link.name}
             </Link>
           ))}
-          <Link to="/orders" className="block font-cinzel text-lg tracking-[0.1em] text-royal-blue-800 hover:text-gold-600 transition-all duration-300 pb-2 border-b border-gold-500/10 mt-4" onClick={() => setIsMobileMenuOpen(false)}>My Orders</Link>
-          <Link to="/wishlist" className="block font-cinzel text-lg tracking-[0.1em] text-royal-blue-800 hover:text-gold-600 transition-all duration-300 pb-2 border-b border-gold-500/10" onClick={() => setIsMobileMenuOpen(false)}>Wishlist</Link>
+          <Link href="/orders" className="block font-cinzel text-lg tracking-[0.1em] text-royal-blue-800 hover:text-gold-600 transition-all duration-300 pb-2 border-b border-gold-500/10 mt-4" onClick={() => setIsMobileMenuOpen(false)}>My Orders</Link>
+          <Link href="/wishlist" className="block font-cinzel text-lg tracking-[0.1em] text-royal-blue-800 hover:text-gold-600 transition-all duration-300 pb-2 border-b border-gold-500/10" onClick={() => setIsMobileMenuOpen(false)}>Wishlist</Link>
         </div>
 
         <div className="p-6 border-t border-gold-500/20 bg-sand-100/50">

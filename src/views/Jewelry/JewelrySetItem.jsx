@@ -1,46 +1,48 @@
+"use client";
+
 import React, { useEffect } from 'react';
 import bannerImg from '../../assets/images/hero_banner 2.png';
-import bracelet1 from '../../assets/images/bracelet_premium.png';
-import bracelet2 from '../../assets/images/product_gold_payal.png';
-import bracelet3 from '../../assets/images/bracelet_premium.png';
-import bracelet4 from '../../assets/images/product_gold_payal.png';
+import set1 from '../../assets/images/product_kundan_set.png';
+import set2 from '../../assets/images/jewelry_set_premium.png';
+import set3 from '../../assets/images/product_kundan_set.png';
+import set4 from '../../assets/images/jewelry_set_premium.png';
 
 const products = [
   {
-    name: 'Kundan Bangle Set',
-    category: 'Bracelets',
-    price: '34,000.00',
-    originalPrice: '38,000.00',
-    rating: '4.8',
-    reviews: '210',
-    img: bracelet1,
-  },
-  {
-    name: 'Traditional Gold Payal',
-    category: 'Bracelets',
-    price: '28,500.00',
-    originalPrice: '32,000.00',
-    rating: '4.9',
-    reviews: '156',
-    img: bracelet2,
-  },
-  {
-    name: 'Royal Navratna Bracelet',
-    category: 'Bracelets',
-    price: '42,500.00',
-    originalPrice: '46,000.00',
+    name: 'Royal Bridal Kundan Set',
+    category: 'Sets',
+    price: '1,25,000.00',
+    originalPrice: '1,45,000.00',
     rating: '5.0',
-    reviews: '89',
-    img: bracelet3,
+    reviews: '56',
+    img: set1,
   },
   {
-    name: 'Meenakari Kada',
-    category: 'Bracelets',
-    price: '22,999.00',
-    originalPrice: '26,999.00',
-    rating: '4.7',
+    name: 'Antique Gold Heritage Set',
+    category: 'Sets',
+    price: '85,500.00',
+    originalPrice: '95,000.00',
+    rating: '4.9',
     reviews: '112',
-    img: bracelet4,
+    img: set2,
+  },
+  {
+    name: 'Polki Diamond Choker Set',
+    category: 'Sets',
+    price: '1,55,000.00',
+    originalPrice: '1,75,000.00',
+    rating: '5.0',
+    reviews: '34',
+    img: set3,
+  },
+  {
+    name: 'Meenakari Wedding Set',
+    category: 'Sets',
+    price: '95,999.00',
+    originalPrice: '1,10,000.00',
+    rating: '4.8',
+    reviews: '89',
+    img: set4,
   },
 ];
 
@@ -81,7 +83,7 @@ const ProductCard = ({ product }) => (
   </div>
 );
 
-const BraceletItem = () => {
+const JewelrySetItem = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -92,7 +94,7 @@ const BraceletItem = () => {
       <div className="relative w-full h-[40vh] sm:h-[50vh] lg:h-[60vh] flex items-center justify-center overflow-hidden">
         <img
           src={bannerImg}
-          alt="Handmade Bracelets Collection"
+          alt="Handmade Sets Collection"
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-royal-blue-950/30"></div>
@@ -107,10 +109,10 @@ const BraceletItem = () => {
               <div className="h-px w-12 sm:w-20 bg-gold-600/40" />
             </div>
             <h1 className="font-cinzel-decorative text-4xl lg:text-5xl text-royal-blue-900 mb-4 tracking-wide">
-              Bangles & Bracelets
+              Bridal & Jewelry Sets
             </h1>
             <p className="font-cormorant text-xl text-royal-blue-600/70 max-w-2xl mx-auto italic">
-              Elegant and timeless, our handcrafted bracelets and bangles add a touch of royal charm to your wrists.
+              Complete your majestic look with our carefully curated, breathtaking jewelry sets perfect for weddings and grand occasions.
             </p>
           </div>
 
@@ -125,4 +127,4 @@ const BraceletItem = () => {
   );
 };
 
-export default BraceletItem;
+export default JewelrySetItem;
