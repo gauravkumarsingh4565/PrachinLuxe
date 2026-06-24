@@ -2,7 +2,7 @@ import React from 'react';
 
 const Footer = () => {
   return (
-    <footer className="relative w-full bg-[#f8f6f0] pt-16 overflow-hidden text-[#2c3e50] font-sans">
+    <footer className="relative w-full bg-[#f8f6f0] pt-16 overflow-hidden text-[#2c3e50] font-cormorant">
       
       {/* 4 Column Layout */}
       <div className="max-w-7xl mx-auto px-6 pb-24 relative z-10">
@@ -265,7 +265,7 @@ const Footer = () => {
               <h3 className="font-cinzel text-xl text-[#d2b36e] tracking-[0.2em] uppercase leading-none">
                 Prachin Luxe
               </h3>
-              <span className="font-sans text-[8px] text-white/60 tracking-[0.3em] uppercase mt-1">
+              <span className="font-cinzel text-[8px] text-white/60 tracking-[0.3em] uppercase mt-1">
                 Heritage Revival
               </span>
            </div>

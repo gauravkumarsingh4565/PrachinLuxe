@@ -1,62 +1,76 @@
 import React from 'react';
-import earringsImg from '../assets/images/earrings2.png';
+import earringsImg from '../assets/images/earrings.png';
 import necklaceImg from '../assets/images/neckless.jpg';
-import payalImg from '../assets/images/payal.png';
+import payalImg from '../assets/images/payal.png'; 
 import antiqueImg from '../assets/images/antique.png';
+import exploreButtonImg from '../assets/images/explore_button.png';
 
-const categories = [
-  { name: 'Royal Earrings', items: '48 Pieces', img: earringsImg },
-  { name: 'Heritage Necklaces', items: '36 Pieces', img: necklaceImg },
-  { name: 'Traditional Payals', items: '24 Pieces', img: payalImg },
-  { name: 'Antique Treasures', items: '52 Pieces', img: antiqueImg },
+// SVG path for the ornate motifs, modeled after image_1.png
+const ornateMotifPath = "M64.6 31.8c-1.3 2.1-1 5.3.6 7 1.6 1.7 5.1 2.3 7 1.1s2.3-5.1 1.1-7-5.1-2.3-7-1.1c-1.7 1.1-2.7 0-3.3-1.6-.6-1.6-.6-2.9 0-3.9 1-1.6 3.9-1.3 5.3-.3s1.6 3.9.6 5.3c-1.1 1.7-.3 3 1.1 3.3s3-.3 3.3-1.1l1 2.1c1 2.1 3 3.3 5.3 3.3 2.6 0 4.9-1.6 5.6-4.2s0-5.1-1.6-7.3l-2.1 1c-1 2.1-3.3 3.3-5.3 3.3s-3.9-1-5.3-3c-1.3-1.9-2.1-4.2-2.1-6.7 0-2.6 1.3-4.9 3.3-6.6l1 2.1c1.3 1.9 3 3 5.3 3s4.2-.6 5.6-2.1c1.3-1.3 2.1-3 2.1-4.9s-1-3.9-3-5.3l-2.1 1c2.1 1 3.3 3.3 3.3 5.3s-1 3.9-3 5.3c-1.6 1.1-3.9 1-5.3 0-1.6-1.1-2.6-3.3-2.6-5.3s.6-3.9 2-5.3c1.6-1.6 3.9-1.6 5.3-.6l1 2.1c-1.1-.3-2.6.3-3.6 1.6s-.3 3.6 1.3 4.6 3.6.3 4.6-1.3l-2.1-1c-1.3 1.3-1.6 3.3-.6 4.9 1 1.6 3.3 2.6 5.3 2.6 2.1 0 4.2-1 5.6-3 1.6-2.1 1.6-4.9.3-7l-1 2.1c1 2.1 0 4.2-1.6 5.6s-3.9 1-5.6-1c-1.7-2.1-1-4.6 1-6.3L64.6 31.8c-1.6-.6-3 0-3.9 1s-1 2.6-.6 3.9 1.6 2.6 3.6 2.6h3.6l1 2.1c1.3 1.1 2.6.6 3.3-.6.6-1 0-2.3-1.3-3.6s-3.3-1.6-5.3-1.6-3.9 1.3-5.3 3.3L64.6 31.8z";
+
+const collections = [
+  { 
+    name: 'Brass Jewelry', 
+    description: 'Experience the timeless beauty of hand-carved, traditional indian brass. Each piece is a masterpiece of artisan skill and filigree work.', 
+    buttonText: 'Explore Brass',
+    img: earringsImg 
+  },
+  { 
+    name: 'Antique Collection', 
+    description: 'Curated with rare, authentic vintage and heirloom jewelry, showcasing centuries of craftsmanship and unique history.', 
+    buttonText: 'Discover Antiques',
+    img: antiqueImg 
+  },
 ];
 
 const FeaturedCategories = () => {
   return (
-    <section className="bg-gradient-to-b from-sand-50 via-sand-100 to-sand-50 py-15 px-4">
-      <div className="max-w-7xl mx-auto">
-        {/* Section Header */}
-        <div className="text-center mb-16">
-          <div className="flex items-center justify-center gap-4 mb-6">
-            <div className="h-px w-16 sm:w-24 bg-gold-600/40" />
-            <span className="text-gold-600 text-lg">◆</span>
-            <div className="h-px w-16 sm:w-24 bg-gold-600/40" />
-          </div>
-          <h2 className="font-cinzel-decorative text-4xl lg:text-5xl text-royal-blue-900 mb-4">
-            Royal Collections
-          </h2>
-          <p className="font-cormorant text-xl text-royal-blue-600/70">
-            Explore our curated categories of heritage jewelry
-          </p>
+    // TOP PADDING KAM KI: py-10 ki jagah pt-4 pb-10 use kiya hai (sirf upar se gap kam karne ke liye)
+    <section className="bg-sand-100 from-sand-50 via-sand-100 to-sand-50 pt-4 pb-6 px-2">
+      <div className="max-w-7xl mx-auto overflow-visible">
+        
+        {/* TOP MARGIN KAM KI: Yahan pehlay mb-16 tha jo extra gap de raha tha. Maine isko mb-4 kar diya hai */}
+        <div className="text-center mb-2">
+          {/* Header content commented out as per your original code */}
         </div>
 
-        {/* Categories Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {categories.map((category, index) => (
+        {/* 2-Column Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 overflow-visible">
+          {collections.map((collection, index) => (
             <div
               key={index}
-              className="group relative rounded-xl overflow-hidden border border-gold-500/20 hover:border-gold-500/50 transition-all duration-500 cursor-pointer"
+              className="group relative overflow-visible h-[240px] md:h-[300px] flex items-center justify-center rounded-sm transition-transform duration-500 hover:scale-[1.02]"
             >
-              {/* Image */}
-              <div className="aspect-[3/4] overflow-hidden">
-                <img
-                  src={category.img}
-                  alt={category.name}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
-                />
-              </div>
+              {/* Background Image */}
+              <img
+                src={collection.img}
+                alt={collection.name}
+                className="absolute inset-0 w-full h-full object-cover z-0"
+              />
 
-              {/* Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-royal-blue-950/80 via-royal-blue-950/40 to-transparent" />
+              {/* Dark Overlay for text readability */}
+              <div className="absolute inset-0 bg-black/65 z-10" />
 
-              {/* Content */}
-              <div className="absolute bottom-0 left-0 right-0 p-6">
-                <h3 className="font-cinzel text-2xl text-sand-50 mb-1">
-                  {category.name}
+              {/* Elegant Inner Gold Border */}
+              <div className="absolute inset-3 sm:inset-4 border border-gold-500/50 pointer-events-none z-30" />
+
+              {/* Centered Content */}
+              <div className="relative z-20 flex flex-col items-center justify-center text-center px-6 sm:px-12 w-full">
+                <h3 className="font-cinzel text-2xl md:text-3xl text-gold-400 mb-2 tracking-wide">
+                  {collection.name}
                 </h3>
-                <p className="font-cormorant text-gold-300/70">
-                  {category.items}
+                <p className="font-cormorant text-gray-200 text-[15px] mb-6 max-w-md leading-relaxed hidden sm:block">
+                  {collection.description}
                 </p>
+
+                {/* Image Button */}
+                <button className="relative flex items-center justify-center p-0 transition-transform duration-300 hover:scale-105 overflow-visible mt-2 group">
+                  <img 
+                    src={exploreButtonImg} 
+                    alt={collection.buttonText} 
+                    className="h-10 md:h-12 w-auto object-contain drop-shadow-2xl opacity-90 group-hover:opacity-100 transition-opacity duration-300" 
+                  />
+                </button>
               </div>
             </div>
           ))}

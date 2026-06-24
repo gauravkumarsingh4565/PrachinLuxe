@@ -1,8 +1,8 @@
 import React from 'react';
-import bannerImg from '../assets/images/antique2.png';
-import productAntiqueBoxImg from '../assets/images/product_antique_box.png';
-import productMeenakariBangleImg from '../assets/images/lamp.jpg';
-import antiqueImg from '../assets/images/antique.png';
+import bannerImg from '../../assets/images/antique2.png';
+import productAntiqueBoxImg from '../../assets/images/product_antique_box.png';
+import productMeenakariBangleImg from '../../assets/images/lamp.jpg';
+import antiqueImg from '../../assets/images/antique.png';
 
 const antiqueProducts = [
   {
@@ -80,71 +80,62 @@ const antiqueProducts = [
 ];
 
 const ProductCard = ({ product }) => (
-  <div className="relative group bg-[#1c120c] border border-gold-800/40 rounded-sm overflow-hidden hover:shadow-[0_0_20px_rgba(201,168,76,0.15)] transition-all duration-500 cursor-pointer flex flex-col font-sans">
-    {/* Decorative corner borders */}
-    <div className="absolute top-0 left-0 w-8 h-8 border-t border-l border-gold-600/50 opacity-50 group-hover:opacity-100 transition-opacity z-10 m-2"></div>
-    <div className="absolute top-0 right-0 w-8 h-8 border-t border-r border-gold-600/50 opacity-50 group-hover:opacity-100 transition-opacity z-10 m-2"></div>
-    <div className="absolute bottom-0 left-0 w-8 h-8 border-b border-l border-gold-600/50 opacity-50 group-hover:opacity-100 transition-opacity z-10 m-2"></div>
-    <div className="absolute bottom-0 right-0 w-8 h-8 border-b border-r border-gold-600/50 opacity-50 group-hover:opacity-100 transition-opacity z-10 m-2"></div>
-
-    <div className="relative aspect-[4/5] overflow-hidden bg-[#0d0805]">
-      {/* Sepia filter on image, removes on hover */}
+  <div className="group relative bg-[#1c120c] rounded-xl overflow-hidden cursor-pointer flex flex-col font-cormorant shadow-sm hover:shadow-[0_0_20px_rgba(201,168,76,0.2)] transition-all duration-500 hover:-translate-y-1.5 border border-gold-900/40 hover:border-gold-500/50">
+    <div className="relative aspect-square overflow-hidden bg-[#0a0705]">
       <img
         src={product.img}
         alt={product.name}
-        className="w-full h-full object-cover sepia-[.60] contrast-125 hover:sepia-0 hover:scale-110 transition-all duration-700 ease-out opacity-80 group-hover:opacity-100"
+        className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 sepia-[.40] group-hover:sepia-0"
+        loading="lazy"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#1c120c] via-transparent to-transparent opacity-80"></div>
-    </div>
-    
-    <div className="p-5 flex flex-col flex-grow relative z-10 -mt-8">
-      <div className="flex items-center justify-center mb-3">
-        <div className="h-px w-8 bg-gold-700/50" />
-        <span className="text-gold-500 text-[10px] mx-2 tracking-widest uppercase">{product.category}</span>
-        <div className="h-px w-8 bg-gold-700/50" />
+      <div className="absolute top-2.5 left-2.5 bg-black/60 backdrop-blur-md px-2.5 py-0.5 rounded-full text-[10px] font-bold text-gold-400 tracking-wider uppercase border border-gold-700/30">
+        {product.category}
       </div>
-      
-      <h3 className="font-cinzel font-semibold text-center text-[15px] sm:text-[16px] leading-snug text-gold-200 mb-4 flex-grow drop-shadow-md">
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
+      <div className="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 translate-y-3 group-hover:translate-y-0 transition-all duration-400">
+        <button className="w-full py-2 rounded-lg bg-gold-600/90 backdrop-blur-sm text-[#0a0705] font-semibold text-xs tracking-widest uppercase hover:bg-gold-400 transition-colors duration-300" aria-label={`Claim ${product.name}`}>
+          CLAIM ARTIFACT
+        </button>
+      </div>
+    </div>
+    <div className="p-3 sm:p-3.5 flex flex-col flex-grow">
+      <h3 className="font-cinzel font-semibold text-[13px] sm:text-[14px] leading-snug text-gold-200 mb-2 flex-grow line-clamp-2">
         {product.name}
       </h3>
-
-      <div className="flex items-center justify-center gap-1 mb-4 text-[13px] text-gold-400/70">
-        <span className="text-[#d4af37] text-sm leading-none mt-[-2px]">★</span>
+      <div className="flex items-center gap-1 mb-2 text-[12px] text-gold-400/70">
+        <span className="text-[#d4af37] text-[13px] leading-none">★</span>
         <span className="font-bold text-gold-300">{product.rating}</span>
-        <span className="text-sand-600">({product.reviews})</span>
+        <span>({product.reviews})</span>
       </div>
-
-      <div className="flex flex-col items-center gap-1 mb-5">
-        <span className="font-cormorant font-extrabold text-[22px] sm:text-[24px] text-gold-400 tracking-wide">
+      <div className="flex items-baseline gap-1.5">
+        <span className="font-cormorant font-bold text-[16px] sm:text-[18px] text-gold-400">
           Rs. {product.price}
         </span>
-        <span className="text-[14px] text-sand-700/60 font-medium line-through">
+        <span className="text-[11px] sm:text-[12px] text-gold-700/60 line-through">
           Rs. {product.originalPrice}
         </span>
       </div>
-      
-      <button className="w-full py-3 border border-gold-700/50 bg-transparent text-gold-400 font-cinzel font-bold tracking-widest text-[13px] hover:bg-gold-900/40 hover:text-gold-200 transition-all duration-500">
-        CLAIM ARTIFACT
-      </button>
     </div>
   </div>
 );
 
-const AntiqueItems = () => {
+const AntiqueItems = ({ isHome = false }) => {
   return (
-    <div className="w-full bg-[#0a0705] min-h-screen relative overflow-hidden">
+    <div className={`w-full bg-[#0a0705] relative overflow-hidden ${!isHome ? 'min-h-screen' : ''}`}>
       {/* Background Texture/Gradient Overlay */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#2a1a10] via-[#0a0705] to-black opacity-80 pointer-events-none"></div>
 
-      {/* Hero Banner */}
-      <div className="relative w-full h-[40vh] sm:h-[50vh] lg:h-[70vh] flex items-center justify-center overflow-hidden border-b-2 border-gold-900/60">
-        <img
-          src={bannerImg}
-          alt="Antique Treasures Collection"
-          className="absolute inset-0 w-full h-full object-cover object-center sepia-[.30]"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0705]/80 via-[#1c120c]/60 to-[#0a0705]"></div>
-      </div>
+      {/* Hero Banner - hidden if on home page */}
+      {!isHome && (
+        <div className="relative w-full h-[40vh] sm:h-[50vh] lg:h-[70vh] flex items-center justify-center overflow-hidden border-b-2 border-gold-900/60">
+          <img
+            src={bannerImg}
+            alt="Antique Treasures Collection"
+            className="absolute inset-0 w-full h-full object-cover object-center sepia-[.30]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0a0705]/80 via-[#1c120c]/60 to-[#0a0705]"></div>
+        </div>
+      )}
 
       <section className="relative z-10 py-20 px-4">
         <div className="max-w-[1400px] mx-auto">
@@ -168,7 +159,7 @@ const AntiqueItems = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
             {antiqueProducts.map((product, index) => (
               <ProductCard key={index} product={product} />
             ))}

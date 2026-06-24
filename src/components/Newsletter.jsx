@@ -12,7 +12,7 @@ const Newsletter = () => {
   };
 
   return (
-    <section className="bg-gradient-to-r from-sand-200 via-sand-100 to-sand-200 relative overflow-hidden py-20 px-4">
+    <section className="bg-gradient-to-r from-sand-200 via-sand-100 to-sand-200 relative overflow-hidden py-10 px-4">
       {/* Decorative Background Circles */}
       <div className="absolute top-0 left-0 w-72 h-72 bg-gold-500/10 rounded-full -translate-x-1/2 -translate-y-1/2" />
       <div className="absolute top-1/2 right-0 w-96 h-96 bg-gold-500/10 rounded-full translate-x-1/3 -translate-y-1/2" />

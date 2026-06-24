@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import heroBanner from '../assets/images/hero_banner.jpg';
-import img1 from '../assets/images/antique1.png';
-import img2 from '../assets/images/antique2.png';
-import img3 from '../assets/images/antique3.png';
+import heroBanner from '../assets/images/hero_banner 2.png';
 
-const carouselImages = [heroBanner, img1, img2, img3];
+import img2 from '../assets/images/antique2.png';
+
+
+const carouselImages = [heroBanner, img2,];
 
 const HeroSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -26,9 +26,9 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="relative w-full overflow-hidden bg-sand-50">
+    <section className=" bg-sand-100 relative w-full overflow-hidden bg-sand-50 ">
       {/* Carousel Container */}
-      <div className="relative w-full h-[40vh] sm:h-[60vh] lg:h-[85vh] flex items-center justify-center overflow-hidden">
+      <div className="relative w-full h-[30vh] sm:h-[40vh] lg:h-[55vh] flex items-center justify-center overflow-hidden bg-sand-100">
         
         {/* Images */}
         {carouselImages.map((img, index) => (
@@ -41,7 +41,7 @@ const HeroSection = () => {
             <img
               src={img}
               alt={`Prachin Luxe Collection ${index + 1}`}
-              className="absolute inset-0 w-full h-full  sm:object-cover object-center"
+              className="w-full h-full object-fill object-center"
             />
             {/* Dark overlay just at the very bottom */}
             <div className="absolute inset-0 bg-gradient-to-t from-royal-blue-950/40 via-transparent to-transparent pointer-events-none" />

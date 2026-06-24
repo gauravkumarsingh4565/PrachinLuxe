@@ -10,8 +10,8 @@ const stats = [
 
 const AboutSection = () => {
   return (
-    <section className="bg-gradient-to-b from-sand-200 to-sand-50 py-24 px-4">
-      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-16 items-center">
+    <section className="bg-gradient-to-b from-sand-200 to-sand-50 py-6 px-4">
+      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-10 items-center">
         {/* Left Column — Image with decorative frame */}
         <div className="lg:w-1/2 flex justify-center">
           <div className="relative">
@@ -56,7 +56,7 @@ const AboutSection = () => {
             every piece with meticulous hand-craftsmanship that honours centuries of
             heritage.
           </p>
-          <p className="text-royal-blue-700/80 leading-relaxed mb-12 text-base lg:text-lg">
+          <p className="text-royal-blue-700/80 leading-relaxed mb-8 text-base lg:text-lg">
             Each creation is a testament to the grandeur of Mughal and Rajputana
             aesthetics — from the delicate Kundan settings to the radiant Polki
             diamonds, every gem is carefully selected and placed to tell a story of
