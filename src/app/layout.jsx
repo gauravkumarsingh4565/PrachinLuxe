@@ -3,6 +3,8 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
 import '@/index.css';
+import { CartProvider } from '@/context/CartContext';
+import { AuthProvider } from '@/context/AuthContext';
 
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
@@ -58,10 +60,14 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${cormorant.variable} ${cinzel.variable} ${cinzelDecorative.variable} ${josefin.variable} ${outfit.variable} min-h-screen bg-sand-50 antialiased`}>
-        <Navbar />
-        {children}
-        <Footer />
-        <ScrollToTop />
+        <AuthProvider>
+          <CartProvider>
+            <Navbar />
+            {children}
+            <Footer />
+            <ScrollToTop />
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );

@@ -42,7 +42,7 @@ const FeaturedCategories = () => {
               className="group relative overflow-visible h-[240px] md:h-[300px] flex items-center justify-center rounded-sm transition-transform duration-500 hover:scale-[1.02]"
             >
               {/* Background Image */}
-              <Image
+              <img
                 src={collection.img}
                 alt={collection.name}
                 className="absolute inset-0 w-full h-full object-cover z-0"

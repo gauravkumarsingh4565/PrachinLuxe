@@ -2,71 +2,25 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import bannerImg from '../assets/images/new_arrival.png';
-import earrings from '../assets/images/earrings_premium.png';
-import necklace from '../assets/images/necklace_premium.png';
-import ring from '../assets/images/ring_premium.png';
-import bracelet from '../assets/images/bracelet_premium.png';
+import { products } from '@/data/products';
 
-const newProducts = [
-  {
-    name: 'Kundan Heritage Jhumka',
-    category: 'Earrings',
-    price: '24,999.00',
-    originalPrice: '28,000.00',
-    rating: '5.0',
-    reviews: '124',
-    img: earrings,
-  },
-  {
-    name: 'Temple Lakshmi Choker',
-    category: 'Necklaces',
-    price: '45,500.00',
-    originalPrice: '52,000.00',
-    rating: '4.9',
-    reviews: '89',
-    img: necklace,
-  },
-  {
-    name: 'Polki Diamond Cocktail Ring',
-    category: 'Rings',
-    price: '18,500.00',
-    originalPrice: '22,000.00',
-    rating: '4.8',
-    reviews: '210',
-    img: ring,
-  },
-  {
-    name: 'Antique Gold Kada',
-    category: 'Bracelets',
-    price: '32,999.00',
-    originalPrice: '38,000.00',
-    rating: '4.9',
-    reviews: '156',
-    img: bracelet,
-  },
-  {
-    name: 'Polki Diamond Cocktail Ring',
-    category: 'Rings',
-    price: '18,500.00',
-    originalPrice: '22,000.00',
-    rating: '4.8',
-    reviews: '210',
-    img: ring,
-  },
-  {
-    name: 'Antique Gold Kada',
-    category: 'Bracelets',
-    price: '32,999.00',
-    originalPrice: '38,000.00',
-    rating: '4.9',
-    reviews: '156',
-    img: bracelet,
-  }
+// Define the IDs of products to showcase as new arrivals
+const newArrivalIds = [
+  'premium-kundan-disc-earrings',
+  'temple-lakshmi-necklace',
+  'royal-heritage-kada',
+  'royal-solitaire-ring',
+  'traditional-gold-najarbattu',
+  'bridal-pearl-gold-hairpin'
 ];
 
 const ProductCard = ({ product }) => (
-  <div className="group relative bg-white rounded-xl overflow-hidden cursor-pointer flex flex-col font-cormorant shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-1.5 border border-sand-200/50 hover:border-gold-300/50">
+  <Link
+    href={`/product/${product.id}`}
+    className="group relative bg-white rounded-xl overflow-hidden cursor-pointer flex flex-col font-cormorant shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-1.5 border border-sand-200/50 hover:border-gold-300/50"
+  >
     <div className="relative aspect-square overflow-hidden bg-sand-50">
       <img
         src={product.img}
@@ -79,8 +33,8 @@ const ProductCard = ({ product }) => (
       </div>
       <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       <div className="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 translate-y-3 group-hover:translate-y-0 transition-all duration-400">
-        <button className="w-full py-2 rounded-lg bg-white/95 backdrop-blur-sm text-royal-blue-900 font-semibold text-xs tracking-wide hover:bg-gold-500 hover:text-white transition-colors duration-300 shadow-md" aria-label={`Add ${product.name} to cart`}>
-          ADD TO CART
+        <button className="w-full py-2 rounded-lg bg-white/95 backdrop-blur-sm text-royal-blue-900 font-semibold text-xs tracking-wide hover:bg-gold-500 hover:text-white transition-colors duration-300 shadow-md" aria-label={`View ${product.name} details`}>
+          VIEW DETAILS
         </button>
       </div>
     </div>
@@ -89,9 +43,11 @@ const ProductCard = ({ product }) => (
         <span className="font-bold text-[17px] sm:text-[19px] text-royal-blue-900 leading-tight">
           Rs. {product.price}
         </span>
-        <span className="text-[12px] sm:text-[13px] text-gray-400 line-through">
-          Rs. {product.originalPrice}
-        </span>
+        {product.originalPrice && (
+          <span className="text-[12px] sm:text-[13px] text-gray-400 line-through">
+            Rs. {product.originalPrice}
+          </span>
+        )}
       </div>
       <div className="flex items-center gap-1.5 mb-2.5 text-[13px]">
         <span className="text-amber-400 text-[16px] leading-none">★</span>
@@ -102,11 +58,16 @@ const ProductCard = ({ product }) => (
         {product.name}
       </h3>
     </div>
-  </div>
+  </Link>
 );
 
 const NewArrival = () => {
   const router = useRouter();
+  
+  // Resolve new products in order of definition
+  const newProducts = newArrivalIds
+    .map(id => products.find(p => p.id === id))
+    .filter(Boolean);
 
   return (
     <section className="bg-sand-50 py-6 px-4 border-t border-gold-500/20">
@@ -118,15 +79,7 @@ const NewArrival = () => {
             alt="New Arrivals"
             className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-royal-blue-950/80 via-royal-blue-950/40 to-transparent"></div>
-          <div className="absolute inset-0 flex flex-col justify-center px-8 md:px-16">
-            <h2 className="font-cinzel-decorative text-3xl md:text-5xl lg:text-6xl text-white mb-4 drop-shadow-lg tracking-wide">
-              New <span className="text-gold-400">Arrivals</span>
-            </h2>
-            <p className="font-cormorant text-xl md:text-2xl text-sand-200 max-w-xl italic drop-shadow-md">
-              Discover our latest collection of magnificent handcrafted treasures, blending timeless tradition with modern elegance.
-            </p>
-          </div>
+          {/* Image is styled with beautiful built-in text */}
         </div>
 
         <div className="text-center flex flex-col items-center my-2">
@@ -137,8 +90,8 @@ const NewArrival = () => {
 
         {/* Products Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
-          {newProducts.map((product, index) => (
-            <ProductCard key={index} product={product} />
+          {newProducts.map((product) => (
+            <ProductCard key={product.id} product={product} />
           ))}
         </div>
 

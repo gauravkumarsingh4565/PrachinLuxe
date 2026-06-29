@@ -2,71 +2,15 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import productAntiqueBoxImg from '../assets/images/product_antique_box.png';
-import productMeenakariBangleImg from '../assets/images/lamp.jpg';
-import antiqueImg from '../assets/images/antique.png';
+import Link from 'next/link';
 import bannerImg from '../assets/images/antique2.png';
-
-const antiqueProducts = [
-  {
-    name: 'Mughal Peacock Box - Heritage Artifact',
-    category: 'Antique',
-    price: '15,999.00',
-    originalPrice: '18,500.00',
-    rating: '4.9',
-    reviews: '89',
-    img: productAntiqueBoxImg,
-  },
-  {
-    name: 'Meenakari Royal Bangles - Jaipur Enamel Work',
-    category: 'Antique',
-    price: '18,999.00',
-    originalPrice: '22,000.00',
-    rating: '4.8',
-    reviews: '412',
-    img: productMeenakariBangleImg,
-  },
-  {
-    name: 'Vintage Brass Ganesha Idol - 19th Century Style',
-    category: 'Antique',
-    price: '24,500.00',
-    originalPrice: '28,000.00',
-    rating: '4.9',
-    reviews: '124',
-    img: antiqueImg,
-  },
-  {
-    name: 'Royal Rajputana Dagger with Scabbard (Replica)',
-    category: 'Antique',
-    price: '32,999.00',
-    originalPrice: '35,000.00',
-    rating: '4.7',
-    reviews: '56',
-    img: productAntiqueBoxImg,
-  },
-  {
-    name: 'Vintage Brass Ganesha Idol - 19th Century Style',
-    category: 'Antique',
-    price: '24,500.00',
-    originalPrice: '28,000.00',
-    rating: '4.9',
-    reviews: '124',
-    img: antiqueImg,
-  },
-  {
-    name: 'Royal Rajputana Dagger with Scabbard (Replica)',
-    category: 'Antique',
-    price: '32,999.00',
-    originalPrice: '35,000.00',
-    rating: '4.7',
-    reviews: '56',
-    img: productAntiqueBoxImg,
-  }
-  
-];
+import { products } from '@/data/products';
 
 const ProductCard = ({ product }) => (
-  <div className="group relative bg-white rounded-xl overflow-hidden cursor-pointer flex flex-col font-cormorant shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-1.5 border border-sand-200/50 hover:border-gold-300/50">
+  <Link
+    href={`/product/${product.id}`}
+    className="group relative bg-white rounded-xl overflow-hidden cursor-pointer flex flex-col font-cormorant shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-1.5 border border-sand-200/50 hover:border-gold-300/50"
+  >
     <div className="relative aspect-square overflow-hidden bg-sand-50">
       <img
         src={product.img}
@@ -89,9 +33,11 @@ const ProductCard = ({ product }) => (
         <span className="font-bold text-[17px] sm:text-[19px] text-royal-blue-900 leading-tight">
           Rs. {product.price}
         </span>
-        <span className="text-[12px] sm:text-[13px] text-gray-400 line-through">
-          Rs. {product.originalPrice}
-        </span>
+        {product.originalPrice && (
+          <span className="text-[12px] sm:text-[13px] text-gray-400 line-through">
+            Rs. {product.originalPrice}
+          </span>
+        )}
       </div>
       <div className="flex items-center gap-1.5 mb-2.5 text-[13px]">
         <span className="text-amber-400 text-[16px] leading-none">★</span>
@@ -102,60 +48,49 @@ const ProductCard = ({ product }) => (
         {product.name}
       </h3>
     </div>
-  </div>
+  </Link>
 );
 
 const FeaturedAntiques = () => {
   const router = useRouter();
 
+  // Filter products by category 'Antique'
+  const antiqueProducts = products.filter(product => product.category === 'Antique');
+
   return (
     <section className="bg-sand-50 py-6 px-4 border-t border-gold-500/20">
       <div className="max-w-[1400px] mx-auto">
         <div className="mb-6">
-        {/* Banner Section */}
-        <div className="relative w-full h-[30vh] sm:h-[40vh] md:h-[50vh] rounded-2xl overflow-hidden mb-4 shadow-xl group">
-          <img 
-            src={bannerImg} 
-            alt="Antique Treasures" 
-            className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#1c120c]/90 via-[#1c120c]/50 to-transparent"></div>
-          <div className="absolute inset-0 flex flex-col justify-center px-8 md:px-16">
-            <h2 className="font-cinzel-decorative text-3xl md:text-5xl lg:text-6xl text-gold-400 mb-4 drop-shadow-lg tracking-wide">
-              Antique <span className="text-white">Treasures</span>
-            </h2>
-            <p className="font-cormorant text-xl md:text-2xl text-sand-200 max-w-xl italic drop-shadow-md">
-              Authentic heritage artifacts and royal collectibles that breathe life into history.
-            </p>
+          {/* Banner Section */}
+          <div className="relative w-full h-[30vh] sm:h-[40vh] md:h-[50vh] rounded-2xl overflow-hidden mb-4 shadow-xl group">
+            <img
+              src={bannerImg}
+              alt="Antique Treasures"
+              className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+            />
+            {/* Image is styled with beautiful built-in text */}
           </div>
-        </div>
 
 
-        <div className="text-center flex flex-col items-center my-2">
-          <h2 className="text-2xl md:text-3xl font-extrabold tracking-wide text-black">
-           Antique Products
-          </h2>
-        </div>
+          <div className="text-center flex flex-col items-center my-2">
+            <h2 className="text-2xl md:text-3xl font-extrabold tracking-wide text-black">
+              Antique Products
+            </h2>
+          </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
-            {antiqueProducts.map((product, index) => (
-              <ProductCard key={index} product={product} />
+            {antiqueProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
             ))}
           </div>
         </div>
 
-        <div className="flex justify-end ">
-          <button 
-            onClick={() => router.push('/antique')}
-            className="group relative inline-flex items-center gap-3 px-8 py-3 text-royal-blue-900 font-cinzel-decorative font-bold text-lg uppercase tracking-[0.15em] transition-all duration-300 hover:text-gold-600"
+        <div className="flex justify-center mt-4">
+          <button
+            onClick={() => router.push('/handmade')}
+            className="px-10 py-3.5 bg-royal-blue-900 text-white font-cinzel-decorative text-sm tracking-[0.2em] hover:bg-gold-600 transition-colors duration-500 shadow-md rounded-sm"
           >
-            <span className="relative">
-              Explore All Antiques
-              <span className="absolute -bottom-1 left-0 w-full h-[1px] bg-gold-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-            </span>
-            <svg className="w-6 h-6 transform group-hover:translate-x-2 transition-transform duration-300 text-gold-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
+            VIEW FULL COLLECTION
           </button>
         </div>
       </div>

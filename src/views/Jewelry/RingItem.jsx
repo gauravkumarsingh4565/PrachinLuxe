@@ -1,54 +1,17 @@
 "use client";
 
 import React, { useEffect } from 'react';
+import Link from 'next/link';
 import bannerImg from '../../assets/images/hero_banner 2.png';
-import ring1 from '../../assets/images/ring_premium.png';
-import ring2 from '../../assets/images/ring_2_premium.png';
-// Re-using some images for placeholders
-import ring3 from '../../assets/images/ring_premium.png';
-import ring4 from '../../assets/images/ring_2_premium.png';
+import { products } from '@/data/products';
 
-const products = [
-  {
-    name: 'Vintage Polki Ring',
-    category: 'Rings',
-    price: '21,000.00',
-    originalPrice: '25,000.00',
-    rating: '4.9',
-    reviews: '342',
-    img: ring1,
-  },
-  {
-    name: 'Royal Diamond Statement Ring',
-    category: 'Rings',
-    price: '45,500.00',
-    originalPrice: '52,000.00',
-    rating: '5.0',
-    reviews: '89',
-    img: ring2,
-  },
-  {
-    name: 'Kundan Cocktail Ring',
-    category: 'Rings',
-    price: '18,500.00',
-    originalPrice: '22,000.00',
-    rating: '4.7',
-    reviews: '156',
-    img: ring3,
-  },
-  {
-    name: 'Antique Gold Band',
-    category: 'Rings',
-    price: '15,999.00',
-    originalPrice: '18,999.00',
-    rating: '4.8',
-    reviews: '210',
-    img: ring4,
-  },
-];
+const ringProducts = products.filter(p => p.category === 'Rings');
 
 const ProductCard = ({ product }) => (
-  <div className="group relative bg-white rounded-xl overflow-hidden cursor-pointer flex flex-col font-cormorant shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-1.5 border border-sand-200/50 hover:border-gold-300/50">
+  <Link
+    href={`/product/${product.id}`}
+    className="group relative bg-white rounded-xl overflow-hidden cursor-pointer flex flex-col font-cormorant shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-1.5 border border-sand-200/50 hover:border-gold-300/50"
+  >
     <div className="relative aspect-square overflow-hidden bg-sand-50">
       <img
         src={product.img}
@@ -58,8 +21,8 @@ const ProductCard = ({ product }) => (
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       <div className="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 translate-y-3 group-hover:translate-y-0 transition-all duration-400">
-        <button className="w-full py-2 rounded-lg bg-white/95 backdrop-blur-sm text-royal-blue-900 font-semibold text-xs tracking-wide hover:bg-gold-500 hover:text-white transition-colors duration-300 shadow-md" aria-label={`Add ${product.name} to cart`}>
-          ADD TO CART
+        <button className="w-full py-2 rounded-lg bg-white/95 backdrop-blur-sm text-royal-blue-900 font-semibold text-xs tracking-wide hover:bg-gold-500 hover:text-white transition-colors duration-300 shadow-md" aria-label={`View ${product.name} details`}>
+          VIEW DETAILS
         </button>
       </div>
     </div>
@@ -76,12 +39,14 @@ const ProductCard = ({ product }) => (
         <span className="font-bold text-[15px] sm:text-[16px] text-royal-blue-900">
           Rs. {product.price}
         </span>
-        <span className="text-[11px] sm:text-[12px] text-gray-400 line-through">
-          Rs. {product.originalPrice}
-        </span>
+        {product.originalPrice && (
+          <span className="text-[11px] sm:text-[12px] text-gray-400 line-through">
+            Rs. {product.originalPrice}
+          </span>
+        )}
       </div>
     </div>
-  </div>
+  </Link>
 );
 
 const RingItem = () => {
@@ -118,8 +83,8 @@ const RingItem = () => {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
-            {products.map((product, index) => (
-              <ProductCard key={index} product={product} />
+            {ringProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
             ))}
           </div>
         </div>

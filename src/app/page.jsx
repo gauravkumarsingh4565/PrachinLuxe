@@ -1,4 +1,5 @@
-import FeaturedCategories from '@/components/FeaturedCategories';
+import CategoryCircles from '@/components/CategoryCircles';
+// import FeaturedCategories from '@/components/FeaturedCategories';
 import HeroSection from '@/components/HeroSection';
 import ShopEarringCategory from '@/components/ShopEarringCategory';
 import FeaturedProducts from '@/components/FeaturedProducts';
@@ -10,9 +11,10 @@ import Testimonials from '@/components/Testimonials';
 export default function Home() {
   return (
     <main>
-      <FeaturedCategories />
+      <CategoryCircles />
+      {/* <FeaturedCategories /> */}
       <HeroSection />
-      <ShopEarringCategory />
+      {/* <ShopEarringCategory /> */}
       <FeaturedProducts />
       <NewArrival />
       <FeaturedAntiques />

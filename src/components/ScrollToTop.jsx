@@ -21,7 +21,7 @@ export default function ScrollToTop() {
     <button
       id="scroll-to-top"
       onClick={scrollToTop}
-      className={`fixed bottom-8 right-8 z-40 w-14 h-14 rounded-full border-2 border-gold-500/40 bg-white/90 backdrop-blur-sm text-gold-700 flex items-center justify-center shadow-lg shadow-sandstone-500/20 transition-all duration-500 hover:bg-gold-500/10 hover:border-gold-500 hover:shadow-xl ${
+      className={`fixed bottom-4 right-4 sm:bottom-8 sm:right-8 z-40 w-10 h-10 sm:w-14 sm:h-14 rounded-full border border-gold-500/40 bg-white/90 backdrop-blur-sm text-gold-700 flex items-center justify-center shadow-lg transition-all duration-500 hover:bg-gold-500/10 hover:border-gold-500 hover:shadow-xl ${
         showScrollTop
           ? 'opacity-100 translate-y-0'
           : 'opacity-0 translate-y-10 pointer-events-none'

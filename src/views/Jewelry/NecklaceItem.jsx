@@ -1,53 +1,17 @@
 "use client";
 
 import React, { useEffect } from 'react';
+import Link from 'next/link';
 import bannerImg from '../../assets/images/hero_banner 2.png';
-import necklace1 from '../../assets/images/necklace_premium.png';
-import necklace2 from '../../assets/images/necklace_2_premium.png';
-import necklace3 from '../../assets/images/product_temple_necklace.png';
-import necklace4 from '../../assets/images/necklace.png';
+import { products } from '@/data/products';
 
-const products = [
-  {
-    name: 'Temple Lakshmi Necklace',
-    category: 'Necklaces',
-    price: '45,999.00',
-    originalPrice: '49,999.00',
-    rating: '4.9',
-    reviews: '1,204',
-    img: necklace1,
-  },
-  {
-    name: 'Emerald Choker Masterpiece',
-    category: 'Necklaces',
-    price: '75,000.00',
-    originalPrice: '82,000.00',
-    rating: '5.0',
-    reviews: '67',
-    img: necklace2,
-  },
-  {
-    name: 'Antique Gold Harram',
-    category: 'Necklaces',
-    price: '55,500.00',
-    originalPrice: '60,000.00',
-    rating: '4.8',
-    reviews: '312',
-    img: necklace3,
-  },
-  {
-    name: 'Classic Kundan Necklace',
-    category: 'Necklaces',
-    price: '38,999.00',
-    originalPrice: '42,999.00',
-    rating: '4.7',
-    reviews: '189',
-    img: necklace4,
-  },
-];
+const necklaceProducts = products.filter(p => p.category === 'Necklaces');
 
 const ProductCard = ({ product }) => (
-  <div className="group relative bg-white rounded-xl overflow-hidden cursor-pointer flex flex-col font-cormorant shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-1.5 border border-sand-200/50 hover:border-gold-300/50">
+  <Link
+    href={`/product/${product.id}`}
+    className="group relative bg-white rounded-xl overflow-hidden cursor-pointer flex flex-col font-cormorant shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-1.5 border border-sand-200/50 hover:border-gold-300/50"
+  >
     <div className="relative aspect-square overflow-hidden bg-sand-50">
       <img
         src={product.img}
@@ -57,8 +21,8 @@ const ProductCard = ({ product }) => (
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       <div className="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 translate-y-3 group-hover:translate-y-0 transition-all duration-400">
-        <button className="w-full py-2 rounded-lg bg-white/95 backdrop-blur-sm text-royal-blue-900 font-semibold text-xs tracking-wide hover:bg-gold-500 hover:text-white transition-colors duration-300 shadow-md" aria-label={`Add ${product.name} to cart`}>
-          ADD TO CART
+        <button className="w-full py-2 rounded-lg bg-white/95 backdrop-blur-sm text-royal-blue-900 font-semibold text-xs tracking-wide hover:bg-gold-500 hover:text-white transition-colors duration-300 shadow-md" aria-label={`View ${product.name} details`}>
+          VIEW DETAILS
         </button>
       </div>
     </div>
@@ -75,12 +39,14 @@ const ProductCard = ({ product }) => (
         <span className="font-bold text-[15px] sm:text-[16px] text-royal-blue-900">
           Rs. {product.price}
         </span>
-        <span className="text-[11px] sm:text-[12px] text-gray-400 line-through">
-          Rs. {product.originalPrice}
-        </span>
+        {product.originalPrice && (
+          <span className="text-[11px] sm:text-[12px] text-gray-400 line-through">
+            Rs. {product.originalPrice}
+          </span>
+        )}
       </div>
     </div>
-  </div>
+  </Link>
 );
 
 const NecklaceItem = () => {
@@ -117,8 +83,8 @@ const NecklaceItem = () => {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
-            {products.map((product, index) => (
-              <ProductCard key={index} product={product} />
+            {necklaceProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
             ))}
           </div>
         </div>

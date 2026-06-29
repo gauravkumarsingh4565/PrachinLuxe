@@ -100,4 +100,13 @@
       background-position: -200% center;
     }
   }
+
+  /* Utility to hide scrollbars but maintain scroll functionality */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
 }
