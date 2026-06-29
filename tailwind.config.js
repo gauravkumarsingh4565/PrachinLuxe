@@ -1,7 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
-    "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
@@ -48,9 +47,11 @@ export default {
 
       },
       fontFamily: {
-        cinzel: ['Cinzel', 'serif'],
-        'cinzel-decorative': ['Cinzel Decorative', 'serif'],
-        cormorant: ['Cormorant Garamond', 'serif'],
+        cinzel: ['var(--font-cinzel)', 'serif'],
+        'cinzel-decorative': ['var(--font-cinzel-decorative)', 'serif'],
+        cormorant: ['var(--font-cormorant)', 'serif'],
+        josefin: ['var(--font-josefin)', 'sans-serif'],
+        outfit: ['var(--font-outfit)', 'sans-serif'],
       },
       animation: {
         'fade-in': 'fadeIn 1s ease-out forwards',

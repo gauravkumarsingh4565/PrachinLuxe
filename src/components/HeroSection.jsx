@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect } from 'react';
 import heroBanner from '../assets/images/hero_banner 2.png';
 

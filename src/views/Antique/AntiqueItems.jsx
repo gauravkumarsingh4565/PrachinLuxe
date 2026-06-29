@@ -1,86 +1,17 @@
-import React from 'react';
-import bannerImg from '../../assets/images/antique2.png';
-import productAntiqueBoxImg from '../../assets/images/product_antique_box.png';
-import productMeenakariBangleImg from '../../assets/images/lamp.jpg';
-import antiqueImg from '../../assets/images/antique.png';
+"use client";
 
-const antiqueProducts = [
-  {
-    name: 'Mughal Peacock Box - Heritage Artifact',
-    category: 'Antique',
-    price: '15,999.00',
-    originalPrice: '18,500.00',
-    rating: '4.9',
-    reviews: '89',
-    img: productAntiqueBoxImg,
-  },
-  {
-    name: 'Meenakari Royal Bangles - Jaipur Enamel Work',
-    category: 'Antique',
-    price: '18,999.00',
-    originalPrice: '22,000.00',
-    rating: '4.8',
-    reviews: '412',
-    img: productMeenakariBangleImg,
-  },
-  {
-    name: 'Vintage Brass Ganesha Idol - 19th Century Style',
-    category: 'Antique',
-    price: '24,500.00',
-    originalPrice: '28,000.00',
-    rating: '4.9',
-    reviews: '124',
-    img: antiqueImg,
-  },
-  {
-    name: 'Royal Rajputana Dagger with Scabbard (Replica)',
-    category: 'Antique',
-    price: '32,999.00',
-    originalPrice: '35,000.00',
-    rating: '4.7',
-    reviews: '56',
-    img: productAntiqueBoxImg,
-  },
-   {
-    name: 'Mughal Peacock Box - Heritage Artifact',
-    category: 'Antique',
-    price: '15,999.00',
-    originalPrice: '18,500.00',
-    rating: '4.9',
-    reviews: '89',
-    img: productAntiqueBoxImg,
-  },
-  {
-    name: 'Meenakari Royal Bangles - Jaipur Enamel Work',
-    category: 'Antique',
-    price: '18,999.00',
-    originalPrice: '22,000.00',
-    rating: '4.8',
-    reviews: '412',
-    img: productMeenakariBangleImg,
-  },
-  {
-    name: 'Vintage Brass Ganesha Idol - 19th Century Style',
-    category: 'Antique',
-    price: '24,500.00',
-    originalPrice: '28,000.00',
-    rating: '4.9',
-    reviews: '124',
-    img: antiqueImg,
-  },
-  {
-    name: 'Royal Rajputana Dagger with Scabbard (Replica)',
-    category: 'Antique',
-    price: '32,999.00',
-    originalPrice: '35,000.00',
-    rating: '4.7',
-    reviews: '56',
-    img: productAntiqueBoxImg,
-  },
-];
+import React from 'react';
+import Link from 'next/link';
+import bannerImg from '../../assets/images/antique2.png';
+import { products } from '@/data/products';
+
+const antiqueProducts = products.filter(p => p.category === 'Antique');
 
 const ProductCard = ({ product }) => (
-  <div className="group relative bg-[#1c120c] rounded-xl overflow-hidden cursor-pointer flex flex-col font-cormorant shadow-sm hover:shadow-[0_0_20px_rgba(201,168,76,0.2)] transition-all duration-500 hover:-translate-y-1.5 border border-gold-900/40 hover:border-gold-500/50">
+  <Link
+    href={`/product/${product.id}`}
+    className="group relative bg-[#1c120c] rounded-xl overflow-hidden cursor-pointer flex flex-col font-cormorant shadow-sm hover:shadow-[0_0_20px_rgba(201,168,76,0.2)] transition-all duration-500 hover:-translate-y-1.5 border border-gold-900/40 hover:border-gold-500/50"
+  >
     <div className="relative aspect-square overflow-hidden bg-[#0a0705]">
       <img
         src={product.img}
@@ -93,7 +24,7 @@ const ProductCard = ({ product }) => (
       </div>
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
       <div className="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 translate-y-3 group-hover:translate-y-0 transition-all duration-400">
-        <button className="w-full py-2 rounded-lg bg-gold-600/90 backdrop-blur-sm text-[#0a0705] font-semibold text-xs tracking-widest uppercase hover:bg-gold-400 transition-colors duration-300" aria-label={`Claim ${product.name}`}>
+        <button className="w-full py-2 rounded-lg bg-gold-600/90 backdrop-blur-sm text-[#0a0705] font-semibold text-xs tracking-widest uppercase hover:bg-gold-400 transition-colors duration-300" aria-label={`View details of ${product.name}`}>
           CLAIM ARTIFACT
         </button>
       </div>
@@ -111,12 +42,14 @@ const ProductCard = ({ product }) => (
         <span className="font-cormorant font-bold text-[16px] sm:text-[18px] text-gold-400">
           Rs. {product.price}
         </span>
-        <span className="text-[11px] sm:text-[12px] text-gold-700/60 line-through">
-          Rs. {product.originalPrice}
-        </span>
+        {product.originalPrice && (
+          <span className="text-[11px] sm:text-[12px] text-gold-700/60 line-through">
+            Rs. {product.originalPrice}
+          </span>
+        )}
       </div>
     </div>
-  </div>
+  </Link>
 );
 
 const AntiqueItems = ({ isHome = false }) => {
@@ -160,8 +93,8 @@ const AntiqueItems = ({ isHome = false }) => {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
-            {antiqueProducts.map((product, index) => (
-              <ProductCard key={index} product={product} />
+            {antiqueProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
             ))}
           </div>
 
