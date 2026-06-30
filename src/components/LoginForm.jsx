@@ -117,15 +117,20 @@ export default function LoginForm() {
 
   return (
     <div className="w-full max-w-[450px] bg-white rounded-2xl border border-gold-500/20 shadow-gold-lg p-6 sm:p-10 font-cormorant flex flex-col justify-center animate-fade-in-up">
-      {/* Brand Header */}
-      <div className="text-center mb-8">
-        <span className="font-cinzel-decorative text-xl sm:text-2xl font-bold tracking-widest text-royal-blue-900">
-          PRACHIN LUXE
+      <div className="text-center mb-8 flex flex-col items-center">
+        <span className="font-cinzel text-2xl sm:text-3xl font-extrabold tracking-[0.18em] text-royal-blue-950 uppercase leading-none pl-[0.18em]">
+          PRACHIN
         </span>
-        <p className="text-gold-700 font-cinzel text-[9px] tracking-[0.2em] uppercase mt-1">
+        <div className="flex items-center gap-3 w-40 mt-1">
+          <div className="h-[1px] bg-gold-500/30 flex-grow" />
+          <span className="text-[10px] font-bold tracking-[0.3em] text-gold-600 uppercase">
+            LUXE
+          </span>
+          <div className="h-[1px] bg-gold-500/30 flex-grow" />
+        </div>
+        <p className="text-gray-400 font-sans text-[8px] tracking-[0.15em] uppercase mt-2.5">
           Handcrafted Jewelry & Antiques
         </p>
-        <div className="h-px bg-gold-200/50 w-24 mx-auto mt-4" />
       </div>
 
       {step === 1 ? (

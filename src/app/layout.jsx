@@ -47,7 +47,8 @@ export const metadata = {
   keywords: 'handmade jewelry, royal jewelry, Indian jewelry, antique pieces, kundan, meenakari, jhumka, payal, heritage jewelry',
   authors: [{ name: 'Prachin Luxe' }],
   icons: {
-    icon: '/favicon.svg',
+    icon: '/favicon.png',
+    apple: '/icon.png',
   },
   openGraph: {
     title: 'PRACHIN LUXE - The Ancient Riches',

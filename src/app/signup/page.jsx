@@ -22,10 +22,17 @@ export default function SignupPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-royal-blue-950 via-royal-blue-950/70 to-transparent" />
           
           {/* Logo */}
-          <div className="relative z-10">
-            <span className="font-cinzel text-xs tracking-[0.25em] font-bold text-gold-400">
-              PRACHIN LUXE
+          <div className="relative z-10 flex flex-col items-start">
+            <span className="font-cinzel text-[14px] tracking-[0.2em] font-black text-white uppercase leading-none">
+              PRACHIN
             </span>
+            <div className="flex items-center gap-1.5 w-20 mt-1">
+              <div className="h-[0.5px] bg-gold-400/40 flex-grow" />
+              <span className="text-[7.5px] font-bold tracking-[0.2em] text-gold-400 uppercase">
+                LUXE
+              </span>
+              <div className="h-[0.5px] bg-gold-400/40 flex-grow" />
+            </div>
           </div>
 
           {/* Bottom Section details */}

@@ -3,10 +3,12 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Image from 'next/image';
 
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
+import logoimage from '@/assets/images/logo_img.png';
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -43,17 +45,14 @@ const Navbar = () => {
       <nav className="sticky top-0 left-0 w-full z-40 bg-sand-50/95 backdrop-blur-md border-b border-gold-500/25 shadow-sm shadow-sand-500/15">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-14 lg:h-16">
-            {/* Logo */}
+            {/* Logo / Brand Name */}
             <div className="flex-shrink-0 flex items-center">
-              <Link href="/" className="flex items-center gap-3 group focus:outline-none">
-                <div className="flex flex-col items-start mt-0.5">
-                  <span className="font-cinzel-decorative text-xl lg:text-2xl font-bold tracking-[0.1em] text-royal-blue-800 group-hover:text-gold-600 transition-colors duration-300">
-                    PRACHIN LUXE
-                  </span>
-                  <span className="font-cinzel text-[8px] sm:text-[9px] tracking-[0.25em] font-medium text-royal-blue-600/80 transition-colors duration-300 mt-[-2px]">
-                    HANDCRAFTED JEWELRY & ANTIQUES
-                  </span>
-                </div>
+              <Link href="/" className="flex items-center group focus:outline-none py-1">
+                <img
+                  src={logoimage.src || logoimage}
+                  alt="Prachin Luxe"
+                  className="h-12 sm:h-14 w-auto object-contain transition-transform duration-300 hover:scale-105"
+                />
               </Link>
             </div>
 
@@ -109,9 +108,9 @@ const Navbar = () => {
                   aria-label="User profile"
                 >
                   {user.profilePic ? (
-                    <img 
-                      src={user.profilePic} 
-                      alt={user.name} 
+                    <img
+                      src={user.profilePic}
+                      alt={user.name}
                       className="w-5 h-5 rounded-full object-cover border border-gold-500/30"
                     />
                   ) : (
@@ -331,21 +330,21 @@ const Navbar = () => {
 
         <div className="p-6 border-t border-gold-500/20 bg-sand-100/50">
           {user ? (
-            <button 
+            <button
               onClick={() => {
                 logout();
                 setIsMobileMenuOpen(false);
                 router.push('/');
-              }} 
+              }}
               className="w-full py-3 rounded-sm border border-royal-blue-900 text-royal-blue-900 font-bold font-cinzel text-[12px] tracking-widest uppercase hover:bg-royal-blue-900 hover:text-white transition-all duration-300 shadow-sm flex items-center justify-center gap-2"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
               Logout
             </button>
           ) : (
-            <Link 
+            <Link
               href="/login"
-              onClick={() => setIsMobileMenuOpen(false)} 
+              onClick={() => setIsMobileMenuOpen(false)}
               className="w-full py-3 rounded-sm bg-royal-blue-900 text-white font-bold font-cinzel text-[12px] tracking-widest uppercase hover:bg-gold-600 transition-all duration-300 shadow-md flex items-center justify-center gap-2 text-center"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
