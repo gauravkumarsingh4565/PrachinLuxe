@@ -1,0 +1,112 @@
+import NextAuthImport from 'next-auth';
+import GoogleProviderImport from 'next-auth/providers/google';
+import dbConnect from '@/lib/db';
+import User from '@/models/User';
+
+const NextAuth = NextAuthImport.default || NextAuthImport;
+const GoogleProvider = GoogleProviderImport.default || GoogleProviderImport;
+
+export const authOptions = {
+  providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID || process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET || '',
+    }),
+  ],
+  session: {
+    strategy: 'jwt',
+  },
+  callbacks: {
+    async signIn({ user, account, profile }) {
+      if (account.provider === 'google') {
+        try {
+          await dbConnect();
+          const email = profile.email || user.email;
+          if (!email) {
+            console.error('Sign-in failed: No email provided by Google profile.');
+            return false;
+          }
+
+          let dbUser = await User.findOne({ email: email.toLowerCase() });
+
+          if (!dbUser) {
+            // First time Google login -> intercept for onboarding
+            dbUser = await User.create({
+              name: profile.name || user.name || 'Google User',
+              email: email.toLowerCase(),
+              image: profile.picture || user.image || '',
+              phoneNumber: '',
+              isOnboarded: false,
+            });
+          }
+
+          // Attach fields to the user object, which passes them to the jwt callback
+          user.id = dbUser._id.toString();
+          user.isOnboarded = dbUser.isOnboarded;
+          user.phoneNumber = dbUser.phoneNumber || '';
+          return true;
+        } catch (error) {
+          console.error('Error in Google sign-in callback:', error);
+          return false;
+        }
+      }
+      return true;
+    },
+    async jwt({ token, user, trigger, session }) {
+      // On initial sign-in, NextAuth passes the 'user' returned from signIn
+      if (user) {
+        token.id = user.id;
+        token.isOnboarded = user.isOnboarded;
+        token.phoneNumber = user.phoneNumber;
+      }
+
+      // Handle session updates (dynamic refresh after onboarding)
+      if (trigger === 'update' && session) {
+        try {
+          await dbConnect();
+          const dbUser = await User.findById(token.id);
+          if (dbUser) {
+            token.isOnboarded = dbUser.isOnboarded;
+            token.phoneNumber = dbUser.phoneNumber || '';
+          } else {
+            // Fallback if user is not found in database
+            if (session.isOnboarded !== undefined) {
+              token.isOnboarded = session.isOnboarded;
+            }
+            if (session.phoneNumber !== undefined) {
+              token.phoneNumber = session.phoneNumber;
+            }
+          }
+        } catch (error) {
+          console.error('Error refreshing token state from database:', error);
+          // Fallback to session payload
+          if (session.isOnboarded !== undefined) {
+            token.isOnboarded = session.isOnboarded;
+          }
+          if (session.phoneNumber !== undefined) {
+            token.phoneNumber = session.phoneNumber;
+          }
+        }
+      }
+
+      return token;
+    },
+    async session({ session, token }) {
+      if (token && session.user) {
+        session.user.id = token.id;
+        session.user.isOnboarded = token.isOnboarded;
+        session.user.phoneNumber = token.phoneNumber;
+      }
+      return session;
+    },
+  },
+  pages: {
+    signIn: '/login',
+    error: '/login',
+  },
+  secret: process.env.NEXTAUTH_SECRET,
+};
+
+const handler = NextAuth(authOptions);
+
+export { handler as GET, handler as POST };
