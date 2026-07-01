@@ -37,6 +37,7 @@ export const authOptions = {
               image: profile.picture || user.image || '',
               phoneNumber: '',
               isOnboarded: false,
+              role: 'NORMALUSER',
             });
           }
 
@@ -44,6 +45,7 @@ export const authOptions = {
           user.id = dbUser._id.toString();
           user.isOnboarded = dbUser.isOnboarded;
           user.phoneNumber = dbUser.phoneNumber || '';
+          user.role = dbUser.role || 'NORMALUSER';
           return true;
         } catch (error) {
           console.error('Error in Google sign-in callback:', error);
@@ -58,6 +60,7 @@ export const authOptions = {
         token.id = user.id;
         token.isOnboarded = user.isOnboarded;
         token.phoneNumber = user.phoneNumber;
+        token.role = user.role || 'NORMALUSER';
       }
 
       // Handle session updates (dynamic refresh after onboarding)
@@ -68,6 +71,7 @@ export const authOptions = {
           if (dbUser) {
             token.isOnboarded = dbUser.isOnboarded;
             token.phoneNumber = dbUser.phoneNumber || '';
+            token.role = dbUser.role || 'NORMALUSER';
           } else {
             // Fallback if user is not found in database
             if (session.isOnboarded !== undefined) {
@@ -75,6 +79,9 @@ export const authOptions = {
             }
             if (session.phoneNumber !== undefined) {
               token.phoneNumber = session.phoneNumber;
+            }
+            if (session.role !== undefined) {
+              token.role = session.role;
             }
           }
         } catch (error) {
@@ -86,6 +93,9 @@ export const authOptions = {
           if (session.phoneNumber !== undefined) {
             token.phoneNumber = session.phoneNumber;
           }
+          if (session.role !== undefined) {
+            token.role = session.role;
+          }
         }
       }
 
@@ -96,6 +106,7 @@ export const authOptions = {
         session.user.id = token.id;
         session.user.isOnboarded = token.isOnboarded;
         session.user.phoneNumber = token.phoneNumber;
+        session.user.role = token.role || 'NORMALUSER';
       }
       return session;
     },

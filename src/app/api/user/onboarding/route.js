@@ -51,6 +51,7 @@ export async function POST(req) {
         email: updatedUser.email,
         phoneNumber: updatedUser.phoneNumber,
         isOnboarded: updatedUser.isOnboarded,
+        role: updatedUser.role || 'NORMALUSER',
       },
     });
   } catch (error) {

@@ -10,7 +10,8 @@ const MOCK_USERS_DB = [
     phone: '9876543210',
     name: 'Gaurav Kumar',
     email: 'gaurav@example.com',
-    profilePic: 'https://i.pravatar.cc/150?img=11'
+    profilePic: 'https://i.pravatar.cc/150?img=11',
+    role: 'NORMALUSER'
   }
 ];
 
@@ -146,8 +147,12 @@ export const AuthProvider = ({ children }) => {
     const foundUser = MOCK_USERS_DB.find(u => u.phone === cleanPhone);
     
     if (foundUser) {
-      setUser(foundUser);
-      localStorage.setItem('prachin_luxe_user', JSON.stringify(foundUser));
+      const userWithRole = {
+        ...foundUser,
+        role: foundUser.role || 'NORMALUSER'
+      };
+      setUser(userWithRole);
+      localStorage.setItem('prachin_luxe_user', JSON.stringify(userWithRole));
       
       // Load mock items for Gaurav Kumar if no stored items exist
       const storedOrders = localStorage.getItem('prachin_luxe_orders');
@@ -171,7 +176,8 @@ export const AuthProvider = ({ children }) => {
       phone: userDetails.phone.replace(/\D/g, ''),
       name: userDetails.name,
       email: userDetails.email,
-      profilePic: `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(userDetails.name)}`
+      profilePic: `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(userDetails.name)}`,
+      role: 'NORMALUSER'
     };
     
     setUser(newUser);
