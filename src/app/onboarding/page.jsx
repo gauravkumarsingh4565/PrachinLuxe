@@ -53,7 +53,7 @@ export default function OnboardingPage() {
       // This sends a signal to NextAuth to trigger the 'jwt' callback with 'update' trigger.
       const updatedSession = await update({
         isOnboarded: true,
-        phoneNumber: phoneNumber,
+        phoneNumber: data.user?.phoneNumber || phoneNumber,
       });
 
       // 3. Navigate to the root page

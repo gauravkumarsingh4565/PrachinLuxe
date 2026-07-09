@@ -19,9 +19,19 @@ export async function POST(req) {
     }
 
     // Clean phone number (keep digits, +, and spaces, but check length)
-    const cleanPhone = phoneNumber.trim();
-    if (cleanPhone.replace(/\D/g, '').length < 10) {
+    let cleanPhone = phoneNumber.trim();
+    const digitsOnly = cleanPhone.replace(/\D/g, '');
+    if (digitsOnly.length < 10) {
       return NextResponse.json({ error: 'Please enter a valid 10-digit phone number.' }, { status: 400 });
+    }
+
+    // Ensure phone number starts with +91
+    if (digitsOnly.length === 10) {
+      cleanPhone = '+91' + digitsOnly;
+    } else if (digitsOnly.length > 10 && digitsOnly.startsWith('91')) {
+      cleanPhone = '+' + digitsOnly;
+    } else if (!cleanPhone.startsWith('+')) {
+      cleanPhone = '+' + cleanPhone;
     }
 
     // 3. Connect to the database

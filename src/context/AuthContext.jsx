@@ -133,8 +133,17 @@ export const AuthProvider = ({ children }) => {
   }, [addresses, isLoaded]);
 
   const loginWithPhone = (phone) => {
-    const cleanPhone = phone.replace(/\D/g, '');
-    const foundUser = MOCK_USERS_DB.find(u => u.phone === cleanPhone);
+    let cleanPhone = phone.replace(/\D/g, '');
+    if (cleanPhone.length === 10) {
+      cleanPhone = '+91' + cleanPhone;
+    } else if (cleanPhone.length > 10 && cleanPhone.startsWith('91')) {
+      cleanPhone = '+' + cleanPhone;
+    }
+    
+    // In case the mock database or a user list is restored later:
+    const foundUser = typeof MOCK_USERS_DB !== 'undefined' 
+      ? MOCK_USERS_DB.find(u => u.phone === cleanPhone) 
+      : null;
     
     if (foundUser) {
       const userWithRole = {
@@ -162,8 +171,14 @@ export const AuthProvider = ({ children }) => {
   };
 
   const signupUser = (userDetails) => {
+    let cleanPhone = userDetails.phone.replace(/\D/g, '');
+    if (cleanPhone.length === 10) {
+      cleanPhone = '+91' + cleanPhone;
+    } else if (cleanPhone.length > 10 && cleanPhone.startsWith('91')) {
+      cleanPhone = '+' + cleanPhone;
+    }
     const newUser = {
-      phone: userDetails.phone.replace(/\D/g, ''),
+      phone: cleanPhone,
       name: userDetails.name,
       email: userDetails.email,
       profilePic: `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(userDetails.name)}`,
@@ -193,11 +208,17 @@ export const AuthProvider = ({ children }) => {
 
   const updateProfile = (updatedDetails) => {
     if (!user) return;
+    let cleanPhone = updatedDetails.phone.replace(/\D/g, '');
+    if (cleanPhone.length === 10) {
+      cleanPhone = '+91' + cleanPhone;
+    } else if (cleanPhone.length > 10 && cleanPhone.startsWith('91')) {
+      cleanPhone = '+' + cleanPhone;
+    }
     const updatedUser = {
       ...user,
       name: updatedDetails.name,
       email: updatedDetails.email,
-      phone: updatedDetails.phone.replace(/\D/g, ''),
+      phone: cleanPhone,
       // update initials avatar if name changes and it was an initials seed
       profilePic: user.profilePic.includes('api.dicebear.com') 
         ? `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(updatedDetails.name)}`
