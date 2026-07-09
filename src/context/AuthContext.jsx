@@ -4,16 +4,6 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext(undefined);
 
-// Pre-registered mock database
-const MOCK_USERS_DB = [
-  {
-    phone: '9876543210',
-    name: 'Gaurav Kumar',
-    email: 'gaurav@example.com',
-    profilePic: 'https://i.pravatar.cc/150?img=11',
-    role: 'NORMALUSER'
-  }
-];
 
 // Pre-populated data for Gaurav Kumar
 const INITIAL_MOCK_ORDERS = [

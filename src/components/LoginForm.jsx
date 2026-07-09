@@ -101,8 +101,8 @@ export default function LoginForm() {
         // User logged in, redirect home
         router.push('/');
       } else if (res.reason === 'unregistered') {
-        // User doesn't exist, redirect to signup with pre-filled phone query param
-        router.push(`/signup?phone=${encodeURIComponent(phone)}`);
+        // User doesn't exist, redirect to onboarding page
+        router.push('/onboarding');
       }
     }, 1200);
   };
@@ -271,7 +271,7 @@ export default function LoginForm() {
 
         <button
           type="button"
-          onClick={() => signIn('google', { callbackUrl: '/' })}
+          onClick={() => signIn('google', { callbackUrl: '/onboarding' })}
           className="w-full py-3 px-4 border border-gold-500/30 hover:border-gold-500 bg-sand-50/50 hover:bg-gold-50 text-royal-blue-950 font-semibold tracking-wide rounded-lg flex items-center justify-center gap-3 transition-all duration-300 shadow-sm"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
