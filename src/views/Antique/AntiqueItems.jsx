@@ -10,47 +10,57 @@ const antiqueProducts = products.filter(p => p.category === 'Antique');
 const ProductCard = ({ product }) => (
   <Link
     href={`/product/${product.id}`}
-    className="group relative bg-[#1c120c] rounded-xl overflow-hidden cursor-pointer flex flex-col font-cormorant shadow-sm hover:shadow-[0_0_20px_rgba(201,168,76,0.2)] transition-all duration-500 hover:-translate-y-1.5 border border-gold-900/40 hover:border-gold-500/50"
+    className="group relative bg-white rounded-xl overflow-hidden cursor-pointer flex flex-col font-cormorant shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-1.5 border border-sand-200/50 hover:border-gold-300/50"
   >
-    <div className="relative aspect-square overflow-hidden bg-[#0a0705]">
+    <div className="relative aspect-square overflow-hidden bg-sand-50">
       <img
         src={product.img}
         alt={product.name}
-        className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 sepia-[.40] group-hover:sepia-0"
+        className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
         loading="lazy"
       />
-      <div className="absolute top-2.5 left-2.5 bg-black/60 backdrop-blur-md px-2.5 py-0.5 rounded-full text-[10px] font-bold text-gold-400 tracking-wider uppercase border border-gold-700/30">
+      <div className="absolute top-2.5 left-2.5 bg-white/90 backdrop-blur-sm px-2.5 py-0.5 rounded-full text-[10px] font-bold text-royal-blue-900 tracking-wider uppercase shadow-sm">
         {product.category}
       </div>
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
-      <div className="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 translate-y-3 group-hover:translate-y-0 transition-all duration-400">
-        <button className="w-full py-2 rounded-lg bg-gold-600/90 backdrop-blur-sm text-[#0a0705] font-semibold text-xs tracking-widest uppercase hover:bg-gold-400 transition-colors duration-300" aria-label={`View details of ${product.name}`}>
-          CLAIM ARTIFACT
-        </button>
-      </div>
+      <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
     </div>
-    <div className="p-3 sm:p-3.5 flex flex-col flex-grow">
-      <h3 className="font-cinzel font-semibold text-[13px] sm:text-[14px] leading-snug text-gold-200 mb-2 flex-grow line-clamp-2">
-        {product.name}
-      </h3>
-      <div className="flex items-center gap-1 mb-2 text-[12px] text-gold-400/70">
-        <span className="text-[#d4af37] text-[13px] leading-none">★</span>
-        <span className="font-bold text-gold-300">{product.rating}</span>
-        <span>({product.reviews})</span>
-      </div>
-      <div className="flex items-baseline gap-1.5">
-        <span className="font-cormorant font-bold text-[16px] sm:text-[18px] text-gold-400">
+
+    {/* Content Area */}
+    <div className="p-3 sm:p-4 flex flex-col flex-grow">
+      {/* Price — sabse upar */}
+      <div className="flex items-baseline gap-2 mb-1.5">
+        <span className="font-bold text-[17px] sm:text-[19px] text-royal-blue-900 leading-tight">
           Rs. {product.price}
         </span>
         {product.originalPrice && (
-          <span className="text-[11px] sm:text-[12px] text-gold-700/60 line-through">
+          <span className="text-[12px] sm:text-[13px] text-gray-400 line-through">
             Rs. {product.originalPrice}
           </span>
         )}
       </div>
+
+      {/* Rating — beech mein */}
+      <div className="flex items-center gap-1.5 mb-2.5 text-[13px]">
+        <span className="text-amber-400 text-[16px] leading-none">★</span>
+        <span className="font-bold text-gray-800">{product.rating}</span>
+        <span className="text-gray-500">({product.reviews})</span>
+      </div>
+
+      {/* Product Name */}
+      <h3 className="font-bold text-[13px] sm:text-[14px] leading-snug text-royal-blue-900 line-clamp-2 mb-4">
+        {product.name}
+      </h3>
+
+      {/* VIEW DETAILS Button — Sabse neeche */}
+      <div
+        className="mt-auto w-full py-2.5 rounded-lg bg-royal-blue-900 text-white text-center font-semibold text-xs tracking-wide group-hover:bg-gold-500 transition-colors duration-300 shadow-md"
+      >
+        VIEW DETAILS
+      </div>
     </div>
   </Link>
 );
+
 
 const AntiqueItems = ({ isHome = false }) => {
   return (
@@ -92,7 +102,7 @@ const AntiqueItems = ({ isHome = false }) => {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 pb-6">
             {antiqueProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}

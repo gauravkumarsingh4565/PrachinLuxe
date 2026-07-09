@@ -21,14 +21,12 @@ const ProductCard = ({ product }) => (
       <div className="absolute top-2.5 left-2.5 bg-white/90 backdrop-blur-sm px-2.5 py-0.5 rounded-full text-[10px] font-bold text-royal-blue-900 tracking-wider uppercase shadow-sm">
         {product.category}
       </div>
-      <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-      <div className="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 translate-y-3 group-hover:translate-y-0 transition-all duration-400">
-        <button className="w-full py-2 rounded-lg bg-white/95 backdrop-blur-sm text-royal-blue-900 font-semibold text-xs tracking-wide hover:bg-gold-500 hover:text-white transition-colors duration-300 shadow-md" aria-label={`View ${product.name} details`}>
-          VIEW DETAILS
-        </button>
-      </div>
+      <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
     </div>
+
+    {/* Content Area */}
     <div className="p-3 sm:p-4 flex flex-col flex-grow">
+      {/* Price — sabse upar */}
       <div className="flex items-baseline gap-2 mb-1.5">
         <span className="font-bold text-[17px] sm:text-[19px] text-royal-blue-900 leading-tight">
           Rs. {product.price}
@@ -39,17 +37,29 @@ const ProductCard = ({ product }) => (
           </span>
         )}
       </div>
+
+      {/* Rating — beech mein */}
       <div className="flex items-center gap-1.5 mb-2.5 text-[13px]">
         <span className="text-amber-400 text-[16px] leading-none">★</span>
         <span className="font-bold text-gray-800">{product.rating}</span>
         <span className="text-gray-500">({product.reviews})</span>
       </div>
-      <h3 className="font-bold text-[13px] sm:text-[14px] leading-snug text-royal-blue-900 line-clamp-2 mt-auto">
+
+      {/* Product Name */}
+      <h3 className="font-bold text-[13px] sm:text-[14px] leading-snug text-royal-blue-900 line-clamp-2 mb-4">
         {product.name}
       </h3>
+
+      {/* VIEW DETAILS Button — Sabse neeche */}
+      <div
+        className="mt-auto w-full py-2.5 rounded-lg bg-royal-blue-900 text-white text-center font-semibold text-xs tracking-wide group-hover:bg-gold-500 transition-colors duration-300 shadow-md"
+      >
+        VIEW DETAILS
+      </div>
     </div>
   </Link>
 );
+
 
 const FeaturedAntiques = () => {
   const router = useRouter();
@@ -78,7 +88,7 @@ const FeaturedAntiques = () => {
             </h2>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 pb-6">
             {antiqueProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
