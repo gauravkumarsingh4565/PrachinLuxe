@@ -2,9 +2,25 @@
 
 import React, { useState, useEffect } from 'react';
 import LoginForm from '@/components/LoginForm';
+import { useAuth } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 export default function LoginPage() {
+  const { user: phoneUser, isLoaded: isPhoneAuthLoaded } = useAuth();
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [activeImgIndex, setActiveImgIndex] = useState(0);
+
+  const isNextAuthLoaded = status !== 'loading';
+  const isLoaded = isPhoneAuthLoaded && isNextAuthLoaded;
+  const user = phoneUser || session?.user;
+
+  useEffect(() => {
+    if (isLoaded && user) {
+      router.push('/');
+    }
+  }, [isLoaded, user, router]);
   
   const carouselItems = [
     {

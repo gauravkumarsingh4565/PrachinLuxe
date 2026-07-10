@@ -4,23 +4,40 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
+import { useSession, signOut } from 'next-auth/react';
 
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import logoimage from '@/assets/images/logo_img.png';
+import LogoutConfirmModal from './LogoutConfirmModal';
 
 const Navbar = () => {
   const pathname = usePathname();
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileSliderOpen, setIsProfileSliderOpen] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const { getCartCount } = useCart();
-  const { user, logout } = useAuth();
+  const { user: phoneUser, logout, isLoaded: isPhoneAuthLoaded } = useAuth();
+  const { data: session, status } = useSession();
+
+  const isNextAuthLoaded = status !== 'loading';
+  const isLoaded = isPhoneAuthLoaded && isNextAuthLoaded;
+
+  let user = phoneUser;
+  if (!user && session?.user) {
+    user = {
+      name: session.user.name,
+      email: session.user.email,
+      profilePic: session.user.image,
+      phone: 'Google Account'
+    };
+  }
 
   // Jab koi bhi slider open ho, toh background scroll lock ho jayega
   useEffect(() => {
-    if (isMobileMenuOpen || isProfileSliderOpen) {
+    if (isMobileMenuOpen || isProfileSliderOpen || isLogoutModalOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -28,7 +45,7 @@ const Navbar = () => {
     return () => {
       document.body.style.overflow = '';
     };
-  }, [isMobileMenuOpen, isProfileSliderOpen]);
+  }, [isMobileMenuOpen, isProfileSliderOpen, isLogoutModalOpen]);
 
   const navLinks = [
     { name: 'Home', path: '/' },
@@ -38,7 +55,16 @@ const Navbar = () => {
     { name: 'About Us', path: '/#about' },
   ];
 
-
+  const handleLogoutConfirm = async () => {
+    if (session) {
+      await signOut({ redirect: false });
+    }
+    logout();
+    setIsLogoutModalOpen(false);
+    setIsProfileSliderOpen(false);
+    setIsMobileMenuOpen(false);
+    router.push('/');
+  };
 
   return (
     <>
@@ -101,34 +127,38 @@ const Navbar = () => {
               </Link>
 
               {/* User Profile Icon */}
-              {user ? (
-                <button
-                  onClick={() => setIsProfileSliderOpen(true)}
-                  className="hidden sm:block text-royal-blue-700 hover:text-gold-600 transition-all duration-300 focus:outline-none"
-                  aria-label="User profile"
-                >
-                  {user.profilePic ? (
-                    <img
-                      src={user.profilePic}
-                      alt={user.name}
-                      className="w-5 h-5 rounded-full object-cover border border-gold-500/30"
-                    />
-                  ) : (
+              {isLoaded ? (
+                user ? (
+                  <button
+                    onClick={() => setIsProfileSliderOpen(true)}
+                    className="text-royal-blue-700 hover:text-gold-600 transition-all duration-300 focus:outline-none"
+                    aria-label="User profile"
+                  >
+                    {user.profilePic ? (
+                      <img
+                        src={user.profilePic}
+                        alt={user.name}
+                        className="w-5 h-5 rounded-full object-cover border border-gold-500/30"
+                      />
+                    ) : (
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                      </svg>
+                    )}
+                  </button>
+                ) : (
+                  <Link
+                    href="/login"
+                    className="text-royal-blue-700 hover:text-gold-600 transition-all duration-300"
+                    aria-label="Login"
+                  >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
                     </svg>
-                  )}
-                </button>
+                  </Link>
+                )
               ) : (
-                <Link
-                  href="/login"
-                  className="hidden sm:block text-royal-blue-700 hover:text-gold-600 transition-all duration-300"
-                  aria-label="Login"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-                  </svg>
-                </Link>
+                <div className="w-5 h-5 animate-pulse bg-gray-200 rounded-full"></div>
               )}
 
               {/* Mobile Menu Toggle */}
@@ -211,14 +241,7 @@ const Navbar = () => {
             Order History
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
           </Link>
-          <Link
-            href="/wishlist"
-            onClick={() => setIsProfileSliderOpen(false)}
-            className="flex items-center justify-between px-6 py-4 font-cormorant text-[16px] font-medium text-gray-700 hover:bg-gold-50/50 hover:text-gold-700 transition-colors border-b border-gray-100"
-          >
-            My Wishlist
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
-          </Link>
+
           <Link
             href="/addresses"
             onClick={() => setIsProfileSliderOpen(false)}
@@ -232,11 +255,7 @@ const Navbar = () => {
         {/* Logout Button Footer */}
         <div className="p-6 border-t border-gold-300/30 bg-white">
           <button
-            onClick={() => {
-              logout();
-              setIsProfileSliderOpen(false);
-              router.push('/');
-            }}
+            onClick={() => setIsLogoutModalOpen(true)}
             className="w-full py-3.5 rounded-sm bg-royal-blue-900 text-white font-bold font-cinzel text-[12px] tracking-widest uppercase hover:bg-gold-600 transition-all duration-300 shadow-md flex items-center justify-center gap-2"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -323,7 +342,7 @@ const Navbar = () => {
           {user && (
             <>
               <Link href="/orders" className="block font-cinzel text-lg tracking-[0.1em] text-royal-blue-800 hover:text-gold-600 transition-all duration-300 pb-2 border-b border-gold-500/10 mt-4" onClick={() => setIsMobileMenuOpen(false)}>My Orders</Link>
-              <Link href="/wishlist" className="block font-cinzel text-lg tracking-[0.1em] text-royal-blue-800 hover:text-gold-600 transition-all duration-300 pb-2 border-b border-gold-500/10" onClick={() => setIsMobileMenuOpen(false)}>Wishlist</Link>
+
             </>
           )}
         </div>
@@ -331,11 +350,7 @@ const Navbar = () => {
         <div className="p-6 border-t border-gold-500/20 bg-sand-100/50">
           {user ? (
             <button
-              onClick={() => {
-                logout();
-                setIsMobileMenuOpen(false);
-                router.push('/');
-              }}
+              onClick={() => setIsLogoutModalOpen(true)}
               className="w-full py-3 rounded-sm border border-royal-blue-900 text-royal-blue-900 font-bold font-cinzel text-[12px] tracking-widest uppercase hover:bg-royal-blue-900 hover:text-white transition-all duration-300 shadow-sm flex items-center justify-center gap-2"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
@@ -356,6 +371,13 @@ const Navbar = () => {
         </div>
       </div>
       {/* ======================= END MOBILE NAVIGATION SLIDER ======================= */}
+
+      {/* ======================= LOGOUT CONFIRMATION MODAL ======================= */}
+      <LogoutConfirmModal 
+        isOpen={isLogoutModalOpen} 
+        onClose={() => setIsLogoutModalOpen(false)} 
+        onConfirm={handleLogoutConfirm} 
+      />
     </>
   );
 };

@@ -15,20 +15,6 @@ const Footer = () => {
               By signing up for alerts, you agree to receive e-mails, calls and text messages from Prachin Luxe.
             </p>
 
-            {/* Email Input */}
-            <div className="flex items-center border-b border-[#a6b0b7] pb-2 mb-8">
-              <input
-                type="email"
-                placeholder="Enter your email address"
-                className="w-full bg-transparent border-none outline-none text-sm text-[#2c3e50] placeholder-[#7f8c8d]"
-              />
-              <button className="text-[#d4af37] hover:text-[#b08d2b] transition-colors">
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
-                </svg>
-              </button>
-            </div>
-
             {/* Follow Us */}
             <h4 className="font-cormorant font-semibold text-lg mb-3 text-[#1a252f]">Follow Us</h4>
             <div className="flex gap-4">

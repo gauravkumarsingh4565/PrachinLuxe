@@ -3,12 +3,18 @@
 import React, { useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import AddressesList from '@/components/AddressesList';
 import Link from 'next/link';
 
 export default function AddressesPage() {
-  const { user, isLoaded } = useAuth();
+  const { user: phoneUser, isLoaded: isPhoneAuthLoaded } = useAuth();
+  const { data: session, status } = useSession();
   const router = useRouter();
+
+  const isNextAuthLoaded = status !== 'loading';
+  const isLoaded = isPhoneAuthLoaded && isNextAuthLoaded;
+  const user = phoneUser || session?.user;
 
   useEffect(() => {
     if (isLoaded && !user) {

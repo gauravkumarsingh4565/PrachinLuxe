@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 
 export default function SignupForm() {
@@ -17,6 +18,7 @@ export default function SignupForm() {
   const [agreed, setAgreed] = useState(false);
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { data: session } = useSession();
 
   // Pre-fill phone from URL param if redirected from OTP verification
   useEffect(() => {
@@ -25,6 +27,14 @@ export default function SignupForm() {
       setPhone(phoneParam);
     }
   }, [searchParams]);
+
+  // Pre-fill name and email from Google session if available
+  useEffect(() => {
+    if (session?.user) {
+      if (session.user.name && !name) setName(session.user.name);
+      if (session.user.email && !email) setEmail(session.user.email);
+    }
+  }, [session, name, email]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -109,7 +119,8 @@ export default function SignupForm() {
             placeholder="name@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-3 rounded-lg border border-gold-500/30 focus:border-gold-500 focus:outline-none bg-sand-50/50 font-sans text-sm font-medium text-gray-800"
+            readOnly={!!session?.user?.email}
+            className={`w-full px-4 py-3 rounded-lg border border-gold-500/30 focus:border-gold-500 focus:outline-none bg-sand-50/50 font-sans text-sm font-medium ${session?.user?.email ? 'text-gray-500 cursor-not-allowed' : 'text-gray-800'}`}
           />
         </div>
 
