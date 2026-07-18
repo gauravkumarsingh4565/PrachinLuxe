@@ -3,10 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import heroBanner from '../assets/images/hero_banner 2.png';
 
-import img2 from '../assets/images/antique2.png';
+// import img2 from '../assets/images/antique2.png';
 
 
-const carouselImages = [heroBanner, img2,];
+const carouselImages = [heroBanner];
 
 const HeroSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0);

@@ -36,7 +36,7 @@ export default function ProfilePage() {
   return (
     <div className="w-full min-h-screen bg-sand-100 py-12 px-4 sm:px-6 lg:px-8 font-cormorant">
       <div className="max-w-[1100px] mx-auto space-y-8">
-        
+
         {/* Breadcrumbs */}
         <nav className="text-xs text-gray-500 font-semibold tracking-wide uppercase">
           <Link href="/" className="hover:text-gold-600 transition-colors">HOME</Link>
@@ -45,7 +45,7 @@ export default function ProfilePage() {
         </nav>
 
         {/* Page title */}
-        <div className="text-center sm:text-left">
+        <div className="text-center sm:text-center">
           <h1 className="font-cinzel text-3xl font-bold text-royal-blue-950 tracking-wider uppercase mb-1">My Account</h1>
           <p className="text-gold-700 font-cinzel text-[10px] tracking-widest uppercase">Personal Details & Club Credentials</p>
           <div className="h-0.5 bg-gold-500/20 w-32 mt-3 mx-auto sm:mx-0" />
@@ -55,7 +55,7 @@ export default function ProfilePage() {
         <div className="animate-fade-in">
           <ProfileDetails />
         </div>
-        
+
       </div>
     </div>
   );

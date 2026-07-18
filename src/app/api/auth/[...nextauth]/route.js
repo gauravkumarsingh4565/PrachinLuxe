@@ -28,9 +28,9 @@ export const authOptions = {
           }
 
           let dbUser = await User.findOne({ email: email.toLowerCase() });
+          const isNewUser = !dbUser;
 
           if (!dbUser) {
-            // First time Google login -> intercept for onboarding
             dbUser = await User.create({
               name: profile.name || user.name || 'Google User',
               email: email.toLowerCase(),
@@ -39,16 +39,32 @@ export const authOptions = {
               isOnboarded: false,
               role: 'NORMALUSER',
             });
+          } else {
+            console.log('\n♻️  EXISTING USER — Found in Database:');
           }
+
+          console.log('📂 Database User Record:');
+          console.log(JSON.stringify({
+            _id: dbUser._id,
+            name: dbUser.name,
+            email: dbUser.email,
+            phoneNumber: dbUser.phoneNumber,
+            isOnboarded: dbUser.isOnboarded,
+            role: dbUser.role,
+            createdAt: dbUser.createdAt,
+          }, null, 2));
+          console.log('   isNewUser:', isNewUser);
+          console.log('========================================\n');
 
           // Attach fields to the user object, which passes them to the jwt callback
           user.id = dbUser._id.toString();
           user.isOnboarded = dbUser.isOnboarded;
           user.phoneNumber = dbUser.phoneNumber || '';
           user.role = dbUser.role || 'NORMALUSER';
+          user.name = dbUser.name;
           return true;
         } catch (error) {
-          console.error('Error in Google sign-in callback:', error);
+          console.error('💥 Error in Google sign-in callback:', error);
           return false;
         }
       }
@@ -72,6 +88,7 @@ export const authOptions = {
             token.isOnboarded = dbUser.isOnboarded;
             token.phoneNumber = dbUser.phoneNumber || '';
             token.role = dbUser.role || 'NORMALUSER';
+            token.name = dbUser.name;
           } else {
             // Fallback if user is not found in database
             if (session.isOnboarded !== undefined) {
@@ -79,6 +96,9 @@ export const authOptions = {
             }
             if (session.phoneNumber !== undefined) {
               token.phoneNumber = session.phoneNumber;
+            }
+            if (session.name !== undefined) {
+              token.name = session.name;
             }
             if (session.role !== undefined) {
               token.role = session.role;
@@ -92,6 +112,9 @@ export const authOptions = {
           }
           if (session.phoneNumber !== undefined) {
             token.phoneNumber = session.phoneNumber;
+          }
+          if (session.name !== undefined) {
+            token.name = session.name;
           }
           if (session.role !== undefined) {
             token.role = session.role;
@@ -107,6 +130,7 @@ export const authOptions = {
         session.user.isOnboarded = token.isOnboarded;
         session.user.phoneNumber = token.phoneNumber;
         session.user.role = token.role || 'NORMALUSER';
+        session.user.name = token.name || session.user.name;
       }
       return session;
     },

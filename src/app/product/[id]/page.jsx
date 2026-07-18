@@ -5,12 +5,17 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { getProductById, getRelatedProducts } from '@/data/products';
 import { useCart } from '@/context/CartContext';
+import { useAuth } from '@/context/AuthContext';
+import { useSession } from 'next-auth/react';
 
 export default function ProductPage({ params }) {
   // Safe param unwrapping for Next.js 15+
   const { id } = React.use(params);
   const router = useRouter();
   const { addToCart } = useCart();
+  const { user: phoneUser } = useAuth();
+  const { data: session } = useSession();
+  const isLoggedIn = !!(phoneUser || session?.user);
 
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
@@ -55,6 +60,13 @@ export default function ProductPage({ params }) {
   };
 
   const handleBuyNow = () => {
+    if (!isLoggedIn) {
+      // Pehle cart mein add karo, phir login page pe bhejo
+      // Login ke baad /cart pe redirect hoga
+      addToCart(product, quantity);
+      router.push('/login?callbackUrl=/cart');
+      return;
+    }
     addToCart(product, quantity);
     router.push('/cart');
   };
@@ -202,9 +214,18 @@ export default function ProductPage({ params }) {
               </button>
               <button
                 onClick={handleBuyNow}
-                className="flex-grow py-4 rounded-lg font-cinzel text-xs sm:text-sm font-bold tracking-widest bg-white text-gold-700 border-2 border-gold-500 hover:bg-gold-500 hover:text-white transition-all duration-300 hover:shadow-lg"
+                className={`flex-grow py-4 rounded-lg font-cinzel text-xs sm:text-sm font-bold tracking-widest border-2 transition-all duration-300 hover:shadow-lg flex items-center justify-center gap-2 ${
+                  isLoggedIn
+                    ? 'bg-white text-gold-700 border-gold-500 hover:bg-gold-500 hover:text-white'
+                    : 'bg-gold-500 text-white border-gold-500 hover:bg-gold-600'
+                }`}
               >
-                BUY NOW
+                {!isLoggedIn && (
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                )}
+                {isLoggedIn ? 'BUY NOW' : 'LOGIN TO BUY'}
               </button>
             </div>
 

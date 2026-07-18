@@ -5,11 +5,14 @@ import LoginForm from '@/components/LoginForm';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import { useSearchParams } from 'next/navigation';
 
 export default function LoginPage() {
   const { user: phoneUser, isLoaded: isPhoneAuthLoaded } = useAuth();
   const { data: session, status } = useSession();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get('callbackUrl') || '/';
   const [activeImgIndex, setActiveImgIndex] = useState(0);
 
   const isNextAuthLoaded = status !== 'loading';
@@ -17,10 +20,31 @@ export default function LoginPage() {
   const user = phoneUser || session?.user;
 
   useEffect(() => {
-    if (isLoaded && user) {
-      router.push('/');
+    if (!isLoaded) return;
+
+    // Phone auth user
+    if (phoneUser) {
+      router.push(callbackUrl);
+      return;
     }
-  }, [isLoaded, user, router]);
+
+    // Google / NextAuth user
+    if (session?.user) {
+      console.log('[LOGIN PAGE] User logged in:', {
+        email: session.user.email,
+        name: session.user.name,
+        isOnboarded: session.user.isOnboarded,
+      });
+
+      if (session.user.isOnboarded === false) {
+        console.log('[LOGIN PAGE] New user detected → Redirecting to /onboarding');
+        router.push('/onboarding');
+      } else {
+        console.log('[LOGIN PAGE] Existing user → Redirecting to', callbackUrl);
+        router.push(callbackUrl);
+      }
+    }
+  }, [isLoaded, phoneUser, session, router]);
   
   const carouselItems = [
     {
@@ -132,7 +156,7 @@ export default function LoginPage() {
         </div>
 
         {/* Right Side: LoginForm Component */}
-        <div className="flex items-center justify-center p-6 sm:p-12 bg-sand-50/50">
+        <div className="flex items-center justify-center p-8 sm:p-14 bg-sand-50/50 min-h-[580px]">
           <LoginForm />
         </div>
 

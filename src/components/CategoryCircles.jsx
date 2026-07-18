@@ -18,7 +18,7 @@ const categories = [
   { name: 'Earrings', img: earringsImg, path: '/jewelry/earrings' },
   { name: 'Necklaces', img: necklacesImg, path: '/jewelry/necklaces' },
   { name: 'Ring', img: ringImg, path: '/jewelry/rings' },
-  { name: 'Antique', img: artworkRichaImg, path: '/antique' },
+  // { name: 'Antique', img: artworkRichaImg, path: '/antique' },
   { name: 'Bridal Collection', img: bridalCollectionImg, path: '/jewelry/sets' },
   { name: 'Best Sellers', img: bestSellersImg, path: '/handmade' },
 ];

@@ -12,11 +12,12 @@ export async function middleware(request) {
 
   const isAuthenticated = !!token;
   const isDashboardRoute = pathname.startsWith('/dashboard');
+  const isAdminRoute = pathname.startsWith('/admin');
   const isOnboardingRoute = pathname === '/onboarding';
 
   // 1. Unauthenticated user redirect
   if (!isAuthenticated) {
-    if (isDashboardRoute || isOnboardingRoute) {
+    if (isDashboardRoute || isOnboardingRoute || isAdminRoute) {
       const loginUrl = new URL('/login', request.url);
       loginUrl.searchParams.set('callbackUrl', request.url);
       return NextResponse.redirect(loginUrl);
@@ -42,7 +43,19 @@ export async function middleware(request) {
   return NextResponse.next();
 }
 
-// Match only dashboard paths and onboarding path for performance
+// Match main app routes + onboarding path + admin
 export const config = {
-  matcher: ['/dashboard/:path*', '/onboarding'],
+  matcher: [
+    '/dashboard/:path*',
+    '/admin/:path*',
+    '/onboarding',
+    '/',
+    '/cart',
+    '/profile',
+    '/orders',
+    '/addresses',
+    '/handmade',
+    '/antique',
+    '/product/:path*',
+  ],
 };

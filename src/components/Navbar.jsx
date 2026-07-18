@@ -50,7 +50,7 @@ const Navbar = () => {
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'Handmade Jewelry', path: '/handmade' },
-    { name: 'Antique Collection', path: '/antique' },
+    // { name: 'Antique Collection', path: '/antique' },
     { name: 'Collections', path: '/#collections' },
     { name: 'About Us', path: '/#about' },
   ];
@@ -232,6 +232,14 @@ const Navbar = () => {
           >
             Personal Information
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+          </Link>
+          <Link
+            href="/admin"
+            onClick={() => setIsProfileSliderOpen(false)}
+            className="flex items-center justify-between px-6 py-4 font-cormorant text-[16px] font-bold text-royal-blue-900 bg-sand-50/50 hover:bg-gold-100 hover:text-gold-800 transition-colors border-b border-gray-100"
+          >
+            Admin Panel
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gold-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
           </Link>
           <Link
             href="/orders"
