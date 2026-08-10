@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import CldImageUploader from '@/components/CldImageUploader';
 
 export default function ProductsAddForm() {
   const router = useRouter();
@@ -41,41 +42,13 @@ export default function ProductsAddForm() {
   const [editingCareId, setEditingCareId] = useState(null);
 
   const [images, setImages] = useState({
-    front: { url: null, uploading: false },
-    left: { url: null, uploading: false },
-    right: { url: null, uploading: false },
-    back: { url: null, uploading: false },
+    front: null,
+    left: null,
+    right: null,
+    back: null,
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleImageUpload = async (e, side) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    // Show local preview immediately while uploading
-    const localPreview = URL.createObjectURL(file);
-    setImages(prev => ({ ...prev, [side]: { url: localPreview, uploading: true } }));
-
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('side', side);
-
-      const res = await fetch('/api/upload', { method: 'POST', body: formData });
-      const data = await res.json();
-
-      if (data.success) {
-        setImages(prev => ({ ...prev, [side]: { url: data.url, uploading: false } }));
-      } else {
-        throw new Error(data.error || 'Upload failed');
-      }
-    } catch (err) {
-      console.error('Image upload error:', err);
-      alert(`Image upload failed: ${err.message}`);
-      setImages(prev => ({ ...prev, [side]: { url: null, uploading: false } }));
-    }
-  };
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -184,10 +157,10 @@ export default function ProductsAddForm() {
       },
       care: care.filter(c => c.tittle.trim() !== '' || c.des.trim() !== ''),
       images: {
-        front: images.front?.url || '',
-        left: images.left?.url || '',
-        right: images.right?.url || '',
-        back: images.back?.url || '',
+        front: typeof images.front === 'string' ? images.front : images.front?.url || '',
+        left: typeof images.left === 'string' ? images.left : images.left?.url || '',
+        right: typeof images.right === 'string' ? images.right : images.right?.url || '',
+        back: typeof images.back === 'string' ? images.back : images.back?.url || '',
       },
     };
 
@@ -627,40 +600,17 @@ export default function ProductsAddForm() {
                 { id: 'right', label: 'Right Side Image' },
                 { id: 'back', label: 'Backside Image' },
               ].map(side => (
-                <div key={side.id} className="space-y-3">
-                  <label className="block font-bold text-royal-blue-900 uppercase text-[10px] tracking-widest font-cinzel mb-2">
-                    {side.label}
-                  </label>
-                  <div className="bg-sand-50/50 border border-gold-500/20 rounded-xl p-3 flex flex-col items-center justify-center gap-3 shadow-sm">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      disabled={images[side.id]?.uploading}
-                      onChange={(e) => handleImageUpload(e, side.id)}
-                      className="w-full text-[11px] text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:font-semibold file:bg-sand-100 file:text-royal-blue-900 hover:file:bg-sand-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                    />
-                    {images[side.id]?.url ? (
-                      <div className="w-full aspect-square rounded-lg overflow-hidden border border-gold-500/30 relative shadow-sm bg-white">
-                        <img
-                          src={images[side.id].url}
-                          alt={`${side.label} Preview`}
-                          className="w-full h-full object-cover"
-                        />
-                        {images[side.id].uploading && (
-                          <div className="absolute inset-0 bg-white/70 flex flex-col items-center justify-center gap-2">
-                            <div className="w-8 h-8 border-4 border-gold-500 border-t-transparent rounded-full animate-spin" />
-                            <span className="text-[10px] font-bold text-royal-blue-900 uppercase tracking-widest">Uploading...</span>
-                          </div>
-                        )}
-                      </div>
-                    ) : (
-                      <div className="w-full aspect-square rounded-lg border-2 border-dashed border-gold-500/20 bg-white flex flex-col items-center justify-center text-gray-400">
-                        <svg className="w-8 h-8 mb-2 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                        <span className="text-[10px] uppercase font-bold tracking-widest opacity-50">Preview</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
+                <CldImageUploader
+                  key={side.id}
+                  label={side.label}
+                  value={images[side.id]}
+                  onChange={(image) => {
+                    setImages(prev => ({
+                      ...prev,
+                      [side.id]: image
+                    }));
+                  }}
+                />
               ))}
             </div>
           </div>
