@@ -1,12 +1,11 @@
 import CategoryCircles from '@/components/CategoryCircles';
-// import FeaturedCategories from '@/components/FeaturedCategories';
 import HeroSection from '@/components/HeroSection';
-import ShopEarringCategory from '@/components/ShopEarringCategory';
-import FeaturedProducts from '@/components/FeaturedProducts';
-import NewArrival from '@/components/NewArrival';
-// import FeaturedAntiques from '@/components/FeaturedAntiques';
-import AboutSection from '@/components/AboutSection';
-import Testimonials from '@/components/Testimonials';
+import dynamic from 'next/dynamic';
+
+const FeaturedProducts = dynamic(() => import('@/components/FeaturedProducts'));
+const NewArrival = dynamic(() => import('@/components/NewArrival'));
+const AboutSection = dynamic(() => import('@/components/AboutSection'));
+const Testimonials = dynamic(() => import('@/components/Testimonials'));
 
 export default function Home() {
   return (

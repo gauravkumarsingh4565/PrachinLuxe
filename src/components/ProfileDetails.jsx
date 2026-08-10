@@ -1,11 +1,15 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '@/context/AuthContext';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectUser, selectOrders, selectAddresses, updateProfile as updateProfileRedux } from '@/redux/slices/authSlice';
 import { useSession } from 'next-auth/react';
 
 export default function ProfileDetails() {
-  const { user: phoneUser, orders, addresses, updateProfile } = useAuth();
+  const dispatch = useDispatch();
+  const phoneUser = useSelector(selectUser);
+  const orders = useSelector(selectOrders);
+  const addresses = useSelector(selectAddresses);
   const { data: session, update } = useSession();
 
   // ── Unified user object from Google session OR phone auth ──
@@ -84,7 +88,7 @@ export default function ProfileDetails() {
         console.log('✅ Profile Updated in DB & Session:', data.user);
       } else {
         // For phone auth users → use local context
-        updateProfile({ name, email, phone });
+        dispatch(updateProfileRedux({ name, email, phone }));
       }
 
       setSuccess(true);

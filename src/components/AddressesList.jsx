@@ -1,10 +1,12 @@
 "use client";
 
 import React, { useState } from 'react';
-import { useAuth } from '@/context/AuthContext';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectAddresses, addAddress as addAddressAction, removeAddress as removeAddressAction, updateAddress as updateAddressAction, setDefaultAddress as setDefaultAddressAction } from '@/redux/slices/authSlice';
 
 export default function AddressesList() {
-  const { addresses, addAddress, removeAddress, updateAddress, setDefaultAddress } = useAuth();
+  const dispatch = useDispatch();
+  const addresses = useSelector(selectAddresses);
   
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
@@ -75,9 +77,9 @@ export default function AddressesList() {
 
     try {
       if (editingId) {
-        updateAddress({ ...payload, id: editingId });
+        dispatch(updateAddressAction({ ...payload, id: editingId }));
       } else {
-        addAddress(payload);
+        dispatch(addAddressAction(payload));
       }
       resetForm();
     } catch (err) {
@@ -265,7 +267,7 @@ export default function AddressesList() {
             <div className="flex gap-4 border-t border-gray-100 pt-4 mt-5 font-sans text-xs">
               {!address.isDefault && (
                 <button 
-                  onClick={() => setDefaultAddress(address.id)}
+                  onClick={() => dispatch(setDefaultAddressAction(address.id))}
                   className="text-royal-blue-800 hover:text-gold-700 font-bold uppercase tracking-wider font-cinzel text-[10px]"
                 >
                   Set Default
@@ -278,7 +280,7 @@ export default function AddressesList() {
                 Edit
               </button>
               <button 
-                onClick={() => removeAddress(address.id)}
+                onClick={() => dispatch(removeAddressAction(address.id))}
                 className="text-red-500 hover:text-red-700 font-bold uppercase tracking-wider font-cinzel text-[10px] ml-auto"
               >
                 Remove

@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import craftsmanImage from '../assets/images/craftsman.png';
 
 const stats = [
@@ -20,10 +21,11 @@ const AboutSection = () => {
             <div className="absolute -bottom-4 -right-4 w-full h-full border-2 border-gold-500/30 rounded-sm pointer-events-none" />
 
             {/* Main image */}
-            <img
+            <Image
               src={craftsmanImage}
               alt="Master craftsman at work"
-              className="relative z-10 w-full max-w-md lg:max-w-lg object-cover rounded-sm shadow-2xl shadow-royal-blue-900/25"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="relative z-10 w-full max-w-md lg:max-w-lg object-cover rounded-sm shadow-2xl shadow-royal-blue-900/25 h-auto"
             />
 
             {/* Floating badge */}

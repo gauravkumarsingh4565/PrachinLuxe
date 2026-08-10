@@ -1,12 +1,14 @@
 "use client";
 
 import React, { useState } from 'react';
-import { useAuth } from '@/context/AuthContext';
+import { useSelector } from 'react-redux';
+import { selectOrders } from '@/redux/slices/authSlice';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function OrderHistory() {
-  const { orders } = useAuth();
+  const orders = useSelector(selectOrders);
   const router = useRouter();
   const [selectedOrderTracking, setSelectedOrderTracking] = useState(null);
 
@@ -89,9 +91,15 @@ export default function OrderHistory() {
                   <div className="flex gap-4 items-center">
                     <div 
                       onClick={() => router.push(`/product/${item.product.id}`)}
-                      className="w-16 h-16 bg-sand-50 rounded-lg overflow-hidden border border-gold-500/10 p-1 cursor-pointer flex-shrink-0"
+                      className="relative w-16 h-16 bg-sand-50 rounded-lg overflow-hidden border border-gold-500/10 p-1 cursor-pointer flex-shrink-0"
                     >
-                      <img src={item.product.img} alt={item.product.name} className="w-full h-full object-cover rounded" />
+                      <Image 
+                        src={item.product.img} 
+                        alt={item.product.name} 
+                        fill 
+                        sizes="64px"
+                        className="object-cover rounded" 
+                      />
                     </div>
                     <div className="space-y-0.5">
                       <span className="text-[10px] font-bold text-gold-600 uppercase tracking-widest block">{item.product.category}</span>

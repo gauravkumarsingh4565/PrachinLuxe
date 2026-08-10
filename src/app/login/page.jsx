@@ -2,13 +2,15 @@
 
 import React, { useState, useEffect } from 'react';
 import LoginForm from '@/components/LoginForm';
-import { useAuth } from '@/context/AuthContext';
+import { useSelector } from 'react-redux';
+import { selectUser, selectIsAuthLoaded } from '@/redux/slices/authSlice';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
 
 export default function LoginPage() {
-  const { user: phoneUser, isLoaded: isPhoneAuthLoaded } = useAuth();
+  const phoneUser = useSelector(selectUser);
+  const isPhoneAuthLoaded = useSelector(selectIsAuthLoaded);
   const { data: session, status } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();

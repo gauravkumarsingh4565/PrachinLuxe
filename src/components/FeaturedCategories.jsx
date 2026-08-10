@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import earringsImg from '../assets/images/earrings.png';
 import necklaceImg from '../assets/images/neckless.jpg';
 import payalImg from '../assets/images/payal.png';
@@ -42,10 +43,12 @@ const FeaturedCategories = () => {
               className="group relative overflow-visible h-[240px] md:h-[300px] flex items-center justify-center rounded-sm transition-transform duration-500 hover:scale-[1.02]"
             >
               {/* Background Image */}
-              <img
+              <Image
                 src={collection.img}
                 alt={collection.name}
-                className="absolute inset-0 w-full h-full object-cover z-0"
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover z-0"
               />
 
               {/* Dark Overlay for text readability */}
@@ -64,11 +67,12 @@ const FeaturedCategories = () => {
                 </p>
 
                 {/* Image Button */}
-                <button className="relative flex items-center justify-center p-0 transition-transform duration-300 hover:scale-105 overflow-visible mt-2 group">
-                  <img
+                <button className="relative flex items-center justify-center p-0 transition-transform duration-300 hover:scale-105 overflow-visible mt-2 group h-10 md:h-12 w-[150px]">
+                  <Image
                     src={exploreButtonImg}
                     alt={collection.buttonText}
-                    className="h-10 md:h-12 w-auto object-contain drop-shadow-2xl opacity-90 group-hover:opacity-100 transition-opacity duration-300"
+                    fill
+                    className="object-contain drop-shadow-2xl opacity-90 group-hover:opacity-100 transition-opacity duration-300"
                   />
                 </button>
               </div>

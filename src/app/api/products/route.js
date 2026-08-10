@@ -25,11 +25,15 @@ export async function POST(request) {
     await dbConnect();
     const body = await request.json();
 
-    const { name, price, description, category, image, inStock } = body;
+    const {
+      name, price, category, subcategory, originalPrice, inStock,
+      description, craftsmanship,
+      images, story, material, care,
+    } = body;
 
-    if (!name || !price || !description || !category) {
+    if (!name || !price || !category) {
       return NextResponse.json(
-        { success: false, error: 'Missing required fields: name, price, description, category' },
+        { success: false, error: 'Missing required fields: name, price, category' },
         { status: 400 }
       );
     }
@@ -37,10 +41,16 @@ export async function POST(request) {
     const newProduct = await Product.create({
       name,
       price,
-      description,
       category,
-      image,
+      subcategory,
+      originalPrice,
       inStock: inStock !== undefined ? inStock : true,
+      description,
+      craftsmanship,
+      images: images || { front: '', left: '', right: '', back: '' },
+      story: story || {},
+      material: material || { ingdrients: [], specification: [] },
+      care: care || [],
     });
 
     return NextResponse.json({ success: true, data: newProduct }, { status: 201 });
@@ -49,3 +59,4 @@ export async function POST(request) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
+

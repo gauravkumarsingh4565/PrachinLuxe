@@ -1,39 +1,32 @@
-import { Cormorant_Garamond, Cinzel, Cinzel_Decorative, Josefin_Sans, Outfit } from 'next/font/google';
+import { Inter, Outfit } from 'next/font/google';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
 import '@/index.css';
-import { CartProvider } from '@/context/CartContext';
-import { AuthProvider } from '@/context/AuthContext';
+import ReduxProvider from '@/redux/Providers';
 import NextAuthSessionProvider from '@/components/SessionProvider';
 
-const cormorant = Cormorant_Garamond({
+const inter = Inter({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600', '700'],
-  variable: '--font-cormorant',
+  variable: '--font-cormorant', // Replacing cormorant with Inter for body text
   display: 'swap',
 });
 
-const cinzel = Cinzel({
+const outfitHeading = Outfit({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700', '800', '900'],
-  variable: '--font-cinzel',
+  variable: '--font-cinzel', // Replacing cinzel with Outfit for headings
   display: 'swap',
 });
 
-const cinzelDecorative = Cinzel_Decorative({
+const outfitDecorative = Outfit({
   subsets: ['latin'],
   weight: ['400', '700', '900'],
-  variable: '--font-cinzel-decorative',
+  variable: '--font-cinzel-decorative', // Replacing decorative with Outfit
   display: 'swap',
 });
 
-const josefin = Josefin_Sans({
-  subsets: ['latin'],
-  weight: ['100', '200', '300', '400', '500', '600', '700'],
-  variable: '--font-josefin',
-  display: 'swap',
-});
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -61,16 +54,14 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${cormorant.variable} ${cinzel.variable} ${cinzelDecorative.variable} ${josefin.variable} ${outfit.variable} min-h-screen bg-sand-50 antialiased`}>
+      <body className={`${inter.variable} ${outfitHeading.variable} ${outfitDecorative.variable} ${outfit.variable} min-h-screen bg-sand-50 antialiased`}>
         <NextAuthSessionProvider>
-          <AuthProvider>
-            <CartProvider>
-              <Navbar />
-              {children}
-              <Footer />
-              <ScrollToTop />
-            </CartProvider>
-          </AuthProvider>
+          <ReduxProvider>
+            <Navbar />
+            {children}
+            <Footer />
+            <ScrollToTop />
+          </ReduxProvider>
         </NextAuthSessionProvider>
       </body>
     </html>

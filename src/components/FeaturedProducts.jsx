@@ -2,10 +2,11 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { products } from '@/data/products';
 
-const categories = ['Earrings', 'Necklaces', 'Sets', 'Bracelets', 'Rings', 'Najarbattu', 'Hairpin'];
+const categories = ['Earrings', 'Necklaces', 'Sets', 'Najarbattu', 'Hairpin'];
 
 const ProductCard = ({ product }) => (
   <Link
@@ -14,11 +15,12 @@ const ProductCard = ({ product }) => (
     className="group relative bg-white rounded-xl overflow-hidden cursor-pointer flex flex-col font-cormorant shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-1.5 border border-sand-200/50 hover:border-gold-300/50"
   >
     <div className="relative aspect-square overflow-hidden bg-sand-50">
-      <img
+      <Image
         src={product.img}
         alt={product.name}
-        className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-        loading="lazy"
+        fill
+        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+        className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
       />
       <div className="absolute top-2.5 left-2.5 bg-white/90 backdrop-blur-sm px-2.5 py-0.5 rounded-full text-[10px] font-bold text-royal-blue-900 tracking-wider uppercase shadow-sm">
         {product.category}

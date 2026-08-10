@@ -1,0 +1,694 @@
+"use client";
+
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+
+export default function ProductsAddForm() {
+  const router = useRouter();
+  const [formData, setFormData] = useState({
+    name: '',
+    category: '',
+    subcategory: '',
+    price: '',
+    originalPrice: '',
+    inStock: true,
+    description: '',
+    craftsmanship: ''
+  });
+
+  const [story, setStory] = useState({
+    title: '',
+    description: '',
+    subDescription: ''
+  });
+
+  const [material, setMaterial] = useState({
+    ingdrients: [],
+    specification: []
+  });
+
+  const [care, setCare] = useState([]);
+
+  // Form states for lists
+  const [ingredientForm, setIngredientForm] = useState({ label: '' });
+  const [editingIngredientId, setEditingIngredientId] = useState(null);
+
+  const [specForm, setSpecForm] = useState({ key: '', val: '' });
+  const [editingSpecId, setEditingSpecId] = useState(null);
+
+  const [careForm, setCareForm] = useState({ tittle: '', des: '' });
+  const [editingCareId, setEditingCareId] = useState(null);
+
+  const [images, setImages] = useState({
+    front: { url: null, uploading: false },
+    left: { url: null, uploading: false },
+    right: { url: null, uploading: false },
+    back: { url: null, uploading: false },
+  });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleImageUpload = async (e, side) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Show local preview immediately while uploading
+    const localPreview = URL.createObjectURL(file);
+    setImages(prev => ({ ...prev, [side]: { url: localPreview, uploading: true } }));
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('side', side);
+
+      const res = await fetch('/api/upload', { method: 'POST', body: formData });
+      const data = await res.json();
+
+      if (data.success) {
+        setImages(prev => ({ ...prev, [side]: { url: data.url, uploading: false } }));
+      } else {
+        throw new Error(data.error || 'Upload failed');
+      }
+    } catch (err) {
+      console.error('Image upload error:', err);
+      alert(`Image upload failed: ${err.message}`);
+      setImages(prev => ({ ...prev, [side]: { url: null, uploading: false } }));
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
+
+  const handleStoryChange = (e) => {
+    const { name, value } = e.target;
+    setStory(prev => ({ ...prev, [name]: value }));
+  };
+
+  // Ingredient Handlers
+  const saveIngredient = () => {
+    if (!ingredientForm.label.trim()) return;
+    if (editingIngredientId) {
+      setMaterial(prev => ({
+        ...prev,
+        ingdrients: prev.ingdrients.map(i => i.id === editingIngredientId ? { ...ingredientForm, id: editingIngredientId } : i)
+      }));
+      setEditingIngredientId(null);
+    } else {
+      setMaterial(prev => ({
+        ...prev,
+        ingdrients: [...prev.ingdrients, { ...ingredientForm, id: Date.now().toString() }]
+      }));
+    }
+    setIngredientForm({ label: '' });
+  };
+
+  const editIngredient = (ing) => {
+    setIngredientForm({ label: ing.label });
+    setEditingIngredientId(ing.id);
+  };
+
+  const deleteIngredient = (id) => {
+    setMaterial(prev => ({
+      ...prev,
+      ingdrients: prev.ingdrients.filter(i => i.id !== id)
+    }));
+  };
+
+  // Specification Handlers
+  const saveSpecification = () => {
+    if (!specForm.key.trim() || !specForm.val.trim()) return;
+    if (editingSpecId) {
+      setMaterial(prev => ({
+        ...prev,
+        specification: prev.specification.map(s => s.id === editingSpecId ? { ...specForm, id: editingSpecId } : s)
+      }));
+      setEditingSpecId(null);
+    } else {
+      setMaterial(prev => ({
+        ...prev,
+        specification: [...prev.specification, { ...specForm, id: Date.now().toString() }]
+      }));
+    }
+    setSpecForm({ key: '', val: '' });
+  };
+
+  const editSpecification = (spec) => {
+    setSpecForm({ key: spec.key, val: spec.val });
+    setEditingSpecId(spec.id);
+  };
+
+  const deleteSpecification = (id) => {
+    setMaterial(prev => ({
+      ...prev,
+      specification: prev.specification.filter(s => s.id !== id)
+    }));
+  };
+
+  // Care Handlers
+  const saveCare = () => {
+    if (!careForm.tittle.trim() || !careForm.des.trim()) return;
+    if (editingCareId) {
+      setCare(prev => prev.map(c => c.id === editingCareId ? { ...careForm, id: editingCareId } : c));
+      setEditingCareId(null);
+    } else {
+      setCare(prev => [...prev, { ...careForm, id: Date.now().toString() }]);
+    }
+    setCareForm({ tittle: '', des: '' });
+  };
+
+  const editCare = (c) => {
+    setCareForm({ tittle: c.tittle, des: c.des });
+    setEditingCareId(c.id);
+  };
+
+  const deleteCare = (id) => {
+    setCare(prev => prev.filter(c => c.id !== id));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    const payload = {
+      ...formData,
+      story,
+      material: {
+        ingdrients: material.ingdrients.filter(i => i.label.trim() !== ''),
+        specification: material.specification.filter(s => s.key.trim() !== '' && s.val.trim() !== '')
+      },
+      care: care.filter(c => c.tittle.trim() !== '' || c.des.trim() !== ''),
+      images: {
+        front: images.front?.url || '',
+        left: images.left?.url || '',
+        right: images.right?.url || '',
+        back: images.back?.url || '',
+      },
+    };
+
+    try {
+      const res = await fetch('/api/products', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        alert('Product saved successfully!');
+        router.push('/admin');
+      } else {
+        throw new Error(data.error || 'Failed to save product');
+      }
+    } catch (err) {
+      console.error('Submit error:', err);
+      alert(`Error: ${err.message}`);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="w-full min-h-screen bg-sand-100 py-12 px-4 sm:px-6 lg:px-8 font-cormorant">
+      <div className="max-w-[1000px] mx-auto space-y-8">
+
+        {/* Breadcrumbs */}
+        <nav className="text-xs text-gray-500 font-semibold tracking-wide uppercase">
+          <Link href="/admin" className="hover:text-gold-600 transition-colors">ADMIN DASHBOARD</Link>
+          <span className="mx-2 text-gold-400">/</span>
+          <span className="text-royal-blue-900 font-bold">ADD NEW PRODUCT</span>
+        </nav>
+
+        {/* Page Title */}
+        <div className="text-center sm:text-left">
+          <h1 className="font-cinzel text-3xl font-bold text-royal-blue-950 tracking-wider uppercase mb-1">Product Onboarding</h1>
+          <p className="text-gold-700 font-cinzel text-[10px] tracking-widest uppercase">Expand your royal collection</p>
+          <div className="h-0.5 bg-gold-500/20 w-32 mt-3 mx-auto sm:mx-0" />
+        </div>
+
+        {/* Form Container */}
+        <form onSubmit={handleSubmit} className="space-y-8 animate-fade-in text-sm">
+
+          {/* SECTION: BASIC INFO */}
+          <div className="bg-white rounded-2xl border border-gold-500/20 shadow-sm overflow-hidden p-6 sm:p-8">
+            <h2 className="font-cinzel text-lg font-bold text-royal-blue-900 tracking-wider mb-6 border-b border-gray-100 pb-3">Basic Information</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="col-span-1 sm:col-span-2">
+                <label className="block font-bold text-royal-blue-900 uppercase text-[10px] tracking-widest font-cinzel mb-2">Product Name *</label>
+                <input
+                  type="text"
+                  name="name"
+                  required
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  placeholder="e.g. Premium Kundan Disc Earrings"
+                  className="w-full px-4 py-3 rounded-lg border border-gold-500/30 focus:outline-none focus:border-gold-500 bg-sand-50/50 font-medium"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-royal-blue-900 uppercase text-[10px] tracking-widest font-cinzel mb-2">Category *</label>
+                <select
+                  name="category"
+                  required
+                  value={formData.category}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 rounded-lg border border-gold-500/30 focus:outline-none focus:border-gold-500 bg-sand-50/50 font-medium appearance-none"
+                >
+                  <option value="">Select Category</option>
+                  <option value="Earrings">Earrings</option>
+                  <option value="Necklaces">Necklaces</option>
+                  <option value="Sets">Sets</option>
+                  <option value="Najarbattu">Najarbattu</option>
+                  <option value="Hairpin">Hairpin</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* SECTION: PRICING & INVENTORY */}
+          <div className="bg-white rounded-2xl border border-gold-500/20 shadow-sm overflow-hidden p-6 sm:p-8">
+            <h2 className="font-cinzel text-lg font-bold text-royal-blue-900 tracking-wider mb-6 border-b border-gray-100 pb-3">Pricing & Inventory</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div>
+                <label className="block font-bold text-royal-blue-900 uppercase text-[10px] tracking-widest font-cinzel mb-2">Selling Price (Rs.) *</label>
+                <input
+                  type="number"
+                  name="price"
+                  required
+                  value={formData.price}
+                  onChange={handleInputChange}
+                  placeholder="e.g. 24999"
+                  className="w-full px-4 py-3 rounded-lg border border-gold-500/30 focus:outline-none focus:border-gold-500 bg-sand-50/50 font-medium"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-royal-blue-900 uppercase text-[10px] tracking-widest font-cinzel mb-2">Original MRP (Rs.)</label>
+                <input
+                  type="number"
+                  name="originalPrice"
+                  value={formData.originalPrice}
+                  onChange={handleInputChange}
+                  placeholder="e.g. 28999"
+                  className="w-full px-4 py-3 rounded-lg border border-gold-500/30 focus:outline-none focus:border-gold-500 bg-sand-50/50 font-medium"
+                />
+              </div>
+
+              <div className="col-span-1 sm:col-span-2 flex items-center gap-3">
+                <input
+                  type="checkbox"
+                  name="inStock"
+                  id="inStock"
+                  checked={formData.inStock}
+                  onChange={handleInputChange}
+                  className="h-5 w-5 rounded border-gold-500/30 text-royal-blue-900 focus:ring-royal-blue-900"
+                />
+                <label htmlFor="inStock" className="font-bold text-royal-blue-900 uppercase text-[12px] tracking-widest font-cinzel cursor-pointer">
+                  Product is currently in stock
+                </label>
+              </div>
+            </div>
+          </div>
+
+
+          {/* SECTION: THE STORY */}
+          <div className="bg-white rounded-2xl border border-gold-500/20 shadow-sm overflow-hidden p-6 sm:p-8">
+            <h2 className="font-cinzel text-lg font-bold text-royal-blue-900 tracking-wider mb-6 border-b border-gray-100 pb-3">The Story</h2>
+
+            <div className="space-y-4 mb-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block font-bold text-royal-blue-900 uppercase text-[10px] tracking-widest font-cinzel mb-2">Title</label>
+                  <input
+                    type="text"
+                    name="title"
+                    value={story.title}
+                    onChange={handleStoryChange}
+                    placeholder="e.g. The Legacy of Kundan"
+                    className="w-full px-4 py-2.5 rounded-lg border border-gold-500/30 focus:outline-none focus:border-gold-500 bg-sand-50/50 font-medium"
+                  />
+                </div>
+                <div>
+                  <label className="block font-bold text-royal-blue-900 uppercase text-[10px] tracking-widest font-cinzel mb-2">Highlight Text (Sub-Description)</label>
+                  <input
+                    type="text"
+                    name="subDescription"
+                    value={story.subDescription}
+                    onChange={handleStoryChange}
+                    placeholder="e.g. Handcrafted by 5th generation artisans"
+                    className="w-full px-4 py-2.5 rounded-lg border border-gold-500/30 focus:outline-none focus:border-gold-500 bg-sand-50/50 font-medium"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block font-bold text-royal-blue-900 uppercase text-[10px] tracking-widest font-cinzel mb-2">Description</label>
+                <textarea
+                  name="description"
+                  rows={2}
+                  value={story.description}
+                  onChange={handleStoryChange}
+                  placeholder="Elaborate on the story behind the piece..."
+                  className="w-full px-4 py-2.5 rounded-lg border border-gold-500/30 focus:outline-none focus:border-gold-500 bg-sand-50/50 font-medium resize-y"
+                />
+              </div>
+            </div>
+
+            {/* Table display */}
+            {(story.title || story.description || story.subDescription) && (
+              <div className="overflow-x-auto border border-gold-500/20 rounded-xl shadow-sm">
+                <table className="w-full text-left text-sm text-gray-700">
+                  <thead className="bg-sand-50/80 text-royal-blue-900 font-cinzel text-xs uppercase tracking-wider">
+                    <tr>
+                      <th className="px-4 py-3 border-b border-gold-500/20 font-bold">Title</th>
+                      <th className="px-4 py-3 border-b border-gold-500/20 font-bold">Description</th>
+                      <th className="px-4 py-3 border-b border-gold-500/20 font-bold">Highlight Text</th>
+                      <th className="px-4 py-3 border-b border-gold-500/20 text-right font-bold w-[100px]">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="hover:bg-sand-50/50 transition-colors">
+                      <td className="px-4 py-3 border-b border-gray-100 font-medium">{story.title}</td>
+                      <td className="px-4 py-3 border-b border-gray-100 max-w-[200px] truncate" title={story.description}>{story.description}</td>
+                      <td className="px-4 py-3 border-b border-gray-100">{story.subDescription}</td>
+                      <td className="px-4 py-3 border-b border-gray-100 text-right">
+                        <button type="button" onClick={() => setStory({ title: '', description: '', subDescription: '' })} className="text-red-400 hover:text-red-600 p-1 bg-white rounded-md shadow-sm border border-gray-100">
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+
+          {/* SECTION: MATERIALS & SPECIFICATIONS */}
+          <div className="bg-white rounded-2xl border border-gold-500/20 shadow-sm overflow-hidden p-6 sm:p-8 space-y-10">
+            {/* Ingredients */}
+            <div>
+              <h2 className="font-cinzel text-lg font-bold text-royal-blue-900 tracking-wider mb-6 border-b border-gray-100 pb-3">Ingredients</h2>
+
+              <div className="flex items-end gap-3 bg-sand-50/50 p-4 rounded-xl border border-gold-500/20 mb-6">
+                <div className="flex-grow">
+                  <label className="block font-bold text-royal-blue-900 uppercase text-[10px] tracking-widest font-cinzel mb-2">
+                    {editingIngredientId ? 'Edit Ingredient' : 'New Ingredient'}
+                  </label>
+                  <input
+                    type="text"
+                    value={ingredientForm.label}
+                    onChange={(e) => setIngredientForm({ label: e.target.value })}
+                    placeholder="e.g. 22k Gold Plated Brass"
+                    className="w-full px-4 py-2.5 rounded-lg border border-gold-500/30 focus:outline-none focus:border-gold-500 bg-white font-medium"
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={saveIngredient}
+                  className="px-6 py-2.5 bg-royal-blue-900 text-white rounded-lg font-cinzel text-xs font-bold tracking-widest hover:bg-gold-600 transition-colors uppercase whitespace-nowrap h-[42px]"
+                >
+                  {editingIngredientId ? 'Update' : 'Add'}
+                </button>
+                {editingIngredientId && (
+                  <button
+                    type="button"
+                    onClick={() => { setEditingIngredientId(null); setIngredientForm({ label: '' }); }}
+                    className="px-4 py-2.5 bg-gray-200 text-gray-700 rounded-lg font-cinzel text-xs font-bold tracking-widest hover:bg-gray-300 transition-colors uppercase h-[42px]"
+                  >
+                    Cancel
+                  </button>
+                )}
+              </div>
+
+              {/* Table display */}
+              {material.ingdrients.length > 0 && (
+                <div className="overflow-x-auto border border-gold-500/20 rounded-xl shadow-sm">
+                  <table className="w-full text-left text-sm text-gray-700">
+                    <thead className="bg-sand-50/80 text-royal-blue-900 font-cinzel text-xs uppercase tracking-wider">
+                      <tr>
+                        <th className="px-4 py-3 border-b border-gold-500/20 font-bold">Ingredient Name</th>
+                        <th className="px-4 py-3 border-b border-gold-500/20 text-right font-bold w-[120px]">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {material.ingdrients.map((ing) => (
+                        <tr key={ing.id} className="hover:bg-sand-50/50 transition-colors">
+                          <td className="px-4 py-3 border-b border-gray-100 font-medium">{ing.label}</td>
+                          <td className="px-4 py-3 border-b border-gray-100 text-right">
+                            <div className="flex justify-end gap-2">
+                              <button type="button" onClick={() => editIngredient(ing)} className="p-1 bg-white rounded-md shadow-sm border border-gray-100 text-royal-blue-600 hover:text-gold-600 transition-colors">
+                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                              </button>
+                              <button type="button" onClick={() => deleteIngredient(ing.id)} className="p-1 bg-white rounded-md shadow-sm border border-gray-100 text-red-400 hover:text-red-600 transition-colors">
+                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+
+            {/* Specifications */}
+            <div className="pt-6 border-t border-gray-100">
+              <h2 className="font-cinzel text-lg font-bold text-royal-blue-900 tracking-wider mb-6 pb-3">Specifications</h2>
+
+              <div className="flex flex-col sm:flex-row items-end gap-3 bg-sand-50/50 p-4 rounded-xl border border-gold-500/20 mb-6">
+                <div className="w-full sm:w-1/3">
+                  <label className="block font-bold text-royal-blue-900 uppercase text-[10px] tracking-widest font-cinzel mb-2">Key</label>
+                  <input
+                    type="text"
+                    value={specForm.key}
+                    onChange={(e) => setSpecForm({ ...specForm, key: e.target.value })}
+                    placeholder="e.g. Weight"
+                    className="w-full px-4 py-2.5 rounded-lg border border-gold-500/30 focus:outline-none focus:border-gold-500 bg-white font-medium"
+                  />
+                </div>
+                <div className="w-full sm:flex-grow">
+                  <label className="block font-bold text-royal-blue-900 uppercase text-[10px] tracking-widest font-cinzel mb-2">Value</label>
+                  <input
+                    type="text"
+                    value={specForm.val}
+                    onChange={(e) => setSpecForm({ ...specForm, val: e.target.value })}
+                    placeholder="e.g. 13g"
+                    className="w-full px-4 py-2.5 rounded-lg border border-gold-500/30 focus:outline-none focus:border-gold-500 bg-white font-medium"
+                  />
+                </div>
+                <div className="flex gap-2 w-full sm:w-auto">
+                  <button
+                    type="button"
+                    onClick={saveSpecification}
+                    className="flex-grow sm:flex-grow-0 px-6 py-2.5 bg-royal-blue-900 text-white rounded-lg font-cinzel text-xs font-bold tracking-widest hover:bg-gold-600 transition-colors uppercase whitespace-nowrap h-[42px]"
+                  >
+                    {editingSpecId ? 'Update' : 'Add'}
+                  </button>
+                  {editingSpecId && (
+                    <button
+                      type="button"
+                      onClick={() => { setEditingSpecId(null); setSpecForm({ key: '', val: '' }); }}
+                      className="px-4 py-2.5 bg-gray-200 text-gray-700 rounded-lg font-cinzel text-xs font-bold tracking-widest hover:bg-gray-300 transition-colors uppercase h-[42px]"
+                    >
+                      Cancel
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Table display */}
+              {material.specification.length > 0 && (
+                <div className="overflow-x-auto border border-gold-500/20 rounded-xl shadow-sm">
+                  <table className="w-full text-left text-sm text-gray-700">
+                    <thead className="bg-sand-50/80 text-royal-blue-900 font-cinzel text-xs uppercase tracking-wider">
+                      <tr>
+                        <th className="px-4 py-3 border-b border-gold-500/20 font-bold w-1/3">Key</th>
+                        <th className="px-4 py-3 border-b border-gold-500/20 font-bold">Value</th>
+                        <th className="px-4 py-3 border-b border-gold-500/20 text-right font-bold w-[120px]">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {material.specification.map((spec) => (
+                        <tr key={spec.id} className="hover:bg-sand-50/50 transition-colors">
+                          <td className="px-4 py-3 border-b border-gray-100 font-medium text-gray-500">{spec.key}</td>
+                          <td className="px-4 py-3 border-b border-gray-100 font-medium">{spec.val}</td>
+                          <td className="px-4 py-3 border-b border-gray-100 text-right">
+                            <div className="flex justify-end gap-2">
+                              <button type="button" onClick={() => editSpecification(spec)} className="p-1 bg-white rounded-md shadow-sm border border-gray-100 text-royal-blue-600 hover:text-gold-600 transition-colors">
+                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                              </button>
+                              <button type="button" onClick={() => deleteSpecification(spec.id)} className="p-1 bg-white rounded-md shadow-sm border border-gray-100 text-red-400 hover:text-red-600 transition-colors">
+                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* SECTION: CARE & TERMS */}
+          <div className="bg-white rounded-2xl border border-gold-500/20 shadow-sm overflow-hidden p-6 sm:p-8">
+            <h2 className="font-cinzel text-lg font-bold text-royal-blue-900 tracking-wider mb-6 border-b border-gray-100 pb-3">Care & Terms</h2>
+
+            <div className="bg-sand-50/50 p-4 rounded-xl border border-gold-500/20 space-y-4 mb-6">
+              <div>
+                <label className="block font-bold text-royal-blue-900 uppercase text-[10px] tracking-widest font-cinzel mb-2">Title</label>
+                <input
+                  type="text"
+                  value={careForm.tittle}
+                  onChange={(e) => setCareForm({ ...careForm, tittle: e.target.value })}
+                  placeholder="e.g. Care Instructions"
+                  className="w-full px-4 py-2.5 rounded-lg border border-gold-500/30 focus:outline-none focus:border-gold-500 bg-white font-medium"
+                />
+              </div>
+              <div>
+                <label className="block font-bold text-royal-blue-900 uppercase text-[10px] tracking-widest font-cinzel mb-2">Description</label>
+                <textarea
+                  rows={2}
+                  value={careForm.des}
+                  onChange={(e) => setCareForm({ ...careForm, des: e.target.value })}
+                  placeholder="e.g. Keep dry and store in our custom soft-padded box..."
+                  className="w-full px-4 py-2.5 rounded-lg border border-gold-500/30 focus:outline-none focus:border-gold-500 bg-white font-medium resize-y"
+                />
+              </div>
+              <div className="flex gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={saveCare}
+                  className="px-6 py-2.5 bg-royal-blue-900 text-white rounded-lg font-cinzel text-xs font-bold tracking-widest hover:bg-gold-600 transition-colors uppercase"
+                >
+                  {editingCareId ? 'Update Care Instruction' : 'Add Care Instruction'}
+                </button>
+                {editingCareId && (
+                  <button
+                    type="button"
+                    onClick={() => { setEditingCareId(null); setCareForm({ tittle: '', des: '' }); }}
+                    className="px-6 py-2.5 bg-gray-200 text-gray-700 rounded-lg font-cinzel text-xs font-bold tracking-widest hover:bg-gray-300 transition-colors uppercase"
+                  >
+                    Cancel
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Table display */}
+            {care.length > 0 && (
+              <div className="overflow-x-auto border border-gold-500/20 rounded-xl shadow-sm">
+                <table className="w-full text-left text-sm text-gray-700">
+                  <thead className="bg-sand-50/80 text-royal-blue-900 font-cinzel text-xs uppercase tracking-wider">
+                    <tr>
+                      <th className="px-4 py-3 border-b border-gold-500/20 font-bold w-1/3">Title</th>
+                      <th className="px-4 py-3 border-b border-gold-500/20 font-bold">Description</th>
+                      <th className="px-4 py-3 border-b border-gold-500/20 text-right font-bold w-[120px]">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {care.map((item) => (
+                      <tr key={item.id} className="hover:bg-sand-50/50 transition-colors">
+                        <td className="px-4 py-3 border-b border-gray-100 font-medium text-royal-blue-900">{item.tittle}</td>
+                        <td className="px-4 py-3 border-b border-gray-100 text-gray-600">{item.des}</td>
+                        <td className="px-4 py-3 border-b border-gray-100 text-right">
+                          <div className="flex justify-end gap-2">
+                            <button type="button" onClick={() => editCare(item)} className="p-1 bg-white rounded-md shadow-sm border border-gray-100 text-royal-blue-600 hover:text-gold-600 transition-colors">
+                              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                            </button>
+                            <button type="button" onClick={() => deleteCare(item.id)} className="p-1 bg-white rounded-md shadow-sm border border-gray-100 text-red-400 hover:text-red-600 transition-colors">
+                              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+
+          {/* SECTION: PRODUCT IMAGES */}
+          <div className="bg-white rounded-2xl border border-gold-500/20 shadow-sm overflow-hidden p-6 sm:p-8">
+            <h2 className="font-cinzel text-lg font-bold text-royal-blue-900 tracking-wider mb-6 border-b border-gray-100 pb-3">Product Images</h2>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[
+                { id: 'front', label: 'Front Image' },
+                { id: 'left', label: 'Left Side Image' },
+                { id: 'right', label: 'Right Side Image' },
+                { id: 'back', label: 'Backside Image' },
+              ].map(side => (
+                <div key={side.id} className="space-y-3">
+                  <label className="block font-bold text-royal-blue-900 uppercase text-[10px] tracking-widest font-cinzel mb-2">
+                    {side.label}
+                  </label>
+                  <div className="bg-sand-50/50 border border-gold-500/20 rounded-xl p-3 flex flex-col items-center justify-center gap-3 shadow-sm">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      disabled={images[side.id]?.uploading}
+                      onChange={(e) => handleImageUpload(e, side.id)}
+                      className="w-full text-[11px] text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:font-semibold file:bg-sand-100 file:text-royal-blue-900 hover:file:bg-sand-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                    />
+                    {images[side.id]?.url ? (
+                      <div className="w-full aspect-square rounded-lg overflow-hidden border border-gold-500/30 relative shadow-sm bg-white">
+                        <img
+                          src={images[side.id].url}
+                          alt={`${side.label} Preview`}
+                          className="w-full h-full object-cover"
+                        />
+                        {images[side.id].uploading && (
+                          <div className="absolute inset-0 bg-white/70 flex flex-col items-center justify-center gap-2">
+                            <div className="w-8 h-8 border-4 border-gold-500 border-t-transparent rounded-full animate-spin" />
+                            <span className="text-[10px] font-bold text-royal-blue-900 uppercase tracking-widest">Uploading...</span>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="w-full aspect-square rounded-lg border-2 border-dashed border-gold-500/20 bg-white flex flex-col items-center justify-center text-gray-400">
+                        <svg className="w-8 h-8 mb-2 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                        <span className="text-[10px] uppercase font-bold tracking-widest opacity-50">Preview</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ACTION BUTTONS */}
+          <div className="flex gap-4 pt-4">
+            <Link
+              href="/admin"
+              className="px-8 py-4 bg-white text-royal-blue-900 border border-royal-blue-900 rounded-lg font-cinzel text-xs font-bold tracking-widest hover:bg-royal-blue-50 transition-all duration-300 uppercase inline-block text-center"
+            >
+              Cancel
+            </Link>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="px-10 py-4 bg-royal-blue-900 hover:bg-gold-600 disabled:opacity-60 disabled:cursor-not-allowed text-white rounded-lg font-cinzel text-xs font-bold tracking-widest transition-all duration-300 hover:shadow-lg uppercase flex-grow text-center flex items-center justify-center gap-2"
+            >
+              {isSubmitting ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  Saving...
+                </>
+              ) : 'Save Product to Catalog'}
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  );
+}

@@ -3,6 +3,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import bannerImg from '../assets/images/antique2.png';
 import { products } from '@/data/products';
 
@@ -12,10 +13,12 @@ const ProductCard = ({ product }) => (
     className="group relative bg-white rounded-xl overflow-hidden cursor-pointer flex flex-col font-cormorant shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-1.5 border border-sand-200/50 hover:border-gold-300/50"
   >
     <div className="relative aspect-square overflow-hidden bg-sand-50">
-      <img
+      <Image
         src={product.img}
         alt={product.name}
-        className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+        fill
+        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+        className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
         loading="lazy"
       />
       <div className="absolute top-2.5 left-2.5 bg-white/90 backdrop-blur-sm px-2.5 py-0.5 rounded-full text-[10px] font-bold text-royal-blue-900 tracking-wider uppercase shadow-sm">
@@ -73,10 +76,12 @@ const FeaturedAntiques = () => {
         <div className="mb-6">
           {/* Banner Section */}
           <div className="relative w-full h-[30vh] sm:h-[40vh] md:h-[50vh] rounded-2xl overflow-hidden mb-4 shadow-xl group">
-            <img
+            <Image
               src={bannerImg}
               alt="Antique Treasures"
-              className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+              fill
+              sizes="100vw"
+              className="object-cover transition-transform duration-1000 group-hover:scale-105"
             />
             {/* Image is styled with beautiful built-in text */}
           </div>

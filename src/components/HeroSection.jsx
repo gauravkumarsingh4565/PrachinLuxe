@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import heroBanner from '../assets/images/hero_banner 2.png';
 
 // import img2 from '../assets/images/antique2.png';
@@ -40,10 +41,13 @@ const HeroSection = () => {
               index === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0'
             }`}
           >
-            <img
+            <Image
               src={img}
               alt={`Prachin Luxe Collection ${index + 1}`}
-              className="w-full h-full object-fill object-center"
+              fill
+              priority={index === 0}
+              sizes="100vw"
+              className="object-cover object-center"
             />
             {/* Dark overlay just at the very bottom */}
             <div className="absolute inset-0 bg-gradient-to-t from-royal-blue-950/40 via-transparent to-transparent pointer-events-none" />

@@ -2,23 +2,19 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { useCart } from '@/context/CartContext';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectCartItems, selectIsCartLoaded, selectCartTotal, updateQuantity as updateQuantityAction, removeFromCart as removeFromCartAction, clearCart as clearCartAction } from '@/redux/slices/cartSlice';
 import { useRouter } from 'next/navigation';
 import CheckoutForm from '@/components/CheckoutForm';
-import { useAuth } from '@/context/AuthContext';
+import { addOrder as addOrderAction } from '@/redux/slices/authSlice';
+import Image from 'next/image';
 
 export default function CartPage() {
-  const {
-    cartItems,
-    isLoaded,
-    updateQuantity,
-    removeFromCart,
-    getCartTotal,
-    clearCart
-  } = useCart();
-
+  const dispatch = useDispatch();
+  const cartItems = useSelector(selectCartItems);
+  const isLoaded = useSelector(selectIsCartLoaded);
+  const cartTotal = useSelector(selectCartTotal);
   const router = useRouter();
-  const { addOrder } = useAuth();
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [checkoutStep, setCheckoutStep] = useState(1); // 1 = Review, 2 = Details Form, 3 = Success
   const [addressData, setAddressData] = useState({
@@ -31,7 +27,7 @@ export default function CartPage() {
     zip: '302001'
   });
 
-  const subtotal = getCartTotal();
+  const subtotal = cartTotal;
   const tax = subtotal * 0.03; // 3% GST on jewelry
   const shipping = subtotal > 5000 ? 0 : 250; // Free shipping above 5000
   const finalTotal = subtotal + tax + shipping;
@@ -66,10 +62,10 @@ export default function CartPage() {
         }))
       };
 
-      addOrder(newOrder);
+      dispatch(addOrderAction(newOrder));
       setIsCheckingOut(false);
       setCheckoutStep(3);
-      clearCart();
+      dispatch(clearCartAction());
     }, 2000);
   };
 
@@ -155,7 +151,7 @@ export default function CartPage() {
                     <div className="p-5 bg-stone-50/50 border-b border-gold-500/10 flex justify-between items-center">
                       <h2 className="font-cinzel text-sm font-bold text-royal-blue-900 tracking-wider">Bagged Items ({cartItems.length})</h2>
                       <button
-                        onClick={clearCart}
+                        onClick={() => dispatch(clearCartAction())}
                         className="text-xs font-cinzel font-bold text-red-600 hover:text-red-800 transition-colors uppercase tracking-wider"
                       >
                         Clear All
@@ -169,11 +165,13 @@ export default function CartPage() {
                         return (
                           <div key={item.product.id} className="p-5 sm:p-6 flex flex-col sm:flex-row gap-5 items-start sm:items-center">
                             {/* Product Image */}
-                            <div className="w-24 h-24 sm:w-28 sm:h-28 flex-shrink-0 bg-sand-50 rounded-xl overflow-hidden border border-gold-500/15 p-1 relative shadow-sm">
-                              <img
+                            <div className="relative w-24 h-24 sm:w-28 sm:h-28 flex-shrink-0 bg-sand-50 rounded-xl overflow-hidden border border-gold-500/15 p-1 shadow-sm">
+                              <Image
                                 src={item.product.img}
                                 alt={item.product.name}
-                                className="w-full h-full object-cover rounded-lg"
+                                fill
+                                sizes="(max-width: 640px) 96px, 112px"
+                                className="object-cover rounded-lg"
                               />
                             </div>
 
@@ -198,7 +196,7 @@ export default function CartPage() {
                                 {/* Quantity controls */}
                                 <div className="flex items-center border border-gold-500/30 rounded-lg overflow-hidden bg-white shadow-sm w-fit scale-90 sm:scale-100">
                                   <button
-                                    onClick={() => updateQuantity(item.product.id, 'dec')}
+                                    onClick={() => dispatch(updateQuantityAction({ productId: item.product.id, action: 'dec' }))}
                                     className="px-2.5 py-1 hover:bg-gold-50 text-royal-blue-900 font-bold transition-colors text-base"
                                     aria-label="Decrease quantity"
                                   >
@@ -208,7 +206,7 @@ export default function CartPage() {
                                     {item.quantity}
                                   </span>
                                   <button
-                                    onClick={() => updateQuantity(item.product.id, 'inc')}
+                                    onClick={() => dispatch(updateQuantityAction({ productId: item.product.id, action: 'inc' }))}
                                     className="px-2.5 py-1 hover:bg-gold-50 text-royal-blue-900 font-bold transition-colors text-base"
                                     aria-label="Increase quantity"
                                   >
@@ -222,7 +220,7 @@ export default function CartPage() {
                                     Rs. {itemTotal.toLocaleString('en-IN')}
                                   </span>
                                   <button
-                                    onClick={() => removeFromCart(item.product.id)}
+                                    onClick={() => dispatch(removeFromCartAction(item.product.id))}
                                     className="text-gray-400 hover:text-red-600 transition-colors duration-300 p-1"
                                     aria-label="Remove item"
                                   >

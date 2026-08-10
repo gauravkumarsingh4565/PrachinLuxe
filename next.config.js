@@ -5,17 +5,12 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
-    disableStaticImages: true,
-  },
-  webpack(config) {
-    config.module.rules.push({
-      test: /\.(png|jpg|jpeg|gif|svg|webp)$/i,
-      type: 'asset/resource',
-      generator: {
-        filename: 'static/media/[name].[contenthash][ext]',
-      },
-    });
-    return config;
+    remotePatterns: [
+      { protocol: 'https', hostname: 'ui-avatars.com' },
+      { protocol: 'https', hostname: 'lh3.googleusercontent.com' },
+      { protocol: 'https', hostname: 'i.pravatar.cc' },
+      { protocol: 'https', hostname: 'res.cloudinary.com' },
+    ],
   },
 };
 

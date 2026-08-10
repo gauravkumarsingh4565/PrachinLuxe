@@ -2,6 +2,7 @@
 
 import { useRef, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 import catDisc from '../assets/images/cat_disc.png';
 import catSignature from '../assets/images/cat_signature.png';
@@ -97,11 +98,10 @@ const ShopEarringCategory = () => {
           {/* Left Arrow */}
           <button
             onClick={() => scroll('left')}
-            className={`absolute left-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm border border-gold-200 text-gold-700 shadow-gold transition-all duration-300 hover:bg-gold-50 hover:border-gold-400 hover:shadow-gold-lg -translate-x-1 sm:-translate-x-3 ${
-              canScrollLeft
+            className={`absolute left-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm border border-gold-200 text-gold-700 shadow-gold transition-all duration-300 hover:bg-gold-50 hover:border-gold-400 hover:shadow-gold-lg -translate-x-1 sm:-translate-x-3 ${canScrollLeft
                 ? 'opacity-100 pointer-events-auto'
                 : 'opacity-0 pointer-events-none'
-            }`}
+              }`}
             aria-label="Scroll categories left"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -112,11 +112,10 @@ const ShopEarringCategory = () => {
           {/* Right Arrow */}
           <button
             onClick={() => scroll('right')}
-            className={`absolute right-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm border border-gold-200 text-gold-700 shadow-gold transition-all duration-300 hover:bg-gold-50 hover:border-gold-400 hover:shadow-gold-lg translate-x-1 sm:translate-x-3 ${
-              canScrollRight
+            className={`absolute right-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm border border-gold-200 text-gold-700 shadow-gold transition-all duration-300 hover:bg-gold-50 hover:border-gold-400 hover:shadow-gold-lg translate-x-1 sm:translate-x-3 ${canScrollRight
                 ? 'opacity-100 pointer-events-auto'
                 : 'opacity-0 pointer-events-none'
-            }`}
+              }`}
             aria-label="Scroll categories right"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -126,14 +125,12 @@ const ShopEarringCategory = () => {
 
           {/* Fade Edges */}
           <div
-            className={`absolute left-0 top-0 bottom-0 w-8 sm:w-12 bg-gradient-to-r from-sand-50 to-transparent z-10 pointer-events-none transition-opacity duration-300 ${
-              canScrollLeft ? 'opacity-100' : 'opacity-0'
-            }`}
+            className={`absolute left-0 top-0 bottom-0 w-8 sm:w-12 bg-gradient-to-r from-sand-50 to-transparent z-10 pointer-events-none transition-opacity duration-300 ${canScrollLeft ? 'opacity-100' : 'opacity-0'
+              }`}
           />
           <div
-            className={`absolute right-0 top-0 bottom-0 w-8 sm:w-12 bg-gradient-to-l from-sand-50 to-transparent z-10 pointer-events-none transition-opacity duration-300 ${
-              canScrollRight ? 'opacity-100' : 'opacity-0'
-            }`}
+            className={`absolute right-0 top-0 bottom-0 w-8 sm:w-12 bg-gradient-to-l from-sand-50 to-transparent z-10 pointer-events-none transition-opacity duration-300 ${canScrollRight ? 'opacity-100' : 'opacity-0'
+              }`}
           />
 
           {/* Scrollable Cards */}
@@ -153,11 +150,13 @@ const ShopEarringCategory = () => {
               >
                 {/* Image Card */}
                 <div className="relative w-28 h-28 sm:w-32 sm:h-32 md:w-36 md:h-36 rounded-xl overflow-hidden bg-sand-100 border border-sand-200/60 shadow-sm transition-all duration-500 group-hover:shadow-gold group-hover:border-gold-300/60 group-hover:-translate-y-1.5">
-                  
-                  <img
+
+                  <Image
                     src={cat.image}
                     alt={`${cat.name} earrings`}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    fill
+                    sizes="(max-width: 640px) 112px, 144px"
+                    className="object-cover transition-transform duration-700 group-hover:scale-110"
                     loading="lazy"
                   />
 

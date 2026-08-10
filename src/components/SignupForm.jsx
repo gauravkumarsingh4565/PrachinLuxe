@@ -1,13 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '@/context/AuthContext';
+import { useDispatch } from 'react-redux';
+import { signupUser as signupUserAction } from '@/redux/slices/authSlice';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 
 export default function SignupForm() {
-  const { signupUser } = useAuth();
+  const dispatch = useDispatch();
   const router = useRouter();
   const searchParams = useSearchParams();
   
@@ -55,7 +56,7 @@ export default function SignupForm() {
     setTimeout(() => {
       setIsSubmitting(false);
       try {
-        signupUser({ name, email, phone });
+        dispatch(signupUserAction({ name, email, phone }));
         router.push('/');
       } catch (err) {
         setError('Signup failed. Please try again.');

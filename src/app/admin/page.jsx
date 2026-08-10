@@ -93,13 +93,30 @@ export default function AdminPanel() {
               </div>
               
               <div className="p-8 text-center text-gray-500 flex flex-col items-center justify-center min-h-[300px]">
-                <svg className="w-12 h-12 text-gold-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                </svg>
-                <p className="font-cinzel text-lg text-royal-blue-900 mb-2">No Data Available Yet</p>
-                <p className="font-sans text-sm max-w-md mx-auto">
-                  The {activeTab} module is currently empty or under development. Check back later when live data is connected.
-                </p>
+                {activeTab === 'products' ? (
+                  <>
+                    <svg className="w-12 h-12 text-gold-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                    <p className="font-cinzel text-lg text-royal-blue-900 mb-2">No Products Found</p>
+                    <p className="font-sans text-sm max-w-md mx-auto mb-6">
+                      Your catalog is currently empty. Start onboarding luxury pieces to your store.
+                    </p>
+                    <Link href="/admin/products/new" className="px-6 py-3 bg-royal-blue-900 text-white rounded-lg font-cinzel text-xs font-bold tracking-widest hover:bg-gold-600 transition-colors uppercase">
+                      + Add New Product
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-12 h-12 text-gold-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                    <p className="font-cinzel text-lg text-royal-blue-900 mb-2">No Data Available Yet</p>
+                    <p className="font-sans text-sm max-w-md mx-auto">
+                      The {activeTab} module is currently empty or under development. Check back later when live data is connected.
+                    </p>
+                  </>
+                )}
               </div>
             </div>
 

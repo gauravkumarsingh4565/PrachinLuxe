@@ -4,16 +4,18 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { getProductById, getRelatedProducts } from '@/data/products';
-import { useCart } from '@/context/CartContext';
-import { useAuth } from '@/context/AuthContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart as addToCartAction } from '@/redux/slices/cartSlice';
+import { selectUser } from '@/redux/slices/authSlice';
 import { useSession } from 'next-auth/react';
+import Image from 'next/image';
 
 export default function ProductPage({ params }) {
   // Safe param unwrapping for Next.js 15+
   const { id } = React.use(params);
   const router = useRouter();
-  const { addToCart } = useCart();
-  const { user: phoneUser } = useAuth();
+  const dispatch = useDispatch();
+  const phoneUser = useSelector(selectUser);
   const { data: session } = useSession();
   const isLoggedIn = !!(phoneUser || session?.user);
 
@@ -54,7 +56,7 @@ export default function ProductPage({ params }) {
   };
 
   const handleAddToCart = () => {
-    addToCart(product, quantity);
+    dispatch(addToCartAction({ product, quantity }));
     setIsAdded(true);
     setTimeout(() => setIsAdded(false), 2000);
   };
@@ -63,11 +65,11 @@ export default function ProductPage({ params }) {
     if (!isLoggedIn) {
       // Pehle cart mein add karo, phir login page pe bhejo
       // Login ke baad /cart pe redirect hoga
-      addToCart(product, quantity);
+      dispatch(addToCartAction({ product, quantity }));
       router.push('/login?callbackUrl=/cart');
       return;
     }
-    addToCart(product, quantity);
+    dispatch(addToCartAction({ product, quantity }));
     router.push('/cart');
   };
 
@@ -94,10 +96,12 @@ export default function ProductPage({ params }) {
 
             {/* Main display image - Removed max-width restriction */}
             <div className="relative w-full aspect-square rounded-xl overflow-hidden bg-sand-100 border border-gold-500/25 p-1 shadow-md hover:shadow-xl transition-shadow duration-500 group">
-              <img
+              <Image
                 src={product.images ? product.images[activeImgIndex] : product.img}
                 alt={product.name}
-                className="w-full h-full object-cover rounded-lg transition-transform duration-700 ease-out group-hover:scale-110 cursor-zoom-in"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover rounded-lg transition-transform duration-700 ease-out group-hover:scale-110 cursor-zoom-in"
               />
               <div className="absolute inset-4 border border-gold-500/20 pointer-events-none rounded-lg" />
             </div>
@@ -115,10 +119,12 @@ export default function ProductPage({ params }) {
                       : 'border-gold-500/10 hover:border-gold-500/40'
                       }`}
                   >
-                    <img
+                    <Image
                       src={imgSrc}
                       alt={`Angle ${idx + 1}`}
-                      className="w-full h-full object-cover"
+                      fill
+                      sizes="(max-width: 768px) 25vw, 15vw"
+                      className="object-cover"
                     />
                   </button>
                 ))}
@@ -143,21 +149,9 @@ export default function ProductPage({ params }) {
 
           {/* ================= RIGHT COLUMN: INFO & CHECKOUT ================= */}
           <div className="flex flex-col w-full pt-2">
-            <span className="text-xs sm:text-sm font-semibold text-gold-600 tracking-widest uppercase mb-1">
-              {product.category} {product.subcategory ? `> ${product.subcategory}` : ''}
-            </span>
             <h1 className="font-cinzel text-3xl sm:text-4xl lg:text-5xl text-royal-blue-900 font-bold leading-tight mb-4">
               {product.name}
             </h1>
-
-            {/* Rating Stars */}
-            <div className="flex items-center gap-2 mb-6">
-              <div className="flex text-amber-400 text-sm">
-                {'★'.repeat(Math.round(product.rating))}
-                {'☆'.repeat(5 - Math.round(product.rating))}
-              </div>
-              <span className="text-xs text-gray-500 font-semibold">({product.reviews} customer reviews)</span>
-            </div>
 
             {/* Pricing */}
             <div className="flex items-baseline gap-3 mb-6 p-4 rounded-xl bg-sand-50 border border-gold-500/10">
@@ -165,9 +159,7 @@ export default function ProductPage({ params }) {
               {product.originalPrice && (
                 <>
                   <span className="text-sm sm:text-base text-gray-400 line-through ml-2">Rs. {product.originalPrice}</span>
-                  <span className="ml-auto text-[10px] sm:text-xs px-3 py-1.5 rounded-full bg-[#34A853]/10 text-[#34A853] font-bold tracking-wider uppercase border border-[#34A853]/20">
-                    SAVE NOW
-                  </span>
+                
                 </>
               )}
             </div>
@@ -308,31 +300,6 @@ export default function ProductPage({ params }) {
           {/* ================= END RIGHT COLUMN ================= */}
         </div>
 
-        {/* Mock Reviews Section */}
-        <section className="bg-white rounded-2xl p-6 sm:p-8 border border-gold-500/10 shadow-sm mb-16">
-          <h3 className="font-cinzel text-xl sm:text-2xl text-royal-blue-900 font-bold mb-6 tracking-wide border-b border-gray-100 pb-4">
-            Customer Reviews
-          </h3>
-          <div className="space-y-6">
-            <div className="border-b border-gray-50 pb-6">
-              <div className="flex items-center justify-between mb-2">
-                <p className="font-bold text-royal-blue-900 font-sans">Rhea Sharma</p>
-                <div className="text-amber-400 text-sm">★★★★★</div>
-              </div>
-              <p className="text-gray-400 text-xs mb-3 font-sans">2 weeks ago</p>
-              <p className="text-gray-600 leading-relaxed italic">"Breathtaking quality. The polish and weight feel extremely premium. It completed my festive outfit perfectly. Will buy again!"</p>
-            </div>
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <p className="font-bold text-royal-blue-900 font-sans">Vikram Malhotra</p>
-                <div className="text-amber-400 text-sm">★★★★☆</div>
-              </div>
-              <p className="text-gray-400 text-xs mb-3 font-sans">1 month ago</p>
-              <p className="text-gray-600 leading-relaxed italic">"Bought it as a anniversary gift. The presentation box is beautifully styled. She loved the craftsmanship and details."</p>
-            </div>
-          </div>
-        </section>
-
         {/* Related Products Section */}
         {related.length > 0 && (
           <section className="w-full mb-8">
@@ -347,10 +314,12 @@ export default function ProductPage({ params }) {
                   className="group relative bg-white rounded-xl overflow-hidden cursor-pointer flex flex-col font-cormorant shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-1.5 border border-sand-200/50 hover:border-gold-300/50"
                 >
                   <div className="relative aspect-square overflow-hidden bg-sand-50 p-2">
-                    <img
+                    <Image
                       src={rel.img}
                       alt={rel.name}
-                      className="w-full h-full object-cover rounded-lg transition-transform duration-700 ease-out group-hover:scale-110"
+                      fill
+                      sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
+                      className="object-cover rounded-lg transition-transform duration-700 ease-out group-hover:scale-110"
                       loading="lazy"
                     />
                     <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] font-bold text-royal-blue-900 tracking-wider uppercase shadow-sm">

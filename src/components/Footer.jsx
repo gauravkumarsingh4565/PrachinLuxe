@@ -1,4 +1,6 @@
 import React from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
 
 const Footer = () => {
   return (
@@ -47,7 +49,7 @@ const Footer = () => {
             <ul className="space-y-3">
               {['Terms of service', 'Privacy Policy', 'Refund and Cancellations', 'Shipping Policy', 'Return and Exchange'].map((item) => (
                 <li key={item}>
-                  <a href="#" className="text-sm text-[#34495e] font-medium hover:text-[#d4af37] transition-colors">{item}</a>
+                  <Link href="#" className="text-sm text-[#34495e] font-medium hover:text-[#d4af37] transition-colors">{item}</Link>
                 </li>
               ))}
             </ul>
@@ -57,9 +59,15 @@ const Footer = () => {
           <div className="flex flex-col">
             <h4 className="font-cormorant font-semibold text-xl mb-4 text-[#1a252f]">Main Categories</h4>
             <ul className="space-y-3">
-              {['Handmade Jewelry', 'Antique Treasures'].map((item) => (
-                <li key={item}>
-                  <a href="#" className="text-sm text-[#34495e] font-medium hover:text-[#d4af37] transition-colors">{item}</a>
+              {[
+                { name: 'Sets', path: '/category/sets' },
+                { name: 'Earrings', path: '/category/earrings' },
+                { name: 'Necklaces', path: '/category/necklaces' },
+                { name: 'Najar Battu', path: '/category/najar-battu' },
+                { name: 'Hair Pins', path: '/category/hair-pins' },
+              ].map((item) => (
+                <li key={item.name}>
+                  <Link href={item.path} className="text-sm text-[#34495e] font-medium hover:text-[#d4af37] transition-colors">{item.name}</Link>
                 </li>
               ))}
             </ul>
@@ -246,10 +254,12 @@ const Footer = () => {
           <div className="relative z-30 flex flex-col items-center justify-center pb-1">
             {/* Logo Icon */}
             <div className="w-9 h-9 bg-[#1a3654] flex items-center justify-center overflow-hidden rounded-full mb-1.5">
-              <img
+              <Image
                 src="/favicon.png"
                 alt="Prachin Queen Icon"
-                className="w-7 h-7 object-contain mix-blend-screen contrast-125 scale-110"
+                width={28}
+                height={28}
+                className="object-contain mix-blend-screen contrast-125 scale-110"
               />
             </div>
             <span className="font-cinzel text-lg font-extrabold tracking-[0.18em] text-[#d2b36e] uppercase leading-none pl-[0.18em]">

@@ -1,14 +1,16 @@
 "use client";
 
 import React, { useEffect } from 'react';
-import { useAuth } from '@/context/AuthContext';
+import { useSelector } from 'react-redux';
+import { selectUser, selectIsAuthLoaded } from '@/redux/slices/authSlice';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import OrderHistory from '@/components/OrderHistory';
 import Link from 'next/link';
 
 export default function OrdersPage() {
-  const { user: phoneUser, isLoaded: isPhoneAuthLoaded } = useAuth();
+  const phoneUser = useSelector(selectUser);
+  const isPhoneAuthLoaded = useSelector(selectIsAuthLoaded);
   const { data: session, status } = useSession();
   const router = useRouter();
 
