@@ -150,6 +150,8 @@ export default function ProductsAddForm() {
 
     const payload = {
       ...formData,
+      price: formData.price ? Number(formData.price) : 0,
+      originalPrice: formData.originalPrice ? Number(formData.originalPrice) : undefined,
       story,
       material: {
         ingdrients: material.ingdrients.filter(i => i.label.trim() !== ''),
@@ -178,6 +180,7 @@ export default function ProductsAddForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
+
       const data = await res.json();
 
       if (data.success) {
