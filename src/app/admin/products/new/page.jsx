@@ -157,10 +157,18 @@ export default function ProductsAddForm() {
       },
       care: care.filter(c => c.tittle.trim() !== '' || c.des.trim() !== ''),
       images: {
-        front: typeof images.front === 'string' ? images.front : images.front?.url || '',
-        left: typeof images.left === 'string' ? images.left : images.left?.url || '',
-        right: typeof images.right === 'string' ? images.right : images.right?.url || '',
-        back: typeof images.back === 'string' ? images.back : images.back?.url || '',
+        front: typeof images.front === 'object' && images.front !== null
+          ? { url: images.front.url || '', publicKey: images.front.publicKey || images.front.publicId || '' }
+          : { url: images.front || '', publicKey: '' },
+        left: typeof images.left === 'object' && images.left !== null
+          ? { url: images.left.url || '', publicKey: images.left.publicKey || images.left.publicId || '' }
+          : { url: images.left || '', publicKey: '' },
+        right: typeof images.right === 'object' && images.right !== null
+          ? { url: images.right.url || '', publicKey: images.right.publicKey || images.right.publicId || '' }
+          : { url: images.right || '', publicKey: '' },
+        back: typeof images.back === 'object' && images.back !== null
+          ? { url: images.back.url || '', publicKey: images.back.publicKey || images.back.publicId || '' }
+          : { url: images.back || '', publicKey: '' },
       },
     };
 

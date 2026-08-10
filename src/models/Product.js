@@ -24,12 +24,28 @@ const ProductSchema = new mongoose.Schema(
     description: { type: String },
     craftsmanship: { type: String },
 
-    // 4-side product images stored as Cloudinary URLs
+    // 4-side product images stored as objects with url and publicKey
     images: {
-      front: { type: String, default: '' },
-      left:  { type: String, default: '' },
-      right: { type: String, default: '' },
-      back:  { type: String, default: '' },
+      front: {
+        url: { type: String, default: '' },
+        publicKey: { type: String, default: '' },
+        publicId: { type: String, default: '' },
+      },
+      left: {
+        url: { type: String, default: '' },
+        publicKey: { type: String, default: '' },
+        publicId: { type: String, default: '' },
+      },
+      right: {
+        url: { type: String, default: '' },
+        publicKey: { type: String, default: '' },
+        publicId: { type: String, default: '' },
+      },
+      back: {
+        url: { type: String, default: '' },
+        publicKey: { type: String, default: '' },
+        publicId: { type: String, default: '' },
+      },
     },
 
     // Story section

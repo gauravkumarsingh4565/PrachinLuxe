@@ -20,12 +20,14 @@ export default function CldImageUploader({ label, value, onChange }) {
   const handleSuccess = (result) => {
     setIsUploading(false);
     console.log("UPLOADIMG", {
-      url: result.info.secure_url,
-      publicId: result.info.public_id,
-    })
-    if (result?.info?.secure_url && result?.info?.public_id) {
+      url: result?.info?.secure_url,
+      publicKey: result?.info?.public_id,
+      publicId: result?.info?.public_id,
+    });
+    if (result?.info?.secure_url) {
       onChange?.({
         url: result.info.secure_url,
+        publicKey: result.info.public_id,
         publicId: result.info.public_id,
       });
     }
