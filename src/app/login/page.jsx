@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import LoginForm from '@/components/LoginForm';
 import { useSelector } from 'react-redux';
 import { selectUser, selectIsAuthLoaded } from '@/redux/slices/authSlice';
@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
 
-export default function LoginPage() {
+function LoginContent() {
   const phoneUser = useSelector(selectUser);
   const isPhoneAuthLoaded = useSelector(selectIsAuthLoaded);
   const { data: session, status } = useSession();
@@ -164,5 +164,17 @@ export default function LoginPage() {
 
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="w-full min-h-screen flex items-center justify-center bg-sand-100">
+        <div className="w-10 h-10 border-4 border-gold-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    }>
+      <LoginContent />
+    </Suspense>
   );
 }
