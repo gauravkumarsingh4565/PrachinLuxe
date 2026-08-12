@@ -21,6 +21,7 @@ const outfit = Outfit({
   display: 'swap',
 });
 
+
 export const metadata = {
   title: 'PRACHIN LUXE — The Ancient Riches | Handmade Jewelry & Antiques',
   description: 'Prachin Luxe - The Ancient Riches. Handmade jewelry & antiques crafted with heritage, inspired by ancient royals. Earrings, necklaces, payals, and antique treasures.',
