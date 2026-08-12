@@ -1,26 +1,9 @@
-import { Inter, Outfit } from 'next/font/google';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
 import '@/index.css';
 import ReduxProvider from '@/redux/Providers';
 import NextAuthSessionProvider from '@/components/SessionProvider';
-
-const inter = Inter({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-  variable: '--font-cormorant', // Replacing cormorant with Inter for body text
-  display: 'swap',
-});
-
-
-const outfit = Outfit({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700', '800', '900'],
-  variable: '--font-outfit',
-  display: 'swap',
-});
-
 
 export const metadata = {
   title: 'PRACHIN LUXE — The Ancient Riches | Handmade Jewelry & Antiques',
@@ -41,7 +24,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${outfit.variable} min-h-screen bg-sand-50 antialiased`}>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+      </head>
+      <body className={`min-h-screen bg-sand-50 antialiased`}>
         <NextAuthSessionProvider>
           <ReduxProvider>
             <Navbar />

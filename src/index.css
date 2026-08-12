@@ -9,6 +9,11 @@
     box-sizing: border-box;
   }
 
+  :root {
+    --font-cormorant: 'Inter', sans-serif;
+    --font-outfit: 'Outfit', sans-serif;
+  }
+
   html {
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
