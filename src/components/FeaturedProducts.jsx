@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { products } from '@/data/products';
+import { products } from '@/data/constant';
 
 const categories = ['Earrings', 'Necklaces', 'Sets', 'Najarbattu', 'Hairpin'];
 

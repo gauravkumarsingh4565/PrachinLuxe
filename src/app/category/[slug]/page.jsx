@@ -3,7 +3,7 @@
 import React, { useEffect, use } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { products } from '@/data/products';
+import { products } from '@/data/constant';
 
 import bannerImg from '@/assets/images/hero_banner 2.png';
 

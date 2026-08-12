@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import CldImageUploader from '@/components/CldImageUploader';
+import { jewelryType } from '@/data/constant';
 
 export default function ProductsAddForm({ mode = 'create', productId }) {
   const router = useRouter();
@@ -17,7 +18,7 @@ export default function ProductsAddForm({ mode = 'create', productId }) {
   const [formData, setFormData] = useState({
     name: '',
     category: '',
-    subcategory: '',
+    isNewArrival: false,
     price: '',
     originalPrice: '',
     inStock: true,
@@ -71,7 +72,7 @@ export default function ProductsAddForm({ mode = 'create', productId }) {
           setFormData({
             name: p.name || '',
             category: p.category || '',
-            subcategory: p.subcategory || '',
+            isNewArrival: p.isNewArrival || false,
             price: p.price !== undefined ? String(p.price) : '',
             originalPrice: p.originalPrice !== undefined ? String(p.originalPrice) : '',
             inStock: p.inStock ?? true,
@@ -356,24 +357,28 @@ export default function ProductsAddForm({ mode = 'create', productId }) {
                   className="w-full px-4 py-3 rounded-lg border border-gold-500/30 focus:outline-none focus:border-gold-500 bg-sand-50/50 font-medium appearance-none"
                 >
                   <option value="">Select Category</option>
-                  <option value="Earrings">Earrings</option>
-                  <option value="Necklaces">Necklaces</option>
-                  <option value="Sets">Sets</option>
-                  <option value="Najarbattu">Najarbattu</option>
-                  <option value="Hairpin">Hairpin</option>
+                  {jewelryType
+                    .filter((type) => type.id !== 'new-arrivals')
+                    .map((type) => (
+                      <option key={type.id} value={type.name}>
+                        {type.name}
+                      </option>
+                    ))}
                 </select>
               </div>
 
-              <div>
-                <label className="block font-bold text-royal-blue-900 uppercase text-[10px] tracking-widest font-cinzel mb-2">Subcategory</label>
+              <div className="flex items-center gap-3 pt-6">
                 <input
-                  type="text"
-                  name="subcategory"
-                  value={formData.subcategory}
+                  type="checkbox"
+                  id="isNewArrival"
+                  name="isNewArrival"
+                  checked={formData.isNewArrival}
                   onChange={handleInputChange}
-                  placeholder="e.g. Studs, Chokers"
-                  className="w-full px-4 py-3 rounded-lg border border-gold-500/30 focus:outline-none focus:border-gold-500 bg-sand-50/50 font-medium"
+                  className="w-5 h-5 accent-gold-600 rounded border-gold-500/30 focus:ring-gold-500 cursor-pointer"
                 />
+                <label htmlFor="isNewArrival" className="font-bold text-royal-blue-900 uppercase text-[10px] tracking-widest font-cinzel cursor-pointer">
+                  Mark as New Arrival
+                </label>
               </div>
 
               <div className="col-span-1 sm:col-span-2">

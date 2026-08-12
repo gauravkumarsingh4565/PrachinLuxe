@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import bannerImg from '../assets/images/new_arrival.png';
-import { products } from '@/data/products';
+import { products } from '@/data/constant';
 
 // Define the IDs of products to showcase as new arrivals
 const newArrivalIds = [

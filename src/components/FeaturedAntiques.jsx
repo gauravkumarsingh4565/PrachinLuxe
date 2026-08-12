@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import bannerImg from '../assets/images/antique2.png';
-import { products } from '@/data/products';
+import { products } from '@/data/constant';
 
 const ProductCard = ({ product }) => (
   <Link

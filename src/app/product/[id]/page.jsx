@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { getProductById, getRelatedProducts } from '@/data/products';
+import { getProductById, getRelatedProducts } from '@/data/constant';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart as addToCartAction } from '@/redux/slices/cartSlice';
 import { selectUser } from '@/redux/slices/authSlice';
