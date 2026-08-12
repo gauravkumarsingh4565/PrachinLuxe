@@ -47,8 +47,8 @@ module.exports = {
 
       },
       fontFamily: {
-        cinzel: ['var(--font-cinzel)', 'serif'],
-        'cinzel-decorative': ['var(--font-cinzel-decorative)', 'serif'],
+        cinzel: ['var(--font-outfit)', 'sans-serif'],
+        'cinzel-decorative': ['var(--font-outfit)', 'sans-serif'],
         cormorant: ['var(--font-cormorant)', 'serif'],
         josefin: ['var(--font-josefin)', 'sans-serif'],
         outfit: ['var(--font-outfit)', 'sans-serif'],

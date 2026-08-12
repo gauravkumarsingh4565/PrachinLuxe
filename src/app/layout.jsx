@@ -13,20 +13,6 @@ const inter = Inter({
   display: 'swap',
 });
 
-const outfitHeading = Outfit({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800', '900'],
-  variable: '--font-cinzel', // Replacing cinzel with Outfit for headings
-  display: 'swap',
-});
-
-const outfitDecorative = Outfit({
-  subsets: ['latin'],
-  weight: ['400', '700', '900'],
-  variable: '--font-cinzel-decorative', // Replacing decorative with Outfit
-  display: 'swap',
-});
-
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -54,7 +40,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${outfitHeading.variable} ${outfitDecorative.variable} ${outfit.variable} min-h-screen bg-sand-50 antialiased`}>
+      <body className={`${inter.variable} ${outfit.variable} min-h-screen bg-sand-50 antialiased`}>
         <NextAuthSessionProvider>
           <ReduxProvider>
             <Navbar />
