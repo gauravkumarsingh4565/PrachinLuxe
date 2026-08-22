@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import logoimage from '@/assets/images/newLogo.png';
 
 const Footer = () => {
   return (
@@ -14,7 +15,7 @@ const Footer = () => {
           <div className="flex flex-col">
             <h4 className="font-cormorant font-semibold text-xl mb-4 text-[#1a252f]">Be In The Know</h4>
             <p className="text-sm text-[#34495e] mb-6 leading-relaxed font-medium">
-              By signing up for alerts, you agree to receive e-mails, calls and text messages from Prachin Luxe.
+              By signing up for alerts, you agree to receive e-mails, calls and text messages from Prachin Luxy.
             </p>
 
             {/* Follow Us */}
@@ -47,9 +48,14 @@ const Footer = () => {
           <div className="flex flex-col">
             <h4 className="font-cormorant font-semibold text-xl mb-4 text-[#1a252f]">Quick links</h4>
             <ul className="space-y-3">
-              {['Terms of service', 'Privacy Policy', 'Refund and Cancellations', 'Shipping Policy', 'Return and Exchange'].map((item) => (
-                <li key={item}>
-                  <Link href="#" className="text-sm text-[#34495e] font-medium hover:text-[#d4af37] transition-colors">{item}</Link>
+              {[
+                { name: 'Terms of Service', path: '/terms-conditions' },
+                { name: 'Privacy Policy', path: '/privacy-policy' },
+                { name: 'Cancellation & Return', path: '/cancellation-return' },
+                { name: 'Shipping Policy', path: '/shipping-policy' }
+              ].map((item) => (
+                <li key={item.name}>
+                  <Link href={item.path} className="text-sm text-[#34495e] font-medium hover:text-[#d4af37] transition-colors">{item.name}</Link>
                 </li>
               ))}
             </ul>
@@ -85,8 +91,8 @@ const Footer = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
                 </svg>
                 <span className="text-sm text-[#34495e] font-medium">
-                  Johari Bazaar, Pink City,<br />
-                  Jaipur, Rajasthan 302001
+                  Gadadhar Nivas, Hatijhari, Baisinga,<br />
+                  Mayurbhanj, Odisha, 757052
                 </span>
               </li>
 
@@ -106,7 +112,7 @@ const Footer = () => {
                 <svg className="w-5 h-5 text-[#34495e] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
                 </svg>
-                <span className="text-sm text-[#34495e] font-medium">+91 9950510448</span>
+                <span className="text-sm text-[#34495e] font-medium">+91-9348400351</span>
               </li>
 
               {/* Email */}
@@ -114,7 +120,7 @@ const Footer = () => {
                 <svg className="w-5 h-5 text-[#34495e] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
                 </svg>
-                <span className="text-sm text-[#34495e] font-medium">namaste@prachinluxe.com</span>
+                <span className="text-sm text-[#34495e] font-medium">prachin.luxy@gmail.com</span>
               </li>
             </ul>
           </div>
@@ -235,7 +241,7 @@ const Footer = () => {
       {/* Bottom Dark Blue Bar */}
       <div className="relative w-full h-12 bg-[#1a3654] z-20 flex items-center px-6">
         <p className="text-sm text-sand-100/70">
-          © 2024 Prachin Luxe. All Rights Reserved.
+          © 2024 Prachin Luxy. All Rights Reserved.
         </p>
 
         {/* The Central Custom Arch (Dome) */}
@@ -251,27 +257,12 @@ const Footer = () => {
           </svg>
 
           {/* Content inside Dome */}
-          <div className="relative z-30 flex flex-col items-center justify-center pb-1">
-            {/* Logo Icon */}
-            <div className="w-9 h-9 bg-[#1a3654] flex items-center justify-center overflow-hidden rounded-full mb-1.5">
-              <Image
-                src="/favicon.png"
-                alt="Prachin Queen Icon"
-                width={28}
-                height={28}
-                className="object-contain mix-blend-screen contrast-125 scale-110"
-              />
-            </div>
-            <span className="font-cinzel text-lg font-extrabold tracking-[0.18em] text-[#d2b36e] uppercase leading-none pl-[0.18em]">
-              PRACHIN
-            </span>
-            <div className="flex items-center gap-2 w-32 mt-1">
-              <div className="h-[0.5px] bg-white/30 flex-grow" />
-              <span className="text-[9px] font-bold tracking-[0.25em] text-[#d2b36e] uppercase">
-                LUXE
-              </span>
-              <div className="h-[0.5px] bg-white/30 flex-grow" />
-            </div>
+          <div className="relative z-30 flex items-center justify-center w-full h-full pt-8 pb-4 px-6">
+            <img
+              src={logoimage.src || logoimage}
+              alt="Prachin Luxy"
+              className="h-7 sm:h-8 w-auto object-contain drop-shadow-2xl"
+            />
           </div>
         </div>
 

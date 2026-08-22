@@ -1,4 +1,5 @@
 import Navbar from '@/components/Navbar';
+import CategoryCircles from '@/components/CategoryCircles';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
 import '@/index.css';
@@ -6,16 +7,16 @@ import ReduxProvider from '@/redux/Providers';
 import NextAuthSessionProvider from '@/components/SessionProvider';
 
 export const metadata = {
-  title: 'PRACHIN LUXE — The Ancient Riches | Handmade Jewelry & Antiques',
-  description: 'Prachin Luxe - The Ancient Riches. Handmade jewelry & antiques crafted with heritage, inspired by ancient royals. Earrings, necklaces, payals, and antique treasures.',
+  title: 'PRACHIN LUXY — The Ancient Riches | Handmade Jewelry & Antiques',
+  description: 'Prachin Luxy - The Ancient Riches. Handmade jewelry & antiques crafted with heritage, inspired by ancient royals. Earrings, necklaces, payals, and antique treasures.',
   keywords: 'handmade jewelry, royal jewelry, Indian jewelry, antique pieces, kundan, meenakari, jhumka, payal, heritage jewelry',
-  authors: [{ name: 'Prachin Luxe' }],
+  authors: [{ name: 'Prachin Luxy' }],
   icons: {
     icon: '/favicon.png',
     apple: '/icon.png',
   },
   openGraph: {
-    title: 'PRACHIN LUXE - The Ancient Riches',
+    title: 'PRACHIN LUXY - The Ancient Riches',
     description: 'Handmade Jewelry & Antiques. Crafted with heritage, inspired by ancient royals.',
     type: 'website',
   },
@@ -33,6 +34,7 @@ export default function RootLayout({ children }) {
         <NextAuthSessionProvider>
           <ReduxProvider>
             <Navbar />
+            <CategoryCircles />
             {children}
             <Footer />
             <ScrollToTop />

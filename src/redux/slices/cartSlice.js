@@ -60,7 +60,9 @@ export const selectCartCount = (state) =>
   state.cart.cartItems.reduce((total, item) => total + item.quantity, 0);
 export const selectCartTotal = (state) => 
   state.cart.cartItems.reduce((total, item) => {
-    const priceNum = parseFloat(item.product.price.replace(/,/g, ''));
+    const priceNum = typeof item.product.price === 'number' 
+      ? item.product.price 
+      : parseFloat(String(item.product.price || 0).replace(/,/g, ''));
     return total + (priceNum * item.quantity);
   }, 0);
 

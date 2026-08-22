@@ -46,7 +46,7 @@ export default function LogoutConfirmModal({ isOpen, onClose, onConfirm }) {
           {/* Body */}
           <div className="p-6 pt-4 text-center">
             <p className="text-gray-600 text-[17px] font-medium leading-relaxed">
-              Are you sure you want to log out of your Prachin Luxe account?
+              Are you sure you want to log out of your Prachin Luxy account?
             </p>
           </div>
 

@@ -1,13 +1,33 @@
 "use client";
 
 import React from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import Image from 'next/image';
 
 import { jewelryType } from '@/data/constant';
 
 export default function CategoryCircles() {
   const router = useRouter();
+  const pathname = usePathname();
+
+  // Hide category circles on policy, auth, and admin pages
+  const hiddenPaths = [
+    '/terms-conditions',
+    '/privacy-policy',
+    '/shipping-policy',
+    '/cancellation-return',
+    '/login',
+    '/signup',
+    '/admin',
+    '/profile',
+    '/orders',
+    '/addresses',
+    '/cart'
+  ];
+
+  if (hiddenPaths.some(path => pathname?.startsWith(path))) {
+    return null;
+  }
 
   return (
     <section className="w-full bg-sand-100 py-6 sm:py-8 border-b border-gold-500/10">

@@ -10,7 +10,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectCartCount } from '@/redux/slices/cartSlice';
 import { selectUser, selectIsAuthLoaded, logout } from '@/redux/slices/authSlice';
 import { useRouter } from 'next/navigation';
-import logoimage from '@/assets/images/logo_img.png';
+import logoimage from '@/assets/images/newLogo.png';
 import LogoutConfirmModal from './LogoutConfirmModal';
 
 const Navbar = () => {
@@ -71,14 +71,14 @@ const Navbar = () => {
     <>
       <nav className="sticky top-0 left-0 w-full z-40 bg-sand-50/95 backdrop-blur-md border-b border-gold-500/25 shadow-sm shadow-sand-500/15">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-14 lg:h-16">
+          <div className="flex items-center justify-between h-16 lg:h-20">
             {/* Logo / Brand Name */}
             <div className="flex-shrink-0 flex items-center">
               <Link href="/" className="flex items-center group focus:outline-none py-1">
                 <img
                   src={logoimage.src || logoimage}
-                  alt="Prachin Luxe"
-                  className="h-12 sm:h-14 w-auto object-contain transition-transform duration-300 hover:scale-105"
+                  alt="Prachin Luxy"
+                  className="h-10 sm:h-12 lg:h-14 w-auto object-contain transition-transform duration-300 hover:scale-105"
                 />
               </Link>
             </div>
@@ -116,7 +116,6 @@ const Navbar = () => {
                   {cartCount}
                 </span>
               </Link>
-
               {/* User Profile Icon */}
               {isLoaded ? (
                 user ? (

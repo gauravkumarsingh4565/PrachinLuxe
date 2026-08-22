@@ -35,6 +35,9 @@ export async function POST(req) {
     if (productData.originalPrice !== undefined && productData.originalPrice !== '') {
       productData.originalPrice = Number(productData.originalPrice);
     }
+    if (productData.position !== undefined && productData.position !== '') {
+      productData.position = Number(productData.position);
+    }
 
     // Create the product in MongoDB (supports standard & dynamic flexible fields)
     const product = await Product.create(productData);

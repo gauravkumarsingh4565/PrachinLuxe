@@ -5,26 +5,28 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import bannerImg from '../assets/images/new_arrival.png';
-import { products } from '@/data/constant';
 
-// Define the IDs of products to showcase as new arrivals
-const newArrivalIds = [
-  'premium-kundan-disc-earrings',
-  'temple-lakshmi-necklace',
-  'royal-heritage-kada',
-  'royal-solitaire-ring',
-  'traditional-gold-najarbattu',
-  'bridal-pearl-gold-hairpin'
-];
+const ProductCard = ({ product }) => {
+  const id = product._id || product.id;
+  
+  const getImageUrl = () => {
+    if (product.images?.front?.url) return product.images.front.url;
+    if (typeof product.images?.front === 'string') return product.images.front;
+    if (product.images?.left?.url) return product.images.left.url;
+    if (product.img) return product.img;
+    if (Array.isArray(product.images) && product.images[0]) return product.images[0];
+    return '/placeholder.png';
+  };
+  const imageUrl = getImageUrl();
 
-const ProductCard = ({ product }) => (
+  return (
   <Link
-    href={`/product/${product.id}`}
+    href={`/product/${id}`}
     className="group relative bg-white rounded-xl overflow-hidden cursor-pointer flex flex-col font-cormorant shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-1.5 border border-sand-200/50 hover:border-gold-300/50"
   >
     <div className="relative aspect-square overflow-hidden bg-sand-50">
       <Image
-        src={product.img}
+        src={imageUrl}
         alt={product.name}
         fill
         sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
@@ -53,8 +55,8 @@ const ProductCard = ({ product }) => (
       {/* Rating — beech mein */}
       <div className="flex items-center gap-1.5 mb-2.5 text-[13px]">
         <span className="text-amber-400 text-[16px] leading-none">★</span>
-        <span className="font-bold text-gray-800">{product.rating}</span>
-        <span className="text-gray-500">({product.reviews})</span>
+        <span className="font-bold text-gray-800">{product.rating || "4.9"}</span>
+        <span className="text-gray-500">({product.reviews || "128"})</span>
       </div>
 
       {/* Product Name */}
@@ -70,16 +72,14 @@ const ProductCard = ({ product }) => (
       </div>
     </div>
   </Link>
-);
+)};
 
 
-const NewArrival = () => {
+const NewArrival = ({ dbProducts = [] }) => {
   const router = useRouter();
   
-  // Resolve new products in order of definition
-  const newProducts = newArrivalIds
-    .map(id => products.find(p => p.id === id))
-    .filter(Boolean);
+  // Resolve new products: DB products marked as isNewArrival exclusively
+  const newProducts = dbProducts.filter(product => product.isNewArrival);
 
   return (
     <section className="bg-sand-50 py-6 px-4 border-t border-gold-500/20">
@@ -105,7 +105,7 @@ const NewArrival = () => {
         {/* Products Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 pb-6">
           {newProducts.slice(0, 5).map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard key={product._id || product.id} product={product} />
           ))}
         </div>
 

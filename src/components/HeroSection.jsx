@@ -43,7 +43,7 @@ const HeroSection = () => {
           >
             <Image
               src={img}
-              alt={`Prachin Luxe Collection ${index + 1}`}
+              alt={`Prachin Luxy Collection ${index + 1}`}
               fill
               priority={index === 0}
               sizes="100vw"

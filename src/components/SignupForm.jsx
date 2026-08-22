@@ -171,7 +171,7 @@ export default function SignupForm() {
             className="mt-1 h-4 w-4 rounded border-gold-500/30 text-royal-blue-900 focus:ring-royal-blue-900 focus:ring-opacity-25"
           />
           <label htmlFor="terms" className="text-xs text-gray-500 leading-normal font-sans">
-            I agree to the <span className="text-royal-blue-900 font-bold hover:underline cursor-pointer">Terms of Service</span> and <span className="text-royal-blue-900 font-bold hover:underline cursor-pointer">Privacy Policy</span> of Prachin Luxe.
+            I agree to the <span className="text-royal-blue-900 font-bold hover:underline cursor-pointer">Terms of Service</span> and <span className="text-royal-blue-900 font-bold hover:underline cursor-pointer">Privacy Policy</span> of Prachin Luxy.
           </label>
         </div>
 

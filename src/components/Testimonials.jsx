@@ -9,7 +9,7 @@ const testimonials = [
     avatar: 'https://ui-avatars.com/api/?name=Priya+Sharma&background=8B4513&color=fff',
   },
   {
-    quote: 'PrachinLuxe delivered a bridal set that became the highlight of my wedding. Every guest was mesmerized.',
+    quote: 'PrachinLuxy delivered a bridal set that became the highlight of my wedding. Every guest was mesmerized.',
     name: 'Ananya Patel',
     time: '2 months ago',
     avatar: 'https://ui-avatars.com/api/?name=Ananya+Patel&background=A0522D&color=fff',

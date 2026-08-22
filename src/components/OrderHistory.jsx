@@ -113,7 +113,7 @@ export default function OrderHistory() {
                     </div>
                   </div>
                   <div className="text-royal-blue-900 font-bold font-sans text-sm sm:text-base">
-                    Rs. {parseFloat(item.product.price.replace(/,/g, '')).toLocaleString('en-IN')}
+                    Rs. {parseFloat(String(item.product.price || 0).replace(/,/g, '')).toLocaleString('en-IN')}
                   </div>
                 </div>
               ))}

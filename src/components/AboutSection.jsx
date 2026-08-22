@@ -52,7 +52,7 @@ const AboutSection = () => {
 
           {/* Paragraphs */}
           <p className="text-royal-blue-700/80 leading-relaxed mb-5 text-base lg:text-lg">
-            For over two decades, Prachin Luxe has been the custodian of India's most
+            For over two decades, Prachin Luxy has been the custodian of India's most
             exquisite jewelry traditions. Our master artisans, inheritors of techniques
             passed down through generations of royal court jewelers, breathe life into
             every piece with meticulous hand-craftsmanship that honours centuries of

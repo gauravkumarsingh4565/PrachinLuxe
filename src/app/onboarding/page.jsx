@@ -306,7 +306,7 @@ export default function OnboardingPage() {
                   <span className="text-royal-blue-900 font-bold hover:underline cursor-pointer">Terms of Service</span>
                   {' '}and{' '}
                   <span className="text-royal-blue-900 font-bold hover:underline cursor-pointer">Privacy Policy</span>
-                  {' '}of Prachin Luxe.
+                  {' '}of Prachin Luxy.
                 </label>
               </div>
 

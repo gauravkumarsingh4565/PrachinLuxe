@@ -23,7 +23,8 @@ export default function ProductsAddForm({ mode = 'create', productId }) {
     originalPrice: '',
     inStock: true,
     description: '',
-    craftsmanship: ''
+    craftsmanship: '',
+    position: ''
   });
 
   const [story, setStory] = useState({
@@ -77,7 +78,8 @@ export default function ProductsAddForm({ mode = 'create', productId }) {
             originalPrice: p.originalPrice !== undefined ? String(p.originalPrice) : '',
             inStock: p.inStock ?? true,
             description: p.description || '',
-            craftsmanship: p.craftsmanship || ''
+            craftsmanship: p.craftsmanship || '',
+            position: p.position !== undefined ? String(p.position) : ''
           });
 
           if (p.story) {
@@ -224,6 +226,7 @@ export default function ProductsAddForm({ mode = 'create', productId }) {
       ...formData,
       price: formData.price ? Number(formData.price) : 0,
       originalPrice: formData.originalPrice ? Number(formData.originalPrice) : undefined,
+      position: formData.position ? Number(formData.position) : undefined,
       story,
       material: {
         ingdrients: material.ingdrients.filter(i => i.label && i.label.trim() !== ''),
@@ -343,6 +346,19 @@ export default function ProductsAddForm({ mode = 'create', productId }) {
                   value={formData.name}
                   onChange={handleInputChange}
                   placeholder="e.g. Premium Kundan Disc Earrings"
+                  className="w-full px-4 py-3 rounded-lg border border-gold-500/30 focus:outline-none focus:border-gold-500 bg-sand-50/50 font-medium"
+                />
+              </div>
+
+              <div className="col-span-1 sm:col-span-2">
+                <label className="block font-bold text-royal-blue-900 uppercase text-[10px] tracking-widest font-cinzel mb-2">Position (Number) *</label>
+                <input
+                  type="number"
+                  name="position"
+                  required
+                  value={formData.position}
+                  onChange={handleInputChange}
+                  placeholder="e.g. 1"
                   className="w-full px-4 py-3 rounded-lg border border-gold-500/30 focus:outline-none focus:border-gold-500 bg-sand-50/50 font-medium"
                 />
               </div>

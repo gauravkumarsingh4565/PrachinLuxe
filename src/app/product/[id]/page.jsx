@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { getProductById, getRelatedProducts } from '@/data/constant';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart as addToCartAction } from '@/redux/slices/cartSlice';
 import { selectUser } from '@/redux/slices/authSlice';
@@ -20,6 +20,7 @@ export default function ProductPage({ params }) {
   const isLoggedIn = !!(phoneUser || session?.user);
 
   const [product, setProduct] = useState(null);
+  const [relatedProducts, setRelatedProducts] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState('story');
   const [isAdded, setIsAdded] = useState(false);
@@ -27,12 +28,61 @@ export default function ProductPage({ params }) {
 
   useEffect(() => {
     if (id) {
-      const found = getProductById(id);
-      if (found) {
-        setProduct(found);
-        setQuantity(1); // Reset quantity on page change
-        setActiveImgIndex(0); // Reset active image index
-      }
+      const fetchData = async () => {
+        try {
+          // Fetch single product
+          const res = await fetch(`/api/products/${id}`);
+          const data = await res.json();
+          let currentProduct = null;
+          
+          if (data.success && data.product) {
+            const p = data.product;
+            currentProduct = {
+              ...p,
+              id: p._id,
+              images: p.images ? [
+                p.images.front?.url, 
+                p.images.left?.url, 
+                p.images.right?.url, 
+                p.images.back?.url
+              ].filter(Boolean) : [],
+              img: p.images?.front?.url || p.img || '/placeholder.png',
+              materials: p.material?.ingdrients ? p.material.ingdrients.map(i => i.label) : (p.materials || []),
+              specifications: p.material?.specification ? p.material.specification.reduce((acc, curr) => {
+                if (curr.key && curr.val) acc[curr.key] = curr.val;
+                return acc;
+              }, {}) : (p.specifications || {}),
+              care: p.care || [],
+              story: p.story || {}
+            };
+            setProduct(currentProduct);
+            setQuantity(1);
+            setActiveImgIndex(0);
+          } else {
+            console.error("Product not found in DB");
+          }
+
+          // Fetch related
+          if (currentProduct) {
+            const relRes = await fetch('/api/products');
+            const relData = await relRes.json();
+            if (relData.success) {
+               const filtered = relData.products
+                 .filter(p => p.category === currentProduct.category && p._id.toString() !== currentProduct.id.toString())
+                 .map(p => ({
+                    ...p,
+                    id: p._id,
+                    img: p.images?.front?.url || '/placeholder.png'
+                 }))
+                 .slice(0, 4);
+               setRelatedProducts(filtered);
+            }
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      };
+      fetchData();
     }
   }, [id]);
 
@@ -72,8 +122,6 @@ export default function ProductPage({ params }) {
     dispatch(addToCartAction({ product, quantity }));
     router.push('/cart');
   };
-
-  const related = getRelatedProducts(product, 4);
 
   return (
     <div className="w-full bg-sand-100 py-8 px-4 font-cormorant min-h-screen">
@@ -259,38 +307,67 @@ export default function ProductPage({ params }) {
               <div className="p-5 font-cormorant text-[15px] sm:text-[16px] text-gray-700 leading-relaxed bg-white min-h-[200px]">
                 {activeTab === 'story' && (
                   <div className="space-y-4">
-                    <p className="font-semibold text-royal-blue-900 uppercase text-xs tracking-wider font-cinzel">Artisanal Craftsmanship</p>
-                    <p>{product.craftsmanship}</p>
-                    <p className="italic text-gray-500">Every item is handmade with love. Minor variations are a sign of authentic human touch and structural uniqueness.</p>
+                    {product.story?.title ? (
+                      <>
+                        <p className="font-semibold text-royal-blue-900 uppercase text-xs tracking-wider font-cinzel">{product.story.title}</p>
+                        <p>{product.story.description}</p>
+                        <p className="italic text-gray-500">{product.story.subDescription}</p>
+                        {product.craftsmanship && (
+                           <>
+                              <p className="font-semibold text-royal-blue-900 uppercase text-xs tracking-wider font-cinzel mt-4">Artisanal Craftsmanship</p>
+                              <p>{product.craftsmanship}</p>
+                           </>
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        <p className="font-semibold text-royal-blue-900 uppercase text-xs tracking-wider font-cinzel">Artisanal Craftsmanship</p>
+                        <p>{product.craftsmanship}</p>
+                        <p className="italic text-gray-500">Every item is handmade with love. Minor variations are a sign of authentic human touch and structural uniqueness.</p>
+                      </>
+                    )}
                   </div>
                 )}
                 {activeTab === 'materials' && (
                   <div className="space-y-4">
                     <p className="font-semibold text-royal-blue-900 uppercase text-xs tracking-wider font-cinzel">Ingredients List</p>
                     <ul className="list-disc pl-5 space-y-1">
-                      {product.materials.map((mat, i) => (
+                      {product.materials?.map((mat, i) => (
                         <li key={i} className="font-semibold">{mat}</li>
                       ))}
                     </ul>
                     <p className="font-semibold text-royal-blue-900 uppercase text-xs tracking-wider font-cinzel mt-4">Specifications</p>
-                    <table className="w-full text-sm mt-2 border-t border-gray-100">
-                      <tbody>
-                        {Object.entries(product.specifications).map(([key, val]) => (
-                          <tr key={key} className="border-b border-gray-100">
-                            <td className="py-2.5 font-bold text-royal-blue-900 uppercase text-[11px] tracking-wider w-[40%]">{key}</td>
-                            <td className="py-2.5 text-gray-600 font-semibold">{val}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                    {product.specifications && Object.keys(product.specifications).length > 0 && (
+                      <table className="w-full text-sm mt-2 border-t border-gray-100">
+                        <tbody>
+                          {Object.entries(product.specifications).map(([key, val]) => (
+                            <tr key={key} className="border-b border-gray-100">
+                              <td className="py-2.5 font-bold text-royal-blue-900 uppercase text-[11px] tracking-wider w-[40%]">{key}</td>
+                              <td className="py-2.5 text-gray-600 font-semibold">{val}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    )}
                   </div>
                 )}
                 {activeTab === 'care' && (
                   <div className="space-y-4">
-                    <p className="font-semibold text-royal-blue-900 uppercase text-xs tracking-wider font-cinzel">Care Instructions</p>
-                    <p>Keep dry and store in our custom soft-padded box. Clean with a soft, dry cotton cloth after each use. Avoid direct contact with perfumes, sprays, and water.</p>
-                    <p className="font-semibold text-royal-blue-900 uppercase text-xs tracking-wider font-cinzel">Shipping Details</p>
-                    <p>Insured shipping across India. Requires a signature upon delivery. Shipped within 3-5 business days.</p>
+                    {product.care && product.care.length > 0 ? (
+                      product.care.map((item, index) => (
+                        <div key={index} className="mb-4">
+                          <p className="font-semibold text-royal-blue-900 uppercase text-xs tracking-wider font-cinzel">{item.tittle || item.title}</p>
+                          <p>{item.des}</p>
+                        </div>
+                      ))
+                    ) : (
+                      <>
+                        <p className="font-semibold text-royal-blue-900 uppercase text-xs tracking-wider font-cinzel">Care Instructions</p>
+                        <p>Keep dry and store in our custom soft-padded box. Clean with a soft, dry cotton cloth after each use. Avoid direct contact with perfumes, sprays, and water.</p>
+                        <p className="font-semibold text-royal-blue-900 uppercase text-xs tracking-wider font-cinzel">Shipping Details</p>
+                        <p>Insured shipping across India. Requires a signature upon delivery. Shipped within 3-5 business days.</p>
+                      </>
+                    )}
                   </div>
                 )}
               </div>
@@ -301,13 +378,13 @@ export default function ProductPage({ params }) {
         </div>
 
         {/* Related Products Section */}
-        {related.length > 0 && (
+        {relatedProducts.length > 0 && (
           <section className="w-full mb-8">
             <h3 className="font-cinzel text-2xl sm:text-3xl text-royal-blue-900 font-bold mb-8 tracking-wide text-center">
               You May Also Like
             </h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5">
-              {related.map((rel, index) => (
+              {relatedProducts.map((rel, index) => (
                 <div
                   key={index}
                   onClick={() => router.push(`/product/${rel.id}`)}

@@ -95,7 +95,7 @@ export default function CartPage() {
             <p className="text-gold-700 font-cinzel text-xs tracking-widest uppercase mb-6">Payment Processed Successfully</p>
             <div className="h-px bg-gold-200/50 w-full mb-6" />
             <p className="text-gray-600 text-lg leading-relaxed mb-8">
-              Thank you for choosing <span className="font-bold text-royal-blue-900">Prachin Luxe</span>. Your order of handcrafted heritage treasures has been successfully placed. We have sent a receipt with tracking details to your registered email address.
+              Thank you for choosing <span className="font-bold text-royal-blue-900">Prachin Luxy</span>. Your order of handcrafted heritage treasures has been successfully placed. We have sent a receipt with tracking details to your registered email address.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
@@ -160,7 +160,9 @@ export default function CartPage() {
 
                     <div className="divide-y divide-gray-100">
                       {cartItems.map((item) => {
-                        const priceNum = parseFloat(item.product.price.replace(/,/g, ''));
+                        const priceNum = typeof item.product.price === 'number' 
+                          ? item.product.price 
+                          : parseFloat(String(item.product.price || 0).replace(/,/g, ''));
                         const itemTotal = priceNum * item.quantity;
                         return (
                           <div key={item.product.id} className="p-5 sm:p-6 flex flex-col sm:flex-row gap-5 items-start sm:items-center">
@@ -305,7 +307,7 @@ export default function CartPage() {
 
                 {/* Trust Seal */}
                 <div className="bg-sand-50/50 p-4 rounded-xl border border-gold-500/10 text-center space-y-3">
-                  <p className="text-[10px] font-bold text-gray-500 tracking-wider uppercase font-cinzel">Prachin Luxe Guarantees</p>
+                  <p className="text-[10px] font-bold text-gray-500 tracking-wider uppercase font-cinzel">Prachin Luxy Guarantees</p>
                   <div className="flex items-center justify-center gap-4 text-[10px] text-gray-500 font-bold uppercase tracking-wide">
                     <span className="flex items-center gap-1">
                       <svg className="w-3.5 h-3.5 text-gold-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12l2 2 4-4" /></svg>

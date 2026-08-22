@@ -80,6 +80,9 @@ async function handleUpdateById(req, context) {
     if (updateFields.originalPrice !== undefined && updateFields.originalPrice !== '') {
       updateFields.originalPrice = Number(updateFields.originalPrice);
     }
+    if (updateFields.position !== undefined && updateFields.position !== '') {
+      updateFields.position = Number(updateFields.position);
+    }
 
     // Find and update document supporting dynamic/flexible schema updates
     const updatedProduct = await Product.findByIdAndUpdate(
