@@ -34,16 +34,16 @@ export default function ProductPage({ params }) {
           const res = await fetch(`/api/products/${id}`);
           const data = await res.json();
           let currentProduct = null;
-          
+
           if (data.success && data.product) {
             const p = data.product;
             currentProduct = {
               ...p,
               id: p._id,
               images: p.images ? [
-                p.images.front?.url, 
-                p.images.left?.url, 
-                p.images.right?.url, 
+                p.images.front?.url,
+                p.images.left?.url,
+                p.images.right?.url,
                 p.images.back?.url
               ].filter(Boolean) : [],
               img: p.images?.front?.url || p.img || '/placeholder.png',
@@ -67,15 +67,15 @@ export default function ProductPage({ params }) {
             const relRes = await fetch('/api/products');
             const relData = await relRes.json();
             if (relData.success) {
-               const filtered = relData.products
-                 .filter(p => p.category === currentProduct.category && p._id.toString() !== currentProduct.id.toString())
-                 .map(p => ({
-                    ...p,
-                    id: p._id,
-                    img: p.images?.front?.url || '/placeholder.png'
-                 }))
-                 .slice(0, 4);
-               setRelatedProducts(filtered);
+              const filtered = relData.products
+                .filter(p => p.category === currentProduct.category && p._id.toString() !== currentProduct.id.toString())
+                .map(p => ({
+                  ...p,
+                  id: p._id,
+                  img: p.images?.front?.url || '/placeholder.png'
+                }))
+                .slice(0, 4);
+              setRelatedProducts(filtered);
             }
           }
         } catch (err) {
@@ -207,7 +207,7 @@ export default function ProductPage({ params }) {
               {product.originalPrice && (
                 <>
                   <span className="text-sm sm:text-base text-gray-400 line-through ml-2">Rs. {product.originalPrice}</span>
-                
+
                 </>
               )}
             </div>
@@ -254,11 +254,10 @@ export default function ProductPage({ params }) {
               </button>
               <button
                 onClick={handleBuyNow}
-                className={`flex-grow py-4 rounded-lg font-cinzel text-xs sm:text-sm font-bold tracking-widest border-2 transition-all duration-300 hover:shadow-lg flex items-center justify-center gap-2 ${
-                  isLoggedIn
+                className={`flex-grow py-4 rounded-lg font-cinzel text-xs sm:text-sm font-bold tracking-widest border-2 transition-all duration-300 hover:shadow-lg flex items-center justify-center gap-2 ${isLoggedIn
                     ? 'bg-white text-gold-700 border-gold-500 hover:bg-gold-500 hover:text-white'
                     : 'bg-gold-500 text-white border-gold-500 hover:bg-gold-600'
-                }`}
+                  }`}
               >
                 {!isLoggedIn && (
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -313,10 +312,10 @@ export default function ProductPage({ params }) {
                         <p>{product.story.description}</p>
                         <p className="italic text-gray-500">{product.story.subDescription}</p>
                         {product.craftsmanship && (
-                           <>
-                              <p className="font-semibold text-royal-blue-900 uppercase text-xs tracking-wider font-cinzel mt-4">Artisanal Craftsmanship</p>
-                              <p>{product.craftsmanship}</p>
-                           </>
+                          <>
+                            <p className="font-semibold text-royal-blue-900 uppercase text-xs tracking-wider font-cinzel mt-4">Artisanal Craftsmanship</p>
+                            <p>{product.craftsmanship}</p>
+                          </>
                         )}
                       </>
                     ) : (

@@ -11,7 +11,7 @@ export default function SignupForm() {
   const dispatch = useDispatch();
   const router = useRouter();
   const searchParams = useSearchParams();
-  
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -19,7 +19,7 @@ export default function SignupForm() {
   const [agreed, setAgreed] = useState(false);
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
 
   // Pre-fill phone from URL param if redirected from OTP verification
   useEffect(() => {
@@ -37,7 +37,7 @@ export default function SignupForm() {
     }
   }, [session, name, email]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
@@ -52,16 +52,37 @@ export default function SignupForm() {
     }
 
     setIsSubmitting(true);
-    
-    setTimeout(() => {
-      setIsSubmitting(false);
-      try {
-        dispatch(signupUserAction({ name, email, phone }));
-        router.push('/');
-      } catch (err) {
-        setError('Signup failed. Please try again.');
+
+    try {
+      const response = await fetch('/api/user/onboarding', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, phoneNumber: phone }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to complete onboarding');
       }
-    }, 1500);
+
+      // Update NextAuth Session
+      await update({
+        isOnboarded: true,
+        phoneNumber: phone,
+        name: name,
+      });
+
+      // Keep Redux synced locally
+      dispatch(signupUserAction({ name, email, phone }));
+      
+      router.push('/');
+    } catch (err) {
+      setError(err.message || 'Signup failed. Please try again.');
+      setIsSubmitting(false);
+    }
   };
 
   return (

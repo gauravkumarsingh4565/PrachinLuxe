@@ -22,7 +22,8 @@ export default function CategoryCircles() {
     '/profile',
     '/orders',
     '/addresses',
-    '/cart'
+    '/cart',
+    '/product'
   ];
 
   if (hiddenPaths.some(path => pathname?.startsWith(path))) {
