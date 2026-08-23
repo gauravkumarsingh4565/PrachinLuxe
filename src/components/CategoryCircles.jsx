@@ -18,6 +18,7 @@ export default function CategoryCircles() {
     '/cancellation-return',
     '/login',
     '/signup',
+    '/onboarding',
     '/admin',
     '/profile',
     '/orders',

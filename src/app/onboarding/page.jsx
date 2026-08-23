@@ -101,7 +101,7 @@ export default function OnboardingPage() {
       });
       console.log('🏠 Redirecting to Homepage...\n');
 
-      router.push('/');
+      window.location.href = '/';
     } catch (err) {
       console.error('[ONBOARDING] Error:', err);
       setError(err.message || 'Something went wrong. Please try again.');

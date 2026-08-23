@@ -78,7 +78,7 @@ export default function SignupForm() {
       // Keep Redux synced locally
       dispatch(signupUserAction({ name, email, phone }));
       
-      router.push('/');
+      window.location.href = '/';
     } catch (err) {
       setError(err.message || 'Signup failed. Please try again.');
       setIsSubmitting(false);
