@@ -27,7 +27,7 @@ export async function GET(req) {
     }
 
     const orders = await Order.find(query)
-      .populate('userId', 'name email phoneNumber')
+      .populate('userId', 'name email phoneNumber role createdAt image')
       .sort({ createdAt: -1 });
 
     return NextResponse.json({

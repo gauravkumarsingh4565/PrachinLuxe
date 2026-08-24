@@ -73,6 +73,7 @@ export async function PATCH(req, { params }) {
     order.orderStatus = status;
     order.statusHistory.push(historyEntry);
     await order.save();
+    await order.populate('userId', 'name email phoneNumber role createdAt image');
 
     return NextResponse.json({
       success: true,
