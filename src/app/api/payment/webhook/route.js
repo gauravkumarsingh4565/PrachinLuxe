@@ -28,23 +28,23 @@ export async function POST(req) {
 
     switch (event.event) {
       case 'payment.captured':
-      case 'order.paid': {
-        const payment = event.payload?.payment?.entity;
-        const orderId = payment?.order_id;
-        if (orderId) {
-          await Order.findOneAndUpdate(
-            { 'paymentInfo.razorpayOrderId': orderId },
-            {
-              $set: {
-                'paymentInfo.paymentStatus': 'Paid',
-                'paymentInfo.razorpayPaymentId': payment.id,
-                orderStatus: 'Confirmed',
-              },
-            }
-          );
-        }
-        break;
-      }
+      // case 'order.paid': {
+      //   const payment = event.payload?.payment?.entity;
+      //   const orderId = payment?.order_id;
+      //   if (orderId) {
+      //     await Order.findOneAndUpdate(
+      //       { 'paymentInfo.razorpayOrderId': orderId },
+      //       {
+      //         $set: {
+      //           'paymentInfo.paymentStatus': 'Paid',
+      //           'paymentInfo.razorpayPaymentId': payment.id,
+      //           orderStatus: 'Confirmed',
+      //         },
+      //       }
+      //     );
+      //   }
+      //   break;
+      // }
       case 'payment.failed': {
         const payment = event.payload?.payment?.entity;
         const orderId = payment?.order_id;
