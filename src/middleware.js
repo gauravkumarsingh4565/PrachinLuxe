@@ -40,6 +40,11 @@ export async function middleware(request) {
     }
   }
 
+  // 3. Admin routes role check
+  if (isAdminRoute && token.role !== 'ADMIN') {
+    return NextResponse.redirect(new URL('/', request.url));
+  }
+
   return NextResponse.next();
 }
 
