@@ -67,7 +67,7 @@ export async function PATCH(req, { params }) {
         role: 'ADMIN',
       },
       timestamp: new Date(),
-      comment: comment || `Order marked as '${status}' by Administrator (${changerName})`,
+      comment: (comment && comment.trim()) ? comment.trim() : `Status updated to ${status} by Administrator`,
     };
 
     order.orderStatus = status;

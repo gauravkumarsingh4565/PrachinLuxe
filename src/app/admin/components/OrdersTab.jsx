@@ -37,8 +37,10 @@ export default function OrdersTab() {
   const [searchQuery, setSearchQuery] = useState('');
   const [updatingOrderId, setUpdatingOrderId] = useState(null);
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState('');
   const [actionError, setActionError] = useState(null);
   const [statusComment, setStatusComment] = useState('');
+  const [saveSuccessMessage, setSaveSuccessMessage] = useState(null);
 
   const fetchOrders = useCallback(async () => {
     setLoading(true);
@@ -66,10 +68,24 @@ export default function OrdersTab() {
     fetchOrders();
   }, [fetchOrders]);
 
+  const handleOpenOrder = (order) => {
+    setSelectedOrder(order);
+    setSelectedStatus(order.orderStatus);
+    setStatusComment('');
+    setSaveSuccessMessage(null);
+    setActionError(null);
+  };
+
   const handleUpdateStatus = async (orderId, newStatus, customComment = '') => {
     setUpdatingOrderId(orderId);
     setActionError(null);
-    const commentToSend = customComment || statusComment || `Status updated to ${newStatus} by Administrator`;
+    setSaveSuccessMessage(null);
+    const commentToSend = (customComment && customComment.trim()) 
+      ? customComment.trim() 
+      : (statusComment && statusComment.trim()) 
+      ? statusComment.trim() 
+      : `Status updated to ${newStatus} by Administrator`;
+
     try {
       const res = await fetch(`/api/admin/orders/${orderId}/status`, {
         method: 'PATCH',
@@ -83,8 +99,10 @@ export default function OrdersTab() {
         );
         if (selectedOrder && (selectedOrder._id === orderId || selectedOrder.orderId === orderId)) {
           setSelectedOrder(data.order);
+          setSelectedStatus(data.order.orderStatus);
         }
         setStatusComment('');
+        setSaveSuccessMessage(`Status updated to '${newStatus}' successfully!`);
       } else {
         setActionError(data.error || 'Failed to update order status');
       }
@@ -94,6 +112,13 @@ export default function OrdersTab() {
     } finally {
       setUpdatingOrderId(null);
     }
+  };
+
+  const handleSaveModalStatus = () => {
+    if (!selectedOrder) return;
+    const orderId = selectedOrder.orderId || selectedOrder._id;
+    const finalComment = statusComment.trim() ? statusComment.trim() : `Status updated to ${selectedStatus} by Administrator`;
+    handleUpdateStatus(orderId, selectedStatus, finalComment);
   };
 
   const filteredOrders = orders.filter((order) => {
@@ -237,7 +262,7 @@ export default function OrdersTab() {
                   return (
                     <tr
                       key={order._id || order.orderId}
-                      onClick={() => setSelectedOrder(order)}
+                      onClick={() => handleOpenOrder(order)}
                       className="hover:bg-sand-50/60 transition-colors cursor-pointer"
                     >
                       {/* Order ID */}
@@ -301,7 +326,7 @@ export default function OrdersTab() {
                           {order.orderStatus === 'Pending Approval' && (
                             <button
                               type="button"
-                              onClick={() => handleUpdateStatus(order.orderId || order._id, 'Confirmed', 'Order confirmed by Admin')}
+                              onClick={() => handleUpdateStatus(order.orderId || order._id, 'Confirmed')}
                               disabled={isUpdating}
                               className="px-2.5 py-1 bg-emerald-700 hover:bg-emerald-800 text-white rounded font-cinzel text-[10px] font-bold tracking-wider uppercase transition-all disabled:opacity-50"
                             >
@@ -311,7 +336,7 @@ export default function OrdersTab() {
 
                           <button
                             type="button"
-                            onClick={() => setSelectedOrder(order)}
+                            onClick={() => handleOpenOrder(order)}
                             className="px-2.5 py-1 bg-white hover:bg-sand-100 text-royal-blue-900 border border-gold-500/30 rounded font-cinzel text-[10px] font-bold tracking-wider uppercase transition-colors"
                           >
                             View
@@ -369,49 +394,78 @@ export default function OrdersTab() {
             {/* Modal Scrollable Content */}
             <div className="overflow-y-auto flex-grow space-y-6 pr-1 divide-y divide-gray-100">
               
-              {/* Status Update Control Section */}
+              {/* Status Update Control Section with Save Button */}
               <div className="bg-sand-50/80 p-4 rounded-xl border border-gold-500/20 space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="font-cinzel font-bold text-royal-blue-950 text-xs uppercase tracking-wider">
-                    Change Order Status
+                    Update Order Status
                   </span>
-                  <span className="text-[10px] text-gray-400">Updates live audit history</span>
+                  <span className="text-[10px] text-gray-400 font-medium">Changes apply on clicking Save</span>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                  <select
-                    value={selectedOrder.orderStatus}
-                    disabled={updatingOrderId === (selectedOrder._id || selectedOrder.orderId)}
-                    onChange={(e) => handleUpdateStatus(selectedOrder.orderId || selectedOrder._id, e.target.value)}
-                    className="sm:col-span-1 px-3 py-2 bg-white border border-gold-500/30 rounded-lg text-xs font-cinzel font-bold text-royal-blue-900 focus:outline-none focus:border-gold-600 uppercase tracking-wide cursor-pointer"
-                  >
-                    <option value="Pending Approval">Pending Approval</option>
-                    <option value="Confirmed">Confirmed</option>
-                    <option value="Processing">Processing</option>
-                    <option value="Shipped">Shipped</option>
-                    <option value="Delivered">Delivered</option>
-                    <option value="Cancelled">Cancelled</option>
-                  </select>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="sm:col-span-1 flex flex-col gap-1">
+                    <label className="text-[10px] font-bold text-gray-500 uppercase font-cinzel">Select Status</label>
+                    <select
+                      value={selectedStatus}
+                      onChange={(e) => setSelectedStatus(e.target.value)}
+                      disabled={updatingOrderId === (selectedOrder._id || selectedOrder.orderId)}
+                      className="px-3 py-2 bg-white border border-gold-500/30 rounded-lg text-xs font-cinzel font-bold text-royal-blue-900 focus:outline-none focus:border-gold-600 uppercase tracking-wide cursor-pointer"
+                    >
+                      <option value="Pending Approval">Pending Approval</option>
+                      <option value="Confirmed">Confirmed</option>
+                      <option value="Processing">Processing</option>
+                      <option value="Shipped">Shipped</option>
+                      <option value="Delivered">Delivered</option>
+                      <option value="Cancelled">Cancelled</option>
+                    </select>
+                  </div>
 
-                  <input
-                    type="text"
-                    placeholder="Optional note / comment..."
-                    value={statusComment}
-                    onChange={(e) => setStatusComment(e.target.value)}
-                    className="sm:col-span-2 px-3 py-2 bg-white border border-gold-500/30 rounded-lg text-xs focus:outline-none focus:border-gold-600"
-                  />
+                  <div className="sm:col-span-2 flex flex-col gap-1">
+                    <label className="text-[10px] font-bold text-gray-500 uppercase font-cinzel">
+                      Custom Note / Reason (Optional)
+                    </label>
+                    <input
+                      type="text"
+                      placeholder={`e.g. Verified crafting & packaging`}
+                      value={statusComment}
+                      onChange={(e) => setStatusComment(e.target.value)}
+                      className="px-3 py-2 bg-white border border-gold-500/30 rounded-lg text-xs focus:outline-none focus:border-gold-600 font-sans"
+                    />
+                  </div>
                 </div>
 
-                {selectedOrder.orderStatus === 'Pending Approval' && (
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1 border-t border-gold-500/10">
+                  <div>
+                    {saveSuccessMessage ? (
+                      <span className="text-emerald-700 font-semibold text-xs animate-fade-in flex items-center gap-1">
+                        ✓ {saveSuccessMessage}
+                      </span>
+                    ) : (
+                      <p className="text-[10px] text-gray-400 italic">
+                        {statusComment.trim() 
+                          ? `Will save with note: "${statusComment.trim()}"` 
+                          : `Default note: "Status updated to ${selectedStatus || selectedOrder.orderStatus} by Administrator"`}
+                      </p>
+                    )}
+                  </div>
+
                   <button
                     type="button"
-                    onClick={() => handleUpdateStatus(selectedOrder.orderId || selectedOrder._id, 'Confirmed', 'Order verified and confirmed by Admin')}
+                    onClick={handleSaveModalStatus}
                     disabled={updatingOrderId === (selectedOrder._id || selectedOrder.orderId)}
-                    className="w-full py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg font-cinzel text-xs font-bold tracking-widest uppercase transition-all shadow-xs"
+                    className="px-5 py-2 bg-royal-blue-900 hover:bg-gold-600 text-white rounded-lg font-cinzel text-xs font-bold tracking-widest uppercase transition-all shadow-sm flex items-center justify-center gap-1.5 disabled:opacity-50 self-end sm:self-auto"
                   >
-                    ✓ Quick Approve & Confirm Order
+                    {updatingOrderId === (selectedOrder._id || selectedOrder.orderId) ? (
+                      <>
+                        <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        Saving...
+                      </>
+                    ) : (
+                      'Save Status Change'
+                    )}
                   </button>
-                )}
+                </div>
               </div>
 
               {/* Customer Account & Shipping & Payment 3-Column / 2-Column Grid */}
