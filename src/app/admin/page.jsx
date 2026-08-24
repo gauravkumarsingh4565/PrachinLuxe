@@ -3,23 +3,24 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import ProductsTab from './components/ProductsTab';
+import OrdersTab from './components/OrdersTab';
 import PlaceholderTab from './components/PlaceholderTab';
 
 export default function AdminPanel() {
-  const [activeTab, setActiveTab] = useState('products');
+  const [activeTab, setActiveTab] = useState('orders');
 
   const renderContent = () => {
     switch (activeTab) {
+      case 'orders':
+        return <OrdersTab />;
       case 'products':
         return <ProductsTab />;
-      case 'orders':
-        return <PlaceholderTab tabId="orders" title="Order Management" setActiveTab={setActiveTab} />;
       case 'customers':
         return <PlaceholderTab tabId="customers" title="Elite Clients" setActiveTab={setActiveTab} />;
       case 'settings':
         return <PlaceholderTab tabId="settings" title="Boutique Settings" setActiveTab={setActiveTab} />;
       default:
-        return <ProductsTab />;
+        return <OrdersTab />;
     }
   };
 
