@@ -1,46 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const INITIAL_MOCK_ORDERS = [
-  {
-    id: 'PL-2026-9874',
-    date: 'June 15, 2026',
-    total: 14500,
-    status: 'Delivered',
-    paymentMethod: 'UPI (GPay)',
-    items: [
-      {
-        product: {
-          id: 'temple-necklace-1',
-          name: 'Temple Lakshmi Nakashi Choker',
-          price: '14,500',
-          img: '/src/assets/images/product_temple_necklace.png',
-          category: 'Necklaces'
-        },
-        quantity: 1
-      }
-    ]
-  },
-  {
-    id: 'PL-2026-8712',
-    date: 'May 20, 2026',
-    total: 8200,
-    status: 'Delivered',
-    paymentMethod: 'Credit Card',
-    items: [
-      {
-        product: {
-          id: 'earrings-chandbali-2',
-          name: 'Kundan Royal Floral Chandbali',
-          price: '8,200',
-          img: '/src/assets/images/product_chandbali.png',
-          category: 'Earrings'
-        },
-        quantity: 1
-      }
-    ]
-  }
-];
-
 const INITIAL_MOCK_ADDRESSES = [
   {
     id: 'addr-1',
@@ -77,10 +36,12 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
+    setOrders: (state, action) => {
+      state.orders = action.payload || [];
+    },
     loadAuthFromStorage: (state) => {
       if (typeof window !== 'undefined') {
         const storedUser = localStorage.getItem('prachin_luxe_user');
-        const storedOrders = localStorage.getItem('prachin_luxe_orders');
         const storedAddresses = localStorage.getItem('prachin_luxe_addresses');
         
         if (storedUser) {
@@ -89,16 +50,6 @@ const authSlice = createSlice({
           } catch (e) {
             console.error("Failed to parse user details from localStorage", e);
           }
-        }
-
-        if (storedOrders) {
-          try {
-            state.orders = JSON.parse(storedOrders);
-          } catch (e) {
-            console.error("Failed to parse orders list", e);
-          }
-        } else if (state.user && state.user.phone === '9876543210') {
-          state.orders = INITIAL_MOCK_ORDERS;
         }
 
         if (storedAddresses) {
@@ -122,8 +73,6 @@ const authSlice = createSlice({
         cleanPhone = '+' + cleanPhone;
       }
       
-      // In a real app we'd fetch this from a DB, using mock logic for now
-      // Since MOCK_USERS_DB was defined externally, we'll create a simple mock user if it matches the mock phone
       if (cleanPhone === '+919876543210' || cleanPhone.includes('9876543210')) {
         const foundUser = {
           name: "Gaurav Kumar",
@@ -134,10 +83,8 @@ const authSlice = createSlice({
         };
         
         state.user = foundUser;
-        if (state.orders.length === 0) state.orders = INITIAL_MOCK_ORDERS;
         if (state.addresses.length === 0) state.addresses = INITIAL_MOCK_ADDRESSES;
       } else {
-         // Create a generic user for any other phone number for this mock
          const foundUser = {
            name: "Test User",
            phone: cleanPhone,
@@ -238,6 +185,7 @@ const authSlice = createSlice({
 });
 
 export const { 
+  setOrders,
   loadAuthFromStorage, 
   loginWithPhone, 
   signupUser, 
