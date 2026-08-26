@@ -90,7 +90,7 @@ const Navbar = () => {
                 <Link
                   key={link.name}
                   href={link.path}
-                  className={`relative font-cinzel font-bold text-sm tracking-wider transition-all duration-300 group py-2 focus:outline-none ${pathname === link.path ? 'text-gold-600' : 'text-royal-blue-700 hover:text-gold-600'
+                  className={`relative font-cinzel font-black text-[15px] uppercase tracking-widest transition-all duration-300 group py-2 focus:outline-none ${pathname === link.path ? 'text-gold-600 drop-shadow-sm' : 'text-royal-blue-950 hover:text-gold-600'
                     }`}
                 >
                   {link.name}

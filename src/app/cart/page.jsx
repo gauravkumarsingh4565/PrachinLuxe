@@ -21,6 +21,7 @@ import {
 import { useSession } from 'next-auth/react';
 import { useRazorpay } from '@/hooks/useRazorpay';
 import Image from 'next/image';
+import confetti from 'canvas-confetti';
 
 export default function CartPage() {
   const dispatch = useDispatch();
@@ -38,6 +39,36 @@ export default function CartPage() {
   const [confirmedOrder, setConfirmedOrder] = useState(null);
 
   const defaultAddr = savedAddresses?.find((a) => a.isDefault) || savedAddresses?.[0];
+
+  useEffect(() => {
+    if (checkoutStep === 3) {
+      const end = Date.now() + 3 * 1000; // 3 seconds
+      const colors = ['#C9A84C', '#1e3a8a', '#ffffff', '#fde68a']; // Prachin Luxe themed colors
+
+      (function frame() {
+        confetti({
+          particleCount: 5,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0, y: 0.6 },
+          colors: colors,
+          zIndex: 9999
+        });
+        confetti({
+          particleCount: 5,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1, y: 0.6 },
+          colors: colors,
+          zIndex: 9999
+        });
+
+        if (Date.now() < end) {
+          requestAnimationFrame(frame);
+        }
+      }());
+    }
+  }, [checkoutStep]);
 
   const [addressData, setAddressData] = useState({
     name: '',
@@ -74,9 +105,7 @@ export default function CartPage() {
   const { initiatePayment, isProcessing, error, clearError } = useRazorpay();
 
   const subtotal = cartTotal;
-  const tax = Math.round(subtotal * 0.03); // 3% GST on luxury jewelry
-  const shipping = subtotal > 5000 ? 0 : 250; // Free shipping above 5000
-  const finalTotal = subtotal + tax + shipping;
+  const finalTotal = subtotal;
 
   const handleCheckoutSubmit = (e) => {
     e.preventDefault();
@@ -194,7 +223,7 @@ export default function CartPage() {
                 View My Orders
               </Link>
               <Link
-                href="/handmade"
+                href="/"
                 className="px-8 py-3.5 bg-white text-royal-blue-900 border border-royal-blue-900 rounded-lg font-cinzel text-xs font-bold tracking-widest hover:bg-royal-blue-50 transition-all duration-300 uppercase"
               >
                 Continue Shopping
@@ -227,7 +256,7 @@ export default function CartPage() {
               You haven't added any luxury pieces or antique treasures to your collection yet. Start exploring our curations to find something unique.
             </p>
             <Link
-              href="/handmade"
+              href="/"
               className="inline-block px-10 py-4 bg-royal-blue-900 hover:bg-gold-600 text-white rounded-lg font-cinzel text-xs font-bold tracking-widest transition-all duration-300 hover:shadow-lg uppercase"
             >
               Explore Collections
@@ -417,44 +446,6 @@ export default function CartPage() {
                       Rs. {subtotal.toLocaleString('en-IN')}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="font-medium text-gray-500 flex items-center gap-1.5">
-                      Insured Shipping
-                      <span className="group relative cursor-help">
-                        <svg
-                          className="w-3.5 h-3.5 text-gray-400"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                          />
-                        </svg>
-                        <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 hidden group-hover:block w-48 bg-royal-blue-950 text-white text-[10px] p-2 rounded shadow-md text-center leading-normal z-10 font-normal">
-                          Free Insured Express Shipping on all orders above Rs. 5,000.
-                        </span>
-                      </span>
-                    </span>
-                    <span className="font-bold text-royal-blue-900">
-                      {shipping === 0 ? (
-                        <span className="text-[#34A853] uppercase tracking-wide text-xs">
-                          Free
-                        </span>
-                      ) : (
-                        `Rs. ${shipping}`
-                      )}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="font-medium text-gray-500">Estimated GST (3%)</span>
-                    <span className="font-bold text-royal-blue-900">
-                      Rs. {tax.toLocaleString('en-IN')}
-                    </span>
-                  </div>
 
                   <div className="h-px bg-gray-100 w-full my-2" />
 
@@ -469,25 +460,43 @@ export default function CartPage() {
                 </div>
 
                 {checkoutStep === 1 && (
-                  <button
-                    onClick={() => setCheckoutStep(2)}
-                    className="w-full py-4 bg-royal-blue-900 hover:bg-gold-600 text-white rounded-lg font-cinzel text-xs font-bold tracking-widest transition-all duration-300 hover:shadow-lg uppercase text-center flex items-center justify-center gap-2"
-                  >
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
+                  currentUser ? (
+                    <button
+                      onClick={() => setCheckoutStep(2)}
+                      className="w-full py-4 bg-royal-blue-900 hover:bg-gold-600 text-white rounded-lg font-cinzel text-xs font-bold tracking-widest transition-all duration-300 hover:shadow-lg uppercase text-center flex items-center justify-center gap-2"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                      />
-                    </svg>
-                    Proceed To Secure Checkout
-                  </button>
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                        />
+                      </svg>
+                      Proceed To Secure Checkout
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => router.push('/login')}
+                      className="w-full py-4 bg-royal-blue-900 hover:bg-gold-600 text-white rounded-lg font-cinzel text-xs font-bold tracking-widest transition-all duration-300 hover:shadow-lg uppercase text-center flex items-center justify-center gap-2"
+                    >
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                      </svg>
+                      Login To Checkout
+                    </button>
+                  )
                 )}
 
                 {/* Trust Seal */}

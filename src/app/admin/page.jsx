@@ -29,7 +29,7 @@ export default function AdminPanel() {
       {/* Top Banner / Breadcrumb */}
       <div className="bg-royal-blue-950 text-white pt-8 pb-8 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#C9A84C_1px,transparent_1px)] [background-size:16px_16px]" />
-        <div className="max-w-7xl mx-auto relative z-10">
+        <div className="max-w-[1600px] mx-auto relative z-10">
           <nav className="text-xs text-gold-400 font-semibold tracking-wide uppercase mb-4 flex items-center gap-2">
             <Link href="/" className="hover:text-white transition-colors">HOME</Link>
             <span>/</span>
@@ -38,11 +38,11 @@ export default function AdminPanel() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-20">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-20">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
 
           {/* Sidebar */}
-          <div className="bg-white rounded-2xl shadow-gold border border-gold-500/20 p-4 flex flex-col gap-2 h-fit">
+          <div className="lg:col-span-1 bg-white rounded-2xl shadow-gold border border-gold-500/20 p-4 flex flex-col gap-2 h-fit">
             {[
               { id: 'orders', label: 'Order Management', icon: 'M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z' },
               { id: 'products', label: 'Jewelry Catalog', icon: 'M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4' },
@@ -66,7 +66,7 @@ export default function AdminPanel() {
           </div>
 
           {/* Main Content Area */}
-          <div className="lg:col-span-3 space-y-8">
+          <div className="lg:col-span-4 space-y-8">
             {/* Content Container */}
             <div className="bg-white rounded-2xl border border-gold-500/20 shadow-sm overflow-hidden">
               {renderContent()}

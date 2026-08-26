@@ -46,8 +46,8 @@ export default function OrdersTab() {
     setLoading(true);
     setActionError(null);
     try {
-      const url = activeStatus === 'all' 
-        ? '/api/admin/orders' 
+      const url = activeStatus === 'all'
+        ? '/api/admin/orders'
         : `/api/admin/orders?status=${encodeURIComponent(activeStatus)}`;
       const res = await fetch(url);
       const data = await res.json();
@@ -80,11 +80,11 @@ export default function OrdersTab() {
     setUpdatingOrderId(orderId);
     setActionError(null);
     setSaveSuccessMessage(null);
-    const commentToSend = (customComment && customComment.trim()) 
-      ? customComment.trim() 
-      : (statusComment && statusComment.trim()) 
-      ? statusComment.trim() 
-      : `Status updated to ${newStatus} by Administrator`;
+    const commentToSend = (customComment && customComment.trim())
+      ? customComment.trim()
+      : (statusComment && statusComment.trim())
+        ? statusComment.trim()
+        : `Status updated to ${newStatus} by Administrator`;
 
     try {
       const res = await fetch(`/api/admin/orders/${orderId}/status`, {
@@ -239,17 +239,17 @@ export default function OrdersTab() {
       ) : (
         <div className="bg-white rounded-xl border border-gold-500/20 shadow-2xs overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse font-sans text-xs">
+            <table className="w-full text-left border-collapse font-sans text-sm">
               <thead>
-                <tr className="bg-stone-50/90 border-b border-gold-500/15 text-royal-blue-950 font-cinzel uppercase tracking-wider text-[11px]">
-                  <th className="py-3 px-4 font-bold">Order ID</th>
-                  <th className="py-3 px-4 font-bold">Date & Time</th>
-                  <th className="py-3 px-4 font-bold">Customer</th>
-                  <th className="py-3 px-4 font-bold">Location</th>
-                  <th className="py-3 px-4 font-bold">Items</th>
-                  <th className="py-3 px-4 font-bold">Total Amount</th>
-                  <th className="py-3 px-4 font-bold">Status</th>
-                  <th className="py-3 px-4 font-bold text-right">Actions</th>
+                <tr className="bg-stone-50/90 border-b border-gold-500/20 text-royal-blue-950 font-cinzel uppercase tracking-wider text-xs">
+                  <th className="py-5 px-6 font-bold">Order ID</th>
+                  <th className="py-5 px-6 font-bold">Date & Time</th>
+                  <th className="py-5 px-6 font-bold">Customer</th>
+                  <th className="py-5 px-6 font-bold">Location</th>
+                  <th className="py-5 px-6 font-bold">Items</th>
+                  <th className="py-5 px-6 font-bold">Total Amount</th>
+                  <th className="py-5 px-6 font-bold">Status</th>
+                  <th className="py-5 px-6 font-bold text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
@@ -266,12 +266,12 @@ export default function OrdersTab() {
                       className="hover:bg-sand-50/60 transition-colors cursor-pointer"
                     >
                       {/* Order ID */}
-                      <td className="py-3.5 px-4 font-mono font-bold text-royal-blue-950 text-[12px]">
+                      <td className="py-5 px-6 font-mono font-bold text-royal-blue-950 text-sm">
                         #{order.orderId}
                       </td>
 
                       {/* Date & Time */}
-                      <td className="py-3.5 px-4 text-gray-600 whitespace-nowrap">
+                      <td className="py-5 px-6 text-gray-600 whitespace-nowrap">
                         {new Date(order.createdAt || Date.now()).toLocaleString('en-IN', {
                           day: '2-digit',
                           month: 'short',
@@ -282,53 +282,53 @@ export default function OrdersTab() {
                       </td>
 
                       {/* Customer */}
-                      <td className="py-3.5 px-4">
-                        <div className="font-semibold text-gray-900">
+                      <td className="py-5 px-6">
+                        <div className="font-semibold text-gray-900 text-sm">
                           {order.shippingAddress?.name || 'Customer'}
                         </div>
-                        <div className="text-gray-400 text-[11px] font-mono">
+                        <div className="text-gray-500 text-xs font-mono mt-0.5">
                           {order.userPhone || order.shippingAddress?.phone || order.userEmail || ''}
                         </div>
                       </td>
 
                       {/* Location */}
-                      <td className="py-3.5 px-4 text-gray-600 whitespace-nowrap">
+                      <td className="py-5 px-6 text-gray-600 whitespace-nowrap">
                         {order.shippingAddress?.city ? `${order.shippingAddress.city}, ${order.shippingAddress.state}` : '—'}
                       </td>
 
                       {/* Items */}
-                      <td className="py-3.5 px-4 text-gray-700 whitespace-nowrap">
+                      <td className="py-5 px-6 text-gray-700 whitespace-nowrap">
                         <span className="font-semibold">{items.length} {items.length === 1 ? 'item' : 'items'}</span>
-                        <span className="text-gray-400 text-[11px]"> ({totalUnits} pcs)</span>
+                        <span className="text-gray-400 text-xs ml-1">({totalUnits} pcs)</span>
                       </td>
 
                       {/* Total Amount */}
-                      <td className="py-3.5 px-4 whitespace-nowrap">
-                        <div className="font-cinzel font-bold text-royal-blue-950 text-sm">
+                      <td className="py-5 px-6 whitespace-nowrap">
+                        <div className="font-cinzel font-bold text-royal-blue-950 text-base">
                           Rs. {Number(order.total).toLocaleString('en-IN')}
                         </div>
-                        <div className="text-[10px] text-emerald-700 font-semibold uppercase">
+                        <div className="text-[11px] text-emerald-700 font-semibold uppercase mt-0.5">
                           {order.paymentInfo?.paymentStatus || 'Paid'}
                         </div>
                       </td>
 
                       {/* Status */}
-                      <td className="py-3.5 px-4 whitespace-nowrap">
-                        <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${badge.bg}`}>
-                          <span className={`w-1.5 h-1.5 rounded-full ${badge.dot}`}></span>
+                      <td className="py-5 px-6 whitespace-nowrap">
+                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border shadow-xs ${badge.bg}`}>
+                          <span className={`w-2 h-2 rounded-full ${badge.dot}`}></span>
                           {order.orderStatus}
                         </span>
                       </td>
 
                       {/* Actions */}
-                      <td className="py-3.5 px-4 text-right whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
-                        <div className="flex items-center justify-end gap-1.5">
+                      <td className="py-5 px-6 text-right whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
+                        <div className="flex items-center justify-end gap-2">
                           {order.orderStatus === 'Pending Approval' && (
                             <button
                               type="button"
                               onClick={() => handleUpdateStatus(order.orderId || order._id, 'Confirmed')}
                               disabled={isUpdating}
-                              className="px-2.5 py-1 bg-emerald-700 hover:bg-emerald-800 text-white rounded font-cinzel text-[10px] font-bold tracking-wider uppercase transition-all disabled:opacity-50"
+                              className="px-3.5 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white rounded-md font-cinzel text-xs font-bold tracking-wider uppercase transition-all disabled:opacity-50 shadow-sm"
                             >
                               {isUpdating ? '...' : '✓ Confirm'}
                             </button>
@@ -337,7 +337,7 @@ export default function OrdersTab() {
                           <button
                             type="button"
                             onClick={() => handleOpenOrder(order)}
-                            className="px-2.5 py-1 bg-white hover:bg-sand-100 text-royal-blue-900 border border-gold-500/30 rounded font-cinzel text-[10px] font-bold tracking-wider uppercase transition-colors"
+                            className="px-3.5 py-1.5 bg-white hover:bg-sand-100 text-royal-blue-900 border border-gold-500/30 rounded-md font-cinzel text-xs font-bold tracking-wider uppercase transition-colors shadow-sm"
                           >
                             View
                           </button>
@@ -355,7 +355,7 @@ export default function OrdersTab() {
       {/* ================= ORDER DETAILS POPUP MODAL ================= */}
       {selectedOrder && (
         <div className="fixed inset-0 z-50 bg-royal-blue-950/65 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl border border-gold-500/25 shadow-2xl max-w-2xl w-full p-6 md:p-8 space-y-6 animate-scale-in max-h-[90vh] flex flex-col font-sans">
+          <div className="bg-white rounded-2xl border border-gold-500/25 shadow-2xl max-w-5xl w-full p-6 md:p-8 space-y-6 animate-scale-in max-h-[90vh] flex flex-col font-sans">
             {/* Modal Header */}
             <div className="flex justify-between items-start border-b border-gold-500/20 pb-4">
               <div>
@@ -393,7 +393,7 @@ export default function OrdersTab() {
 
             {/* Modal Scrollable Content */}
             <div className="overflow-y-auto flex-grow space-y-6 pr-1 divide-y divide-gray-100">
-              
+
               {/* Status Update Control Section with Save Button */}
               <div className="bg-sand-50/80 p-4 rounded-xl border border-gold-500/20 space-y-3">
                 <div className="flex items-center justify-between">
@@ -443,8 +443,8 @@ export default function OrdersTab() {
                       </span>
                     ) : (
                       <p className="text-[10px] text-gray-400 italic">
-                        {statusComment.trim() 
-                          ? `Will save with note: "${statusComment.trim()}"` 
+                        {statusComment.trim()
+                          ? `Will save with note: "${statusComment.trim()}"`
                           : `Default note: "Status updated to ${selectedStatus || selectedOrder.orderStatus} by Administrator"`}
                       </p>
                     )}
@@ -476,11 +476,10 @@ export default function OrdersTab() {
                     <h3 className="font-cinzel font-bold text-royal-blue-900 uppercase tracking-wider text-[11px]">
                       Registered User Profile
                     </h3>
-                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
-                      selectedOrder.userId 
-                        ? 'bg-emerald-100 text-emerald-800' 
-                        : 'bg-gray-100 text-gray-600'
-                    }`}>
+                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${selectedOrder.userId
+                      ? 'bg-emerald-100 text-emerald-800'
+                      : 'bg-gray-100 text-gray-600'
+                      }`}>
                       {selectedOrder.userId ? 'Registered User' : 'Direct / Guest'}
                     </span>
                   </div>
@@ -547,7 +546,7 @@ export default function OrdersTab() {
                       Total: Rs. {Number(selectedOrder.total).toLocaleString('en-IN')}
                     </span>
                   </div>
-                  
+
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
                     <div className="bg-white p-2.5 rounded border border-gold-500/10">
                       <span className="text-[10px] text-gray-400 block uppercase">Payment Status</span>
@@ -610,7 +609,7 @@ export default function OrdersTab() {
                 <h3 className="font-cinzel font-bold text-royal-blue-900 uppercase tracking-wider text-xs">
                   Status Transition Audit Trail ({selectedOrder.statusHistory?.length || 0})
                 </h3>
-                
+
                 {(!selectedOrder.statusHistory || selectedOrder.statusHistory.length === 0) ? (
                   <p className="text-xs text-gray-400 italic bg-sand-50 p-3 rounded-lg text-center">
                     No status history recorded yet.
