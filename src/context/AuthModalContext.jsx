@@ -17,10 +17,22 @@ export function AuthModalProvider({ children }) {
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  // Read login presentation mode from env ('route' | 'popup')
-  const envMode = process.env.NEXT_PUBLIC_LOGIN_MODE || process.env.LOGIN_MODE;
-  const loginMode = envMode === 'route' ? 'route' : 'popup';
-  const showCountdown = (process.env.NEXT_PUBLIC_SHOW_COUNTDOWN === 'true' || process.env.SHOW_COUNTDOWN === 'true');
+  // Read login presentation mode from env ('route' | 'popup') with whitespace trimming
+  const getLoginMode = () => {
+    const rawMode = process.env.NEXT_PUBLIC_LOGIN_MODE ?? process.env.LOGIN_MODE ?? '';
+    const normalized = String(rawMode).trim().toLowerCase();
+    return normalized === 'route' ? 'route' : 'popup';
+  };
+  const loginMode = getLoginMode();
+
+  // Read SHOW_COUNTDOWN setting from env (NEXT_PUBLIC_SHOW_COUNTDOWN -> SHOW_COUNTDOWN fallback)
+  // Evaluates to true only when set to 'yes' (case-insensitive & leading/trailing whitespace trimmed)
+  const getShowCountdown = () => {
+    const rawVal = process.env.NEXT_PUBLIC_SHOW_COUNTDOWN ?? process.env.SHOW_COUNTDOWN ?? '';
+    const normalized = String(rawVal).trim().toLowerCase();
+    return normalized === 'yes';
+  };
+  const showCountdown = getShowCountdown();
 
   // Same sparkle celebration as order confirmation
   const triggerSparkle = () => {

@@ -14,12 +14,27 @@ export const metadata = {
   authors: [{ name: 'Prachin Luxy' }],
   icons: {
     icon: '/favicon.png',
+    shortcut: '/favicon.png',
     apple: '/icon.png',
   },
   openGraph: {
     title: 'PRACHIN LUXY - The Ancient Riches',
     description: 'Handmade Jewelry & Antiques. Crafted with heritage, inspired by ancient royals.',
     type: 'website',
+    images: [
+      {
+        url: '/icon.png',
+        width: 800,
+        height: 800,
+        alt: 'PRACHIN LUXY Logo',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'PRACHIN LUXY - The Ancient Riches',
+    description: 'Handmade Jewelry & Antiques. Crafted with heritage, inspired by ancient royals.',
+    images: ['/icon.png'],
   },
 };
 
