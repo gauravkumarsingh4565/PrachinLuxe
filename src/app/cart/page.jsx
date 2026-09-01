@@ -22,6 +22,7 @@ import { useSession } from 'next-auth/react';
 import { useRazorpay } from '@/hooks/useRazorpay';
 import Image from 'next/image';
 import confetti from 'canvas-confetti';
+import { useAuthModal } from '@/context/AuthModalContext';
 
 export default function CartPage() {
   const dispatch = useDispatch();
@@ -29,6 +30,7 @@ export default function CartPage() {
   const isLoaded = useSelector(selectIsCartLoaded);
   const cartTotal = useSelector(selectCartTotal);
   const router = useRouter();
+  const { openLogin } = useAuthModal();
 
   const phoneUser = useSelector(selectUser);
   const savedAddresses = useSelector(selectAddresses);
@@ -482,7 +484,7 @@ export default function CartPage() {
                     </button>
                   ) : (
                     <button
-                      onClick={() => router.push('/login')}
+                      onClick={openLogin}
                       className="w-full py-4 bg-royal-blue-900 hover:bg-gold-600 text-white rounded-lg font-cinzel text-xs font-bold tracking-widest transition-all duration-300 hover:shadow-lg uppercase text-center flex items-center justify-center gap-2"
                     >
                       <svg

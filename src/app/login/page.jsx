@@ -8,6 +8,8 @@ import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
 
+import logoimage from '@/assets/images/newLogo.png';
+
 function LoginContent() {
   const phoneUser = useSelector(selectUser);
   const isPhoneAuthLoaded = useSelector(selectIsAuthLoaded);
@@ -38,7 +40,8 @@ function LoginContent() {
         isOnboarded: session.user.isOnboarded,
       });
 
-      if (session.user.isOnboarded === false) {
+      const loginMode = process.env.NEXT_PUBLIC_LOGIN_MODE || process.env.LOGIN_MODE || 'route';
+      if (session.user.isOnboarded === false && loginMode !== 'popup') {
         console.log('[LOGIN PAGE] New user detected → Redirecting to /onboarding');
         router.push('/onboarding');
       } else {
@@ -112,15 +115,13 @@ function LoginContent() {
           
           {/* Logo / Top Section */}
           <div className="relative z-20 flex flex-col items-start">
-            <span className="font-cinzel text-[14px] tracking-[0.2em] font-black text-white uppercase leading-none">
-              PRACHIN
-            </span>
-            <div className="flex items-center gap-1.5 w-20 mt-1">
-              <div className="h-[0.5px] bg-gold-400/40 flex-grow" />
-              <span className="text-[7.5px] font-bold tracking-[0.2em] text-gold-400 uppercase">
-                LUXE
-              </span>
-              <div className="h-[0.5px] bg-gold-400/40 flex-grow" />
+            <div className="relative group flex items-center justify-center">
+              <div className="absolute inset-0 bg-gold-400/20 rounded-full blur-md animate-pulse" />
+              <img
+                src={logoimage.src || logoimage}
+                alt="Prachin Luxy"
+                className="h-12 sm:h-14 w-auto object-contain relative z-10 drop-shadow-lg"
+              />
             </div>
           </div>
 

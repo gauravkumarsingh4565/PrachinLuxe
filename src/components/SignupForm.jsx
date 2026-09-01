@@ -6,11 +6,14 @@ import { signupUser as signupUserAction } from '@/redux/slices/authSlice';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
+import logoimage from '@/assets/images/newLogo.png';
+import { useAuthModal } from '@/context/AuthModalContext';
 
-export default function SignupForm() {
+export default function SignupForm({ isModal = false, onCloseModal }) {
   const dispatch = useDispatch();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { triggerSparkle } = useAuthModal();
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -23,7 +26,7 @@ export default function SignupForm() {
 
   // Pre-fill phone from URL param if redirected from OTP verification
   useEffect(() => {
-    const phoneParam = searchParams.get('phone');
+    const phoneParam = searchParams?.get('phone');
     if (phoneParam) {
       setPhone(phoneParam);
     }
@@ -77,8 +80,18 @@ export default function SignupForm() {
 
       // Keep Redux synced locally
       dispatch(signupUserAction({ name, email, phone }));
+
+      // Trigger royal signup sparkle celebration (canvas-confetti)
+      if (triggerSparkle) {
+        triggerSparkle();
+      }
       
-      window.location.href = '/';
+      if (onCloseModal) {
+        onCloseModal();
+      }
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 1000);
     } catch (err) {
       setError(err.message || 'Signup failed. Please try again.');
       setIsSubmitting(false);
@@ -86,19 +99,28 @@ export default function SignupForm() {
   };
 
   return (
-    <div className="w-full max-w-[500px] bg-white rounded-2xl border border-gold-500/20 shadow-gold-lg p-6 sm:p-10 font-cormorant flex flex-col justify-center animate-fade-in-up">
-      <div className="text-center mb-8 flex flex-col items-center">
-        <span className="font-cinzel text-2xl sm:text-3xl font-extrabold tracking-[0.18em] text-royal-blue-950 uppercase leading-none pl-[0.18em]">
-          PRACHIN
-        </span>
-        <div className="flex items-center gap-3 w-40 mt-1">
-          <div className="h-[1px] bg-gold-500/30 flex-grow" />
-          <span className="text-[10px] font-bold tracking-[0.3em] text-gold-600 uppercase">
-            LUXE
-          </span>
-          <div className="h-[1px] bg-gold-500/30 flex-grow" />
+    <div className={`w-full max-w-[500px] ${isModal ? 'p-2' : 'bg-white rounded-2xl border border-gold-500/20 shadow-gold-lg p-6 sm:p-10'} font-cormorant flex flex-col justify-center animate-fade-in-up`}>
+      {/* Brand Header with Luxury Jewelry Animation */}
+      <div className="text-center mb-6 flex flex-col items-center relative">
+        {/* Animated Golden Sparkles & Floating Jewels */}
+        <div className="relative group flex items-center justify-center py-2">
+          {/* Ambient Glowing Halo around Logo */}
+          <div className="absolute inset-0 bg-gold-400/25 rounded-full blur-xl animate-pulse" />
+          
+          {/* Sparkling Orbit Jewels */}
+          <span className="absolute -top-1 -left-4 text-gold-500 text-xs animate-bounce delay-100 opacity-80">✦</span>
+          <span className="absolute -bottom-1 -right-3 text-gold-400 text-sm animate-pulse delay-300 opacity-90">✨</span>
+          <span className="absolute top-2 -right-5 text-gold-600 text-[10px] animate-bounce delay-500 opacity-70">✦</span>
+          
+          {/* Logo Image */}
+          <img
+            src={logoimage.src || logoimage}
+            alt="Prachin Luxy"
+            className="h-16 sm:h-20 w-auto object-contain relative z-10 drop-shadow-md transition-transform duration-500 hover:scale-105"
+          />
         </div>
-        <p className="text-gray-400 font-sans text-[8px] tracking-[0.15em] uppercase mt-2.5">
+
+        <p className="text-gold-700/80 font-cinzel text-[10px] tracking-[0.25em] uppercase mt-2 font-semibold">
           Handcrafted Jewelry & Antiques
         </p>
       </div>
@@ -123,10 +145,10 @@ export default function SignupForm() {
           <input
             type="text"
             required
-            placeholder="Enter your name"
+            placeholder="Enter your full name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full px-4 py-3 rounded-lg border border-gold-500/30 focus:border-gold-500 focus:outline-none bg-sand-50/50 font-sans text-sm font-medium text-gray-800"
+            className="w-full px-4 py-3 rounded-xl border border-gold-500/30 focus:border-gold-500 focus:ring-2 focus:ring-gold-400/20 focus:outline-none bg-sand-50/50 font-sans text-sm font-medium text-gray-800 transition-all duration-300"
           />
         </div>
 
@@ -142,7 +164,7 @@ export default function SignupForm() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             readOnly={!!session?.user?.email}
-            className={`w-full px-4 py-3 rounded-lg border border-gold-500/30 focus:border-gold-500 focus:outline-none bg-sand-50/50 font-sans text-sm font-medium ${session?.user?.email ? 'text-gray-500 cursor-not-allowed' : 'text-gray-800'}`}
+            className={`w-full px-4 py-3 rounded-xl border border-gold-500/30 focus:border-gold-500 focus:ring-2 focus:ring-gold-400/20 focus:outline-none bg-sand-50/50 font-sans text-sm font-medium transition-all duration-300 ${session?.user?.email ? 'text-gray-500 cursor-not-allowed bg-sand-100/50' : 'text-gray-800'}`}
           />
         </div>
 
@@ -151,7 +173,7 @@ export default function SignupForm() {
           <label className="font-bold text-royal-blue-900 uppercase text-[10px] tracking-widest font-cinzel block">
             Mobile Number
           </label>
-          <div className="flex rounded-lg overflow-hidden border border-gold-500/30 focus-within:border-gold-500 bg-sand-50/50 font-sans text-sm">
+          <div className="flex rounded-xl overflow-hidden border border-gold-500/30 focus-within:border-gold-500 focus-within:ring-2 focus-within:ring-gold-400/20 bg-sand-50/50 font-sans text-sm transition-all duration-300">
             <span className="px-3.5 bg-sand-100 flex items-center border-r border-gold-500/20 font-bold text-royal-blue-900 text-xs">
               +91
             </span>
@@ -163,7 +185,7 @@ export default function SignupForm() {
               value={phone}
               onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
               className="flex-grow px-4 py-3.5 focus:outline-none bg-transparent font-medium text-gray-800 tracking-wider disabled:text-gray-400"
-              disabled={!!searchParams.get('phone')}
+              disabled={!!searchParams?.get('phone')}
             />
           </div>
         </div>
@@ -178,7 +200,7 @@ export default function SignupForm() {
             placeholder="Enter code for special discount"
             value={referral}
             onChange={(e) => setReferral(e.target.value)}
-            className="w-full px-4 py-3 rounded-lg border border-gold-500/30 focus:border-gold-500 focus:outline-none bg-sand-50/50 font-sans text-sm font-medium text-gray-800"
+            className="w-full px-4 py-3 rounded-xl border border-gold-500/30 focus:border-gold-500 focus:ring-2 focus:ring-gold-400/20 focus:outline-none bg-sand-50/50 font-sans text-sm font-medium text-gray-800 transition-all duration-300"
           />
         </div>
 
@@ -199,7 +221,7 @@ export default function SignupForm() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full py-4 bg-royal-blue-900 hover:bg-gold-600 text-white rounded-lg font-cinzel text-xs font-bold tracking-widest transition-all duration-300 hover:shadow-lg uppercase flex items-center justify-center gap-2"
+          className="w-full py-4 bg-gradient-to-r from-royal-blue-950 via-royal-blue-900 to-royal-blue-950 hover:from-gold-600 hover:to-gold-700 text-white rounded-xl font-cinzel text-xs font-bold tracking-widest transition-all duration-300 hover:shadow-gold-lg uppercase flex items-center justify-center gap-2 transform hover:-translate-y-0.5 cursor-pointer disabled:opacity-60"
         >
           {isSubmitting ? (
             <>

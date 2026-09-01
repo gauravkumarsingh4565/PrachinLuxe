@@ -5,6 +5,7 @@ import ScrollToTop from '@/components/ScrollToTop';
 import '@/index.css';
 import ReduxProvider from '@/redux/Providers';
 import NextAuthSessionProvider from '@/components/SessionProvider';
+import { AuthModalProvider } from '@/context/AuthModalContext';
 
 export const metadata = {
   title: 'PRACHIN LUXY — The Ancient Riches | Handmade Jewelry & Antiques',
@@ -33,11 +34,13 @@ export default function RootLayout({ children }) {
       <body className={`min-h-screen bg-sand-50 antialiased`}>
         <NextAuthSessionProvider>
           <ReduxProvider>
-            <Navbar />
-            <CategoryCircles />
-            {children}
-            <Footer />
-            <ScrollToTop />
+            <AuthModalProvider>
+              <Navbar />
+              <CategoryCircles />
+              {children}
+              <Footer />
+              <ScrollToTop />
+            </AuthModalProvider>
           </ReduxProvider>
         </NextAuthSessionProvider>
       </body>
