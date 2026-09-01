@@ -9,7 +9,7 @@ import confetti from 'canvas-confetti';
 
 const AuthModalContext = createContext();
 
-export function AuthModalProvider({ children }) {
+export function AuthModalProvider({ children, initialShowCountdown }) {
   const [isOpen, setIsOpen] = useState(false);
   const [modalStep, setModalStep] = useState('login'); // 'login' | 'onboarding'
   const prevAuthRef = useRef(false);
@@ -26,8 +26,8 @@ export function AuthModalProvider({ children }) {
   const loginMode = getLoginMode();
 
   // Read SHOW_COUNTDOWN setting from env (NEXT_PUBLIC_SHOW_COUNTDOWN -> SHOW_COUNTDOWN fallback)
-  // Evaluates to true only when set to 'yes' (case-insensitive & leading/trailing whitespace trimmed)
   const getShowCountdown = () => {
+    if (initialShowCountdown !== undefined) return initialShowCountdown;
     const rawVal = process.env.NEXT_PUBLIC_SHOW_COUNTDOWN ?? process.env.SHOW_COUNTDOWN ?? '';
     const normalized = String(rawVal).trim().toLowerCase();
     return normalized === 'yes';

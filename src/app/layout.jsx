@@ -38,7 +38,15 @@ export const metadata = {
   },
 };
 
+function getCountdownSetting() {
+  const rawVal = process.env.NEXT_PUBLIC_SHOW_COUNTDOWN ?? process.env.SHOW_COUNTDOWN ?? '';
+  const normalized = String(rawVal).trim().toLowerCase();
+  return normalized === 'yes';
+}
+
 export default function RootLayout({ children }) {
+  const isCountdown = getCountdownSetting();
+
   return (
     <html lang="en">
       <head>
@@ -49,7 +57,7 @@ export default function RootLayout({ children }) {
       <body className={`min-h-screen bg-sand-50 antialiased`}>
         <NextAuthSessionProvider>
           <ReduxProvider>
-            <AuthModalProvider>
+            <AuthModalProvider initialShowCountdown={isCountdown}>
               <Navbar />
               <CategoryCircles />
               {children}
