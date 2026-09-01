@@ -1,4 +1,5 @@
 import HeroSection from '@/components/HeroSection';
+import CategoryCircles from '@/components/CategoryCircles';
 import dynamic from 'next/dynamic';
 import dbConnect from '@/lib/db';
 import Product from '@/models/Product';
@@ -24,6 +25,7 @@ export default async function Home() {
     <main>
       {/* <FeaturedCategories /> */}
       <HeroSection />
+      <CategoryCircles />
       {/* <ShopEarringCategory /> */}
       <FeaturedProducts dbProducts={dbProducts} />
       <NewArrival dbProducts={dbProducts} />

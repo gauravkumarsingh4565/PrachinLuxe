@@ -1,5 +1,4 @@
 import Navbar from '@/components/Navbar';
-import CategoryCircles from '@/components/CategoryCircles';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
 import '@/index.css';
@@ -34,7 +33,6 @@ export default function RootLayout({ children }) {
         <NextAuthSessionProvider>
           <ReduxProvider>
             <Navbar />
-            <CategoryCircles />
             {children}
             <Footer />
             <ScrollToTop />

@@ -19,6 +19,7 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileSliderOpen, setIsProfileSliderOpen] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const dispatch = useDispatch();
   const cartCount = useSelector(selectCartCount);
   const phoneUser = useSelector(selectUser);
@@ -39,6 +40,15 @@ const Navbar = () => {
     };
   }
 
+  // Scroll listener for transparent header
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   // Jab koi bhi slider open ho, toh background scroll lock ho jayega
   useEffect(() => {
     if (isMobileMenuOpen || isProfileSliderOpen || isLogoutModalOpen) {
@@ -57,6 +67,21 @@ const Navbar = () => {
     { name: 'About Us', path: '/#about' },
   ];
 
+  const isHomePage = pathname === '/';
+  const isTransparent = isHomePage && !isScrolled;
+  
+  const navBgClass = isTransparent 
+    ? 'bg-transparent py-4' 
+    : 'bg-sand-50/95 backdrop-blur-md border-b border-gold-500/25 shadow-sm shadow-sand-500/15 py-0';
+    
+  const textColorClass = isTransparent 
+    ? 'text-white hover:text-gold-400' 
+    : 'text-royal-blue-950 hover:text-gold-600';
+    
+  const iconColorClass = isTransparent
+    ? 'text-white hover:text-gold-400'
+    : 'text-royal-blue-700 hover:text-gold-600';
+
   const handleLogoutConfirm = async () => {
     if (session) {
       await signOut({ redirect: false });
@@ -70,7 +95,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="sticky top-0 left-0 w-full z-40 bg-sand-50/95 backdrop-blur-md border-b border-gold-500/25 shadow-sm shadow-sand-500/15">
+      <nav className={`fixed top-0 left-0 w-full z-40 transition-all duration-500 ${navBgClass}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-20">
             {/* Logo / Brand Name */}
@@ -79,7 +104,7 @@ const Navbar = () => {
                 <img
                   src={logoimage.src || logoimage}
                   alt="Prachin Luxy"
-                  className="h-10 sm:h-12 lg:h-14 w-auto object-contain transition-transform duration-300 hover:scale-105"
+                  className={`h-10 sm:h-12 lg:h-14 w-auto object-contain transition-all duration-300 hover:scale-105 ${isTransparent ? 'brightness-0 invert opacity-90' : ''}`}
                 />
               </Link>
             </div>
@@ -90,12 +115,10 @@ const Navbar = () => {
                 <Link
                   key={link.name}
                   href={link.path}
-                  className={`relative font-cinzel font-black text-[15px] uppercase tracking-widest transition-all duration-300 group py-2 focus:outline-none ${pathname === link.path ? 'text-gold-600 drop-shadow-sm' : 'text-royal-blue-950 hover:text-gold-600'
-                    }`}
+                  className={`relative font-cinzel font-black text-[15px] uppercase tracking-widest transition-all duration-300 group py-2 focus:outline-none ${pathname === link.path ? 'text-gold-500 drop-shadow-sm' : textColorClass}`}
                 >
                   {link.name}
-                  <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-[1.5px] transition-all duration-300 ${pathname === link.path ? 'w-full bg-gold-600' : 'w-0 bg-gold-600 group-hover:w-full'
-                    }`} />
+                  <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-[1.5px] transition-all duration-300 ${pathname === link.path ? 'w-full bg-gold-500' : 'w-0 bg-gold-600 group-hover:w-full'}`} />
                 </Link>
               ))}
             </div>
@@ -107,7 +130,7 @@ const Navbar = () => {
               {/* Shopping Bag Icon */}
               <Link
                 href="/cart"
-                className="relative text-royal-blue-700 hover:text-gold-600 transition-all duration-300"
+                className={`relative transition-all duration-300 ${iconColorClass}`}
                 aria-label="Shopping bag"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -122,7 +145,7 @@ const Navbar = () => {
                 user ? (
                   <button
                     onClick={() => setIsProfileSliderOpen(true)}
-                    className="text-royal-blue-700 hover:text-gold-600 transition-all duration-300 focus:outline-none"
+                    className={`transition-all duration-300 focus:outline-none ${iconColorClass}`}
                     aria-label="User profile"
                   >
                     {user.profilePic ? (
@@ -140,7 +163,7 @@ const Navbar = () => {
                 ) : (
                   <Link
                     href="/login"
-                    className="text-royal-blue-700 hover:text-gold-600 transition-all duration-300"
+                    className={`transition-all duration-300 ${iconColorClass}`}
                     aria-label="Login"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>

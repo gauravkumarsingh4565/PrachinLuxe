@@ -32,36 +32,46 @@ export default function CategoryCircles() {
   }
 
   return (
-    <section className="w-full bg-sand-100 py-6 sm:py-8 border-b border-gold-500/10">
-      <div className="max-w-7xl mx-auto px-4">
+    <section id="categories" className="w-full bg-sand-50 py-16 sm:py-24 border-b border-gold-500/10">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* Section Heading (Optional but adds to premium feel) */}
+        <div className="text-center mb-8 sm:mb-10">
+          <h2 className="font-cinzel text-2xl sm:text-3xl text-royal-blue-900 font-bold uppercase tracking-widest">
+            Shop by Category
+          </h2>
+          <div className="w-24 h-0.5 bg-gold-400 mx-auto mt-4" />
+        </div>
+
         {/* Horizontal scrollable wrapper */}
-        <div className="flex items-center gap-6 sm:gap-8 lg:gap-10 overflow-x-auto pb-4 scrollbar-hide justify-start md:justify-center flex-nowrap">
+        <div className="flex items-center gap-6 sm:gap-8 lg:gap-10 overflow-x-auto pb-10 scrollbar-hide justify-start md:justify-center flex-nowrap px-4 mt-8">
           {jewelryType.map((cat, index) => (
             <button
               key={cat.id || index}
               onClick={() => router.push(cat.path)}
-              className="flex flex-col items-center group flex-shrink-0 transition-transform duration-300 focus:outline-none"
+              className="group relative flex-shrink-0 w-[180px] h-[250px] sm:w-[220px] sm:h-[300px] lg:w-[280px] lg:h-[380px] rounded-md overflow-hidden shadow-xl hover:shadow-[0_15px_40px_rgba(201,168,76,0.35)] transition-all duration-700 focus:outline-none hover:-translate-y-2"
             >
-              {/* Outer Shadow Ring */}
-              <div className="relative p-0.5 rounded-full bg-white shadow-[0_4px_12px_rgba(0,0,0,0.12)] border border-gray-100 transition-all duration-500 group-hover:shadow-[0_8px_25px_rgba(201,168,76,0.3)] group-hover:scale-105">
-                {/* Circular image frame */}
-                <div className="w-[85px] h-[85px] sm:w-[95px] sm:h-[95px] lg:w-[105px] lg:h-[105px] rounded-full overflow-hidden border-2 border-white relative">
-                  <Image
-                    src={cat.image.url}
-                    alt={cat.name}
-                    fill
-                    sizes="(max-width: 640px) 85px, (max-width: 1024px) 95px, 105px"
-                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-                  />
-                  {/* Subtle Inner Gold Shadow on Hover */}
-                  <div className="absolute inset-0 rounded-full border border-transparent group-hover:border-gold-500/20 transition-all duration-300 pointer-events-none" />
-                </div>
-              </div>
+              {/* Background Image */}
+              <Image
+                src={cat.image.url}
+                alt={cat.name}
+                fill
+                sizes="(max-width: 640px) 180px, (max-width: 1024px) 220px, 280px"
+                className="object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
+              />
+              
+              {/* Premium Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-royal-blue-950/90 via-royal-blue-950/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500" />
+              
+              {/* Inner Gold Frame Effect on Hover */}
+              <div className="absolute inset-4 border border-gold-400/0 group-hover:border-gold-400/60 transition-colors duration-700 pointer-events-none rounded-sm" />
 
-              {/* Category Name */}
-              <span className="font-cormorant text-[13px] sm:text-[14px] font-bold text-royal-blue-900 mt-3 tracking-wide uppercase transition-colors duration-300 group-hover:text-gold-600">
-                {cat.name}
-              </span>
+              {/* Category Title Overlay */}
+              <div className="absolute bottom-8 left-0 w-full text-center px-4">
+                <span className="font-cinzel text-[16px] sm:text-[18px] lg:text-[20px] font-bold text-white tracking-[0.2em] uppercase drop-shadow-lg group-hover:text-gold-300 transition-colors duration-500 block transform group-hover:-translate-y-2">
+                  {cat.name}
+                </span>
+              </div>
             </button>
           ))}
         </div>
